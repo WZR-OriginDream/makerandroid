@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
 //    ViewPager viewPager;
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     //        tabViewChildList.add(new TabViewChild(R.mipmap.main,R.mipmap.main_no,"首页",  MainFragment.newInstance()));
-
+    private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private List<Fragment> mList = new ArrayList<>();
     private MainFragment mainFragment;
     private ProjectFragment projectFragment;
@@ -54,5 +55,16 @@ public class MainActivity extends AppCompatActivity {
         }
         tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
 
+    }
+    //退出提醒 两次back退出
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - lastClickBackTime > 2000) { // 后退阻断
+            Toast.makeText(this, "再点一次退出", Toast.LENGTH_LONG).show();
+            lastClickBackTime = System.currentTimeMillis();
+        } else { // 关掉app
+            //System.exit(0);//完全退出  再次启动很慢
+            finish();//保留进程 再次启动较快
+        }
     }
 }
