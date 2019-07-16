@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabView)
     TabView tabView;
+
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private List<Fragment> mList = new ArrayList<>();
@@ -68,5 +69,10 @@ public class MainActivity extends AppCompatActivity {
             //System.exit(0);//完全退出  再次启动很慢
             finish();//保留进程 再次启动较快
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

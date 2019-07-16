@@ -1,12 +1,16 @@
 package com.lipiao.makerandroid.View.Fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.lipiao.makerandroid.Base.BaseFragment;
+import com.lipiao.makerandroid.Base.BasePresenter;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -23,11 +27,11 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
     View rootView;
 
-
+    private Handler mHandler = new Handler();
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
@@ -36,6 +40,7 @@ public class MainFragment extends Fragment {
 
     @BindView(R.id.srl_mf)
     SmartRefreshLayout smartRefreshLayout;
+
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
     ArrayList<String> titles = new ArrayList<String>();//标题
 
@@ -48,34 +53,64 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        ButterKnife.bind(this, rootView);
-        initData();
-        initView();
-        initListener();
-        return rootView;
+    public void loadDataStart() {
+        Log.d(TAG, "loadDataStart");
+        // 模拟请求数据
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+                // 一旦获取到数据, 就应该立刻标记数据加载完成
+                mLoadDataFinished = true;
+                if (mViewInflateFinished) { // mViewInflateFinished一般都是true
+
+                }
+            }
+        }, 3000);
     }
 
-    private void initData() {
-        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
-        images.add("https://www.wanandroid.com/blogimgs/ab17e8f9-6b79-450b-8079-0f2287eb6f0f.png");
-        images.add("https://www.wanandroid.com/blogimgs/fb0ea461-e00a-482b-814f-4faca5761427.png");
-        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
-        images.add("https://www.wanandroid.com/blogimgs/00f83f1d-3c50-439f-b705-54a49fc3d90d.jpg");
-        images.add("https://www.wanandroid.com/blogimgs/90cf8c40-9489-4f9d-8936-02c9ebae31f0.png");
-        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
-        images.add("https://www.wanandroid.com/blogimgs/acc23063-1884-4925-bdf8-0b0364a7243e.png");
-        titles.add("一起来做个App吧");
-        titles.add("看看别人的面经，搞定面试");
-        titles.add("兄弟，要不要挑个项目学习下?");
-        titles.add("我们新增了一个常用导航Tab~");
-        titles.add("公众号文章列表强势上线");
-        titles.add("JSON工具");
-        titles.add("flutter 中文社区");
-        titles.add("微信文章合集");
+    @Override
+    protected View initRootView(LayoutInflater inflater, ViewGroup container,
+                                Bundle savedInstanceState) {
+        Log.d(TAG, "initRootView");
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
+
+    @Override
+    protected void findViewById(View view) {
+
+        //绑定控件
+        unbinder.unbind();
+
+        if (mLoadDataFinished) { // 一般情况下这时候数据请求都还没完成, 所以不会进这个if
+            //为控件赋值数据以及添加监听
+
+            banner.setImageLoader(new GlideImageLoader()).setImages(images);
+            //设置banner样式 显示圆形指示器和标题（水平显示
+            banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+            //设置标题集合（当banner样式有显示title时）
+            banner.setBannerTitles(titles);
+            //设置轮播时间
+            banner.setDelayTime(3000);
+            banner.start();
+
+
+            smartRefreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
+            smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh(RefreshLayout refreshlayout) {
+                    refreshlayout.finishRefresh(1500);
+                }
+            });
+            smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+                @Override
+                public void onLoadMore(RefreshLayout refreshlayout) {
+                    refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
+                }
+            });
+        }
+    }
+
 
     /**
      * onDestroyView中进行解绑操作
@@ -86,7 +121,10 @@ public class MainFragment extends Fragment {
         unbinder.unbind();
     }
 
-
+    @Override
+    protected BasePresenter createPresenter() {
+        return null;
+    }
 
     //对于图片轮播库 如果你需要考虑更好的体验，可以这么操作
     @Override
@@ -102,37 +140,6 @@ public class MainFragment extends Fragment {
         super.onStop();
         //结束轮播
         banner.stopAutoPlay();
-    }
-
-    private void initView() {
-        banner.setImageLoader(new GlideImageLoader()).setImages(images);
-        //设置banner样式 显示圆形指示器和标题（水平显示
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-        //设置标题集合（当banner样式有显示title时）
-        banner.setBannerTitles(titles);
-        //设置轮播时间
-        banner.setDelayTime(3000);
-        banner.start();
-
-    }
-
-    private void initListener() {
-
-        smartRefreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
-        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(1500);
-            }
-        });
-        smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
-            }
-        });
-
-
     }
 
 }
