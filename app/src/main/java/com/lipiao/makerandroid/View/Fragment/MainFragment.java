@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lipiao.makerandroid.Base.BaseFragment;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends Fragment  {
+public class MainFragment extends Fragment {
 
     View rootView;
 
@@ -84,6 +85,8 @@ public class MainFragment extends Fragment  {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+
 
     //对于图片轮播库 如果你需要考虑更好的体验，可以这么操作
     @Override
