@@ -1,37 +1,31 @@
-package com.lipiao.makerandroid;
+package com.lipiao.makerandroid.View.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.lipiao.makerandroid.bean.BannerBean;
-import com.lipiao.makerandroid.presenter.BannerPresenter;
-import com.lipiao.makerandroid.view.BannerView;
+import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
-import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.BezierRadarHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends Fragment implements BannerView {
+public class MainFragment extends Fragment  {
 
     View rootView;
-    BannerPresenter bannerPresenter;
+
 
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
@@ -56,17 +50,10 @@ public class MainFragment extends Fragment implements BannerView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
-        unbinder = ButterKnife.bind(this, rootView);
+        ButterKnife.bind(this, rootView);
         initData();
         initView();
-
-        bannerPresenter=new BannerPresenter();
-        bannerPresenter.attachView(this);   //绑定
-        bannerPresenter.fetch();
         initListener();
-        //表示层
-//        new BannerPresenter<>(this).fetch();
         return rootView;
     }
 
@@ -96,7 +83,6 @@ public class MainFragment extends Fragment implements BannerView {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        bannerPresenter.detachView();
     }
 
     //对于图片轮播库 如果你需要考虑更好的体验，可以这么操作
@@ -130,8 +116,6 @@ public class MainFragment extends Fragment implements BannerView {
     private void initListener() {
 
         smartRefreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
-////设置 Footer 为 球脉冲 样式
-//        smartRefreshLayout.setRefreshFooter(new BallPulseFooter(getContext()).setSpinnerStyle(SpinnerStyle.Scale));
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -148,16 +132,4 @@ public class MainFragment extends Fragment implements BannerView {
 
     }
 
-    //加载
-    @Override
-    public void showLoading() {
-//        Toast.makeText(this,"加载成功",Toast.LENGTH_SHORT).show();
-    }
-
-    //加载banner
-    @Override
-    public void showBanner(List<BannerBean> bannerBeans) {
-        //设置适配器
-
-    }
 }

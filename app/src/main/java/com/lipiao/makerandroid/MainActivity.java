@@ -1,11 +1,14 @@
 package com.lipiao.makerandroid;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.lipiao.makerandroid.View.Fragment.MainFragment;
+import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
+import com.lipiao.makerandroid.View.Fragment.SystemFragment;
+import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -18,10 +21,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabView)
     TabView tabView;
-    //    @BindView(R.id.viewpager_main)
-//    ViewPager viewPager;
     List<TabViewChild> tabViewChildList = new ArrayList<>();
-    //        tabViewChildList.add(new TabViewChild(R.mipmap.main,R.mipmap.main_no,"首页",  MainFragment.newInstance()));
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private List<Fragment> mList = new ArrayList<>();
     private MainFragment mainFragment;
@@ -53,9 +53,11 @@ public class MainActivity extends AppCompatActivity {
             userFragment = UserFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
+        //getSupportFragmentManager() 需要基类继承自AppCompatActivity
         tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
 
     }
+
     //退出提醒 两次back退出
     @Override
     public void onBackPressed() {

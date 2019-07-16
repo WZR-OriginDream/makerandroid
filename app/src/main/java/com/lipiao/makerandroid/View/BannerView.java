@@ -1,4 +1,4 @@
-package com.lipiao.makerandroid.view;
+package com.lipiao.makerandroid.View;
 
 import com.lipiao.makerandroid.bean.BannerBean;
 
