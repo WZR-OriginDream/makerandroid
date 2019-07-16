@@ -1,9 +1,9 @@
-package com.lipiao.makerandroid.presenter;
+package com.lipiao.makerandroid.Presenter;
 
 import com.lipiao.makerandroid.Base.BasePresenter;
-import com.lipiao.makerandroid.bean.BannerBean;
-import com.lipiao.makerandroid.model.BannerModel;
-import com.lipiao.makerandroid.model.BannerModelImpl;
+import com.lipiao.makerandroid.Bean.BannerBean;
+import com.lipiao.makerandroid.Model.BannerModel;
+import com.lipiao.makerandroid.Model.BannerModelImpl;
 import com.lipiao.makerandroid.View.BannerView;
 
 import java.util.List;

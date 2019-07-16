@@ -1,4 +1,4 @@
-package com.lipiao.makerandroid.bean;
+package com.lipiao.makerandroid.Bean;
 
 import java.util.List;
 

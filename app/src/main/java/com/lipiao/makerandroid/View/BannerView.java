@@ -1,6 +1,6 @@
 package com.lipiao.makerandroid.View;
 
-import com.lipiao.makerandroid.bean.BannerBean;
+import com.lipiao.makerandroid.Bean.BannerBean;
 
 import java.util.List;
 
