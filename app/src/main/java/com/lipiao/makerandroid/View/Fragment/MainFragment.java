@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends BaseFragment {
+public class MainFragment extends Fragment {
 
     View rootView;
 
@@ -53,62 +53,33 @@ public class MainFragment extends BaseFragment {
     }
 
     @Override
-    public void loadDataStart() {
-        Log.d(TAG, "loadDataStart");
-        // 模拟请求数据
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-
-                // 一旦获取到数据, 就应该立刻标记数据加载完成
-                mLoadDataFinished = true;
-                if (mViewInflateFinished) { // mViewInflateFinished一般都是true
-
-                }
-            }
-        }, 3000);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
+        unbinder = ButterKnife.bind(this, rootView);
+        initView();
+        return rootView;
     }
 
-    @Override
-    protected View initRootView(LayoutInflater inflater, ViewGroup container,
-                                Bundle savedInstanceState) {
-        Log.d(TAG, "initRootView");
-        return inflater.inflate(R.layout.fragment_main, container, false);
-    }
+    private void initView() {
+        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
+        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
+        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
+        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
+        titles.add("标题1");
+        titles.add("标题2");
+        titles.add("标题3");
+        titles.add("标题4");
+        banner.setImages(images).setImageLoader(new GlideImageLoader());
+        //设置banner样式 显示圆形指示器和标题（水平显示
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        //设置标题集合（当banner样式有显示title时）
+        banner.setBannerTitles(titles);
+        //设置轮播时间
+        banner.setDelayTime(3000);
+        banner.start();
 
-    @Override
-    protected void findViewById(View view) {
-
-        //绑定控件
-        unbinder.unbind();
-
-        if (mLoadDataFinished) { // 一般情况下这时候数据请求都还没完成, 所以不会进这个if
-            //为控件赋值数据以及添加监听
-
-            banner.setImageLoader(new GlideImageLoader()).setImages(images);
-            //设置banner样式 显示圆形指示器和标题（水平显示
-            banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-            //设置标题集合（当banner样式有显示title时）
-            banner.setBannerTitles(titles);
-            //设置轮播时间
-            banner.setDelayTime(3000);
-            banner.start();
-
-
-            smartRefreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
-            smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-                @Override
-                public void onRefresh(RefreshLayout refreshlayout) {
-                    refreshlayout.finishRefresh(1500);
-                }
-            });
-            smartRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-                @Override
-                public void onLoadMore(RefreshLayout refreshlayout) {
-                    refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
-                }
-            });
-        }
     }
 
 
@@ -119,11 +90,6 @@ public class MainFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    @Override
-    protected BasePresenter createPresenter() {
-        return null;
     }
 
     //对于图片轮播库 如果你需要考虑更好的体验，可以这么操作

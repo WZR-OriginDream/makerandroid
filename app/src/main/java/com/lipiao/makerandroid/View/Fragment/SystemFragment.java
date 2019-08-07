@@ -19,6 +19,7 @@ public class SystemFragment  extends Fragment {
     View rootView;
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
+
     @BindView(R.id.srl_sf)
     RefreshLayout refreshLayout;
     public SystemFragment() {
