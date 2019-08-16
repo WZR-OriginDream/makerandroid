@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--管理颜色-->
+    <!--app总主题颜色 普通 加深 强调-->
     <color name="colorPrimary">#91BCF0</color>
     <color name="colorPrimaryDark">#2E85ED</color>
     <color name="colorAccent">#D81B60</color>
+
+
     <color name="white">#FFFFFF</color>
+
 </resources>

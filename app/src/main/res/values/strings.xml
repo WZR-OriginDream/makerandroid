@@ -1,6 +1,28 @@
 <resources>
     <string name="app_name">玩Android</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--统一管理各个请求的baseURL-->
+    <!--玩Android 开放API https://www.wanandroid.com/blog/show/2 -->
+
+    <!--1.1首页 banner GET-->
+    <string name="banner_url">https://www.wanandroid.com/banner/json</string>
+    <!--1.2首页 置顶文章2篇 GET-->
+    <string name="article_top_url">https://www.wanandroid.com/article/top/json</string>
+
+    <!--2.1 体系数据 GET-->
+    <string name="system_url">https://www.wanandroid.com/tree/json</string>
+    <!--2.2 知识体系下的文章 GET 参数：cid 分类的id，上述二级目录的id 页码：拼接在链接上，从0开始。-->
+    <!--例如： https://www.wanandroid.com/article/list/0/json?cid=60-->
+    <string name="system_article_url">https://www.wanandroid.com/article/list/0/json?cid=60</string>
+
+    <!--3.1 导航数据 GET-->
+    <string name="navigation_url">https://www.wanandroid.com/navi/json</string>
+
+    <!--4.1 项目分类 GET-->
+    <string name="project_url">https://www.wanandroid.com/navi/json</string>
+    <!--4.2 项目列表数据 GET 参数：cid 分类的id，上面项目分类接口 页码：拼接在链接中，从1开始。-->
+    <!--例如https://www.wanandroid.com/project/list/1/json?cid=294-->
+    <string name="project_list_data_url">https://www.wanandroid.com/project/list/1/json?cid=294</string>
+
+
 </resources>
