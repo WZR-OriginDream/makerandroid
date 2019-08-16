@@ -38,9 +38,6 @@ public class MainFragment extends Fragment {
     @BindView(R.id.banner)
     Banner banner;
 
-    @BindView(R.id.srl_mf)
-    SmartRefreshLayout smartRefreshLayout;
-
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
     ArrayList<String> titles = new ArrayList<String>();//标题
 
