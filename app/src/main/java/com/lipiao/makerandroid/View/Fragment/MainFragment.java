@@ -1,26 +1,22 @@
 package com.lipiao.makerandroid.View.Fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
-import com.lipiao.makerandroid.Base.BaseFragment;
-import com.lipiao.makerandroid.Base.BasePresenter;
+import com.lipiao.makerandroid.Bean.ArticleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,7 +27,6 @@ public class MainFragment extends Fragment {
 
     View rootView;
 
-    private Handler mHandler = new Handler();
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
@@ -40,6 +35,12 @@ public class MainFragment extends Fragment {
 
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
     ArrayList<String> titles = new ArrayList<String>();//标题
+
+    //top article
+    static TopArticleAdapter topArticleAdapter;
+    static List<ArticleBean> mList = new ArrayList<>();
+    @BindView(R.id.rv_top_article)
+    RecyclerView mRecyclerView;
 
     public MainFragment() {
         // Required empty public constructor
@@ -76,6 +77,28 @@ public class MainFragment extends Fragment {
         //设置轮播时间
         banner.setDelayTime(3000);
         banner.start();
+
+
+        //top rv
+        mRecyclerView.setHasFixedSize(true);
+        //平常的水平一个item布局的流
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+//初始化mList
+        initArticleBeanList();
+//实例化MyAdapter并传入mList对象
+        topArticleAdapter = new TopArticleAdapter(mList);
+//为RecyclerView对象mRecyclerView设置adapter
+        mRecyclerView.setAdapter(topArticleAdapter);
+    }
+
+    private void initArticleBeanList() {
+        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
+        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
+        mList.add(articleBean1);
+        mList.add(articleBean2);
 
     }
 

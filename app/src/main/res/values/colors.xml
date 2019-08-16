@@ -2,11 +2,15 @@
 <resources>
     <!--管理颜色-->
     <!--app总主题颜色 普通 加深 强调-->
-    <color name="colorPrimary">#91BCF0</color>
+    <color name="colorPrimary">#74ABEE</color>
     <color name="colorPrimaryDark">#2E85ED</color>
     <color name="colorAccent">#D81B60</color>
 
 
     <color name="white">#FFFFFF</color>
+    <color name="gray">#C1C1C2</color>
+    <!--app背景 浅灰-->
+    <color name="back_gray">#F0F0F0</color>
+
 
 </resources>
