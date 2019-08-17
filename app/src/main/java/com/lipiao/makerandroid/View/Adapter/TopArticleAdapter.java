@@ -39,9 +39,9 @@ public class TopArticleAdapter  extends RecyclerView.Adapter<TopArticleAdapter.C
         //通过其get()方法可以获得其中的对象
         ArticleBean articleBean=articleBeanList.get(i);
         contactViewHolder.author.setText(articleBean.getAuthor());
-        contactViewHolder.title.setText(articleBean.getKind());
+        contactViewHolder.title.setText(articleBean.getTitle());
         contactViewHolder.time.setText(articleBean.getTime());
-        contactViewHolder.kind.setText(articleBean.getTitle());
+        contactViewHolder.kind.setText(articleBean.getKind());
     }
 
     @Override
