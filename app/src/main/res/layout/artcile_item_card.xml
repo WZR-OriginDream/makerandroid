@@ -2,20 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/back_gray">
+    android:layout_height="wrap_content">
 
     <android.support.v7.widget.CardView
         android:id="@+id/view_card"
         android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="8dp"
+        android:layout_height="130dp"
+        android:layout_margin="5dp"
         android:alpha="0.7"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp">
+        app:cardCornerRadius="5dp"
+        app:cardElevation="8dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -30,13 +26,12 @@
                 android:text="文章作者id" />
 
             <TextView
+                android:id="@+id/tv_top_article_kind"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
-                android:text="文章的分类介绍"
-                android:id="@+id/tv_top_article_kind"
-                />
+                android:text="文章的分类介绍" />
 
             <TextView
                 android:id="@+id/tv_top_article_title"
@@ -45,7 +40,7 @@
                 android:layout_below="@id/tv_top_article_author"
                 android:layout_margin="5dp"
                 android:text="文章的标题介绍，文章的简要介绍"
-                android:textSize="20dp" />
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/tv_top_article_time"
