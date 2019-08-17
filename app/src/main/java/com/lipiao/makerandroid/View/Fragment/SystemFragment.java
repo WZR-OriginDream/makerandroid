@@ -10,6 +10,7 @@ import com.lipiao.makerandroid.R;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.zhy.view.flowlayout.FlowLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,8 +21,10 @@ public class SystemFragment  extends Fragment {
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
-    @BindView(R.id.srl_sf)
-    RefreshLayout refreshLayout;
+//    @BindView(R.id.srl_sf)
+//    RefreshLayout refreshLayout;
+    @BindView(R.id.id_flow_layout)
+    FlowLayout flowLayout;
     public SystemFragment() {
         // Required empty public constructor
     }
@@ -38,7 +41,7 @@ public class SystemFragment  extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         initData();
         initView();
-        initListener();
+//        initListener();
         return rootView;
     }
 
@@ -50,20 +53,30 @@ public class SystemFragment  extends Fragment {
     private void initData() {
 
     }
-    private void initListener() {
-        refreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
+//    private void initListener() {
+//        refreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
+//
+//        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshlayout) {
+//                refreshlayout.finishRefresh(1500);
+//            }
+//        });
+//        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshlayout) {
+//                refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
+//            }
+//        });
+//    }
 
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(1500);
-            }
-        });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
-            }
-        });
+    /**
+     * onDestroyView中进行解绑操作
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
+
 }

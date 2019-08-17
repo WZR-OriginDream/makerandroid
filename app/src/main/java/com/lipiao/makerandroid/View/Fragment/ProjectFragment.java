@@ -54,6 +54,7 @@ public class ProjectFragment extends Fragment {
     }
 
     private void initListener() {
+
         refreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -68,6 +69,15 @@ public class ProjectFragment extends Fragment {
             }
         });
 
+    }
+
+    /**
+     * onDestroyView中进行解绑操作
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
 
