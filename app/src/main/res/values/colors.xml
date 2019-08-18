@@ -17,4 +17,7 @@
     <color name="gray_tags_bg">#E9E9E9</color>
 
 
+    <!--文章card背景色-->
+    <color name="bg_daily_mode">#FFF</color>
+
 </resources>
