@@ -3,6 +3,7 @@ package com.lipiao.makerandroid.View.Adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import java.util.List;
 //体系标签适配器——recycleView+cardView
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHolder> {
 
+    String TAG ="TagsAdapter";
+
     //TagsAdapter的成员变量systemBeanList.DataBean, 这里被我们用作数据的来源
     private List<SystemBean.DataBean> systemDataBeanList;
     private Context context;
@@ -34,11 +37,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
     @Override
     public TagsAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         //获取context
-        context=viewGroup.getContext();
+        context = viewGroup.getContext();
 
         View itemView = LayoutInflater.from(context).
                 inflate(R.layout.flow_tags_card_item, viewGroup, false);
-        return new TagsAdapter.ContactViewHolder(itemView);
+        return new ContactViewHolder(itemView);
     }
 
     @Override
@@ -47,8 +50,16 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
         //通过其get()方法可以获得其中的对象
         SystemBean.DataBean systemDataBean = systemDataBeanList.get(i);
         contactViewHolder.tvTitle.setText(systemDataBean.getName());
+        Log.d(TAG, "title: "+systemDataBean.getName());
 
-        String[] mVals=(String[]) systemDataBean.getChildren().toArray();
+        List<SystemBean.DataBean.ChildrenBean> childrenBeanList=systemDataBean.getChildren();
+        String[] mVals =new String[childrenBeanList.size()];
+        for (int index=0;index<childrenBeanList.size();index++){
+            mVals[i]=childrenBeanList.get(index).getName();
+            Log.d(TAG, "child: "+childrenBeanList.get(index).getName());
+        }
+
+
 
         //获取布局填充器,一会将tv.xml文件填充到标签内.
         final LayoutInflater mInflater = LayoutInflater.from(context);
@@ -90,8 +101,8 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
 
         public ContactViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle.findViewById(R.id.tv_flow_tags_card_title);
-            tflTags.findViewById(R.id.id_flow_layout);
+            tvTitle = itemView.findViewById(R.id.tv_flow_tags_card_title);
+            tflTags = itemView.findViewById(R.id.id_flow_layout);
         }
     }
 }
