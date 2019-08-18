@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.kymjs.rxvolley.RxVolley;
 import com.kymjs.rxvolley.client.HttpCallback;
 import com.lipiao.makerandroid.Bean.SystemBean;
+import com.lipiao.makerandroid.Bean.SystemSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.View.Adapter.TagsAdapter;
 import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
@@ -29,6 +30,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -53,6 +55,7 @@ public class SystemFragment extends Fragment {
     RecyclerView mRecyclerView;
     TagsAdapter tagsAdapter;
     private List<SystemBean.DataBean> systemDataBeanList;
+    private List<SystemSimpleBean> systemSimpleBeanList=new ArrayList<>();
 
     //放入流式布局标签中的内容
     private String[] mVals = new String[]
@@ -101,10 +104,10 @@ public class SystemFragment extends Fragment {
         systemDataBeanList = systemBean.getData();
 
 
-        //实例化MyAdapter并传入mList对象
-        tagsAdapter = new TagsAdapter(systemDataBeanList);
-//为RecyclerView对象mRecyclerView设置adapter
-        mRecyclerView.setAdapter(tagsAdapter);
+//        //实例化MyAdapter并传入mList对象
+//        tagsAdapter = new TagsAdapter(systemDataBeanList);
+////为RecyclerView对象mRecyclerView设置adapter
+//        mRecyclerView.setAdapter(tagsAdapter);
 
         //通过其get()方法可以获得其中的对象
         for (int i=0;i<systemDataBeanList.size();i++){
@@ -117,7 +120,15 @@ public class SystemFragment extends Fragment {
                 mVals[index]=childrenBeanList.get(index).getName();
                 Log.d(TAG, "child: "+childrenBeanList.get(index).getName());
             }
+            SystemSimpleBean systemSimpleBean=new SystemSimpleBean(systemDataBean.getName(),mVals);
+            systemSimpleBeanList.add(systemSimpleBean);
         }
+
+        //实例化MyAdapter并传入mList对象
+        tagsAdapter = new TagsAdapter(systemSimpleBeanList);
+        Log.d(TAG, "initData: "+systemSimpleBeanList.size());
+//为RecyclerView对象mRecyclerView设置adapter
+        mRecyclerView.setAdapter(tagsAdapter);
 
         Log.d(TAG, "initData:  rcyc ok");
     }

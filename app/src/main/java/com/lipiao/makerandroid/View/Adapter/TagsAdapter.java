@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lipiao.makerandroid.Bean.SystemBean;
+import com.lipiao.makerandroid.Bean.SystemSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -24,12 +25,12 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
     String TAG ="TagsAdapter";
 
     //TagsAdapter的成员变量systemBeanList.DataBean, 这里被我们用作数据的来源
-    private List<SystemBean.DataBean> systemDataBeanList;
+    private List<SystemSimpleBean> systemSimpleBeanList;
     private Context context;
 
     //构造函数
-    public TagsAdapter(List<SystemBean.DataBean> systemBeanList) {
-        this.systemDataBeanList = systemBeanList;
+    public TagsAdapter(List<SystemSimpleBean> systemSimpleBeanList) {
+        this.systemSimpleBeanList = systemSimpleBeanList;
     }
 
 
@@ -48,24 +49,16 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
     public void onBindViewHolder(@NonNull ContactViewHolder contactViewHolder, int i) {
 
         //通过其get()方法可以获得其中的对象
-        SystemBean.DataBean systemDataBean = systemDataBeanList.get(i);
-        contactViewHolder.tvTitle.setText(systemDataBean.getName());
-        Log.d(TAG, "title: "+systemDataBean.getName());
-
-        List<SystemBean.DataBean.ChildrenBean> childrenBeanList=systemDataBean.getChildren();
-        String[] mVals =new String[childrenBeanList.size()];
-        for (int index=0;index<childrenBeanList.size();index++){
-            mVals[i]=childrenBeanList.get(index).getName();
-            Log.d(TAG, "child: "+childrenBeanList.get(index).getName());
-        }
-
+        SystemSimpleBean systemSimpleBean = systemSimpleBeanList.get(i);
+        contactViewHolder.tvTitle.setText(systemSimpleBean.getTitle());
+        Log.d(TAG, "title: "+systemSimpleBean.getTitle());
 
 
         //获取布局填充器,一会将tv.xml文件填充到标签内.
         final LayoutInflater mInflater = LayoutInflater.from(context);
 
         //流式布局
-        contactViewHolder.tflTags.setAdapter(new TagAdapter<String>(mVals) {
+        contactViewHolder.tflTags.setAdapter(new TagAdapter<String>(systemSimpleBean.getTags()) {
             @Override
             public View getView(FlowLayout parent, int position, String s) {
                 TextView tv = (TextView) mInflater.inflate(R.layout.flow_tv_item,
@@ -79,7 +72,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
         contactViewHolder.tflTags.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
             @Override
             public boolean onTagClick(View view, int position, com.zhy.view.flowlayout.FlowLayout parent) {
-                Toast.makeText(context, mVals[position], Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, systemSimpleBean.getTags()[position], Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
@@ -88,7 +81,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
 
     @Override
     public int getItemCount() {
-        return systemDataBeanList.size();
+        return systemSimpleBeanList.size();
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
