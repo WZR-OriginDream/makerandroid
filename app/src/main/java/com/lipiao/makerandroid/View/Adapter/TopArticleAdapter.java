@@ -1,6 +1,5 @@
 package com.lipiao.makerandroid.View.Adapter;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import com.lipiao.makerandroid.R;
 
 import java.util.List;
 
+
+//每日文章推荐适配器（top）——recycleView+cardView
 public class TopArticleAdapter  extends RecyclerView.Adapter<TopArticleAdapter.ContactViewHolder> {
 
     //MyAdapter的成员变量contactInfoList, 这里被我们用作数据的来源
@@ -28,7 +29,7 @@ public class TopArticleAdapter  extends RecyclerView.Adapter<TopArticleAdapter.C
     @Override
     public TopArticleAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.artcile_item_card, viewGroup, false);
+                inflate(R.layout.artcile_card_item, viewGroup, false);
         return new ContactViewHolder(itemView);
 
     }
