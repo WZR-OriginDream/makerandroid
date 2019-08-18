@@ -11,6 +11,8 @@
     <color name="gray">#C1C1C2</color>
     <!--app背景 浅灰-->
     <color name="back_gray">#F0F0F0</color>
+    <!--体系标签tag字体颜色 黑色-->
+    <color name="black_tag_text">#000000</color>
 
 
 </resources>

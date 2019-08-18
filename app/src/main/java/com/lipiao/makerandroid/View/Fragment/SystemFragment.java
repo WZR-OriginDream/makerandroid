@@ -5,26 +5,38 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lipiao.makerandroid.R;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class SystemFragment  extends Fragment {
+public class SystemFragment extends Fragment {
     View rootView;
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
 //    @BindView(R.id.srl_sf)
 //    RefreshLayout refreshLayout;
+
+    //流式布局
     @BindView(R.id.id_flow_layout)
-    FlowLayout flowLayout;
+    TagFlowLayout tagFlowLayout;
+
+    //放入流式布局标签中的内容
+    private String[] mVals = new String[]
+            {"有信用卡", "有微粒贷", "我有房", "我有车", "有社保", "有公积金",
+                    "有人寿保险", "工资银行卡转账", "啥都没有"};
+
     public SystemFragment() {
         // Required empty public constructor
     }
@@ -47,6 +59,28 @@ public class SystemFragment  extends Fragment {
 
 
     private void initView() {
+        //获取布局填充器,一会将tv.xml文件填充到标签内.
+        final LayoutInflater mInflater = LayoutInflater.from(getActivity());
+
+        //流式布局
+        tagFlowLayout.setAdapter(new TagAdapter<String>(mVals) {
+            @Override
+            public View getView(FlowLayout parent, int position, String s) {
+                TextView tv = (TextView) mInflater.inflate(R.layout.flow_tv_item,
+                        tagFlowLayout, false);
+                tv.setText(s);
+                return tv;
+            }
+        });
+
+        //          为点击标签设置点击事件.
+        tagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
+            @Override
+            public boolean onTagClick(View view, int position, com.zhy.view.flowlayout.FlowLayout parent) {
+                Toast.makeText(getContext(), mVals[position], Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
     }
 
