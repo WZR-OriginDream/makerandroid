@@ -25,4 +25,13 @@
     <string name="project_list_data_url">https://www.wanandroid.com/project/list/1/json?cid=294</string>
 
 
+    <array name="tree">
+        <item>体系</item>
+        <item>导航</item>
+    </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
