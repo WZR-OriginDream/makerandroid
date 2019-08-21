@@ -22,6 +22,12 @@
     <color name="bg_rv_item_tv">#e6e7ed</color>
     <color name="text_daily_mode">#393B4D</color>
 
+    <!--tags-->
+    1296db
+    <color name="text_tags_select">#1296db</color>
+    <color name="text_tags_select_no">#000000</color>
+    <color name="tags_color">#1296db</color>
+
 
 
 </resources>

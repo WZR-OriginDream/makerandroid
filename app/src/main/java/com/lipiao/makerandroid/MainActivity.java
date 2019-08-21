@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (systemFragment == null) {
             systemFragment = systemFragment.newInstance();
-            tabViewChildList.add(new TabViewChild(R.mipmap.system, R.mipmap.system_no, "体系", systemFragment));
+            tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", systemFragment));
         }
         if (projectFragment == null) {
             projectFragment = ProjectFragment.newInstance();
