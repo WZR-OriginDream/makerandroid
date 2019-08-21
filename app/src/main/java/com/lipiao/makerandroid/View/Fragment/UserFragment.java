@@ -26,13 +26,13 @@ public class UserFragment extends Fragment {
     private Unbinder unbinder;
 
     @BindView(R.id.tl_user_fragment)
-    private TabLayout tabLayout;
+    TabLayout tabLayout;
 
     @BindView(R.id.vp_user_fragment)
-    private ViewPager viewPager;
+    ViewPager viewPager;
 
     private TabPagerAdapter tabPagerAdapter;//注意导包
-    private String[] titles = {"知识体系","拓维导航"};
+    private String[] titles = {"知识体系", "拓维导航"};
     private List<Fragment> fragments;
 
 
@@ -84,6 +84,7 @@ public class UserFragment extends Fragment {
     private void initData() {
 
     }
+
     private void initListener() {
 
     }
