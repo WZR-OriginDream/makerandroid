@@ -3,6 +3,7 @@ package com.lipiao.makerandroid.View.Fragment;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,11 @@ public class UserFragment extends Fragment {
     private Unbinder unbinder;
 
     @BindView(R.id.tl_user_fragment)
-    TabLayout tabLayout;
+    private TabLayout tabLayout;
+
+    @BindView(R.id.vp_user_fragment)
+    private ViewPager viewPager;
+
 
 
     public UserFragment() {
@@ -46,6 +51,7 @@ public class UserFragment extends Fragment {
     private void initView() {
         tabLayout.addTab(tabLayout.newTab().setText("知识体系"));
         tabLayout.addTab(tabLayout.newTab().setText("拓维导航"));
+        //为指示器添加图片
 //        tabLayout.addTab(tabLayout.newTab().setText("知识体系").setIcon(R.mipmap.tree));
 //        tabLayout.addTab(tabLayout.newTab().setText("拓维导航").setIcon(R.mipmap.navi));
 
