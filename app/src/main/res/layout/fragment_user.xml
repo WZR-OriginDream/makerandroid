@@ -5,6 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.TabLayout
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabTextColor="@color/text_tags_select_no"
         app:tabSelectedTextColor="@color/text_tags_select"
         app:tabIndicatorColor="@color/text_tags_select"

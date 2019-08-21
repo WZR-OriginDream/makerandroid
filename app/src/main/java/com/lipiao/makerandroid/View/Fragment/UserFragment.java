@@ -44,8 +44,10 @@ public class UserFragment extends Fragment {
 
 
     private void initView() {
-        tabLayout.addTab(tabLayout.newTab().setText("知识体系").setIcon(R.mipmap.tree));
-        tabLayout.addTab(tabLayout.newTab().setText("拓维导航").setIcon(R.mipmap.navi));
+        tabLayout.addTab(tabLayout.newTab().setText("知识体系"));
+        tabLayout.addTab(tabLayout.newTab().setText("拓维导航"));
+//        tabLayout.addTab(tabLayout.newTab().setText("知识体系").setIcon(R.mipmap.tree));
+//        tabLayout.addTab(tabLayout.newTab().setText("拓维导航").setIcon(R.mipmap.navi));
 
     }
 

@@ -16,7 +16,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    // values-v21。5.0 以上提供了 setStatusBarColor() 方法设置状态栏颜色。
+    <!--values-v21。5.0 以上提供了 setStatusBarColor() 方法设置状态栏颜色。-->
     <style parent="Theme.AppCompat.Light.NoActionBar" name="smartTheme">
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">true</item>
@@ -24,6 +24,11 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <!--允许过度-->
         <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <!--TabLayout字体大小样式设置-->
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">18dp</item>
     </style>
 
 
