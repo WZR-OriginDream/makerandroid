@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 //适配tabLayout指示器与viewpager+fragment联动
-public class PagerAdapter extends FragmentStatePagerAdapter {
+public class TabPagerAdapter extends FragmentStatePagerAdapter {
 
     private String[] titles;
 
@@ -23,7 +23,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         this.fragments = fragments;
     }
 
-    public PagerAdapter(FragmentManager fm) {
+    public TabPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
