@@ -91,7 +91,9 @@ public class LeadFragment extends Fragment {
         }
 
         //titles，fragments，viewpager初始完后与适配器绑定
-        tabPagerAdapter = new TabPagerAdapter(getActivity().getSupportFragmentManager());
+        //getChildFragmentManager()解决滑动卡顿 亲测有效
+        tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager());
+        //tabPagerAdapter = new TabPagerAdapter(getActivity().getSupportFragmentManager());
         tabPagerAdapter.setTitles(titles);
         tabPagerAdapter.setFragments(fragments);
         viewPager.setAdapter(tabPagerAdapter);
