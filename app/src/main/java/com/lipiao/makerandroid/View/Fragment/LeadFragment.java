@@ -22,8 +22,8 @@ public class LeadFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static SimpleFragment newInstance() {
-        return new SimpleFragment();
+    public static LeadFragment newInstance() {
+        return new LeadFragment();
     }
 
     @Override
