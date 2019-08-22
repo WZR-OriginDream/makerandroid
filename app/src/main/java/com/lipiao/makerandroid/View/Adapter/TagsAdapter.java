@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lipiao.makerandroid.Bean.SystemBean;
 import com.lipiao.makerandroid.Bean.SystemSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -19,7 +18,7 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 
 import java.util.List;
 
-//体系标签适配器——recycleView+cardView
+//导向碎片中 知识体系与拓维导航 标签适配器——recycleView+cardView+flowLayout
 public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHolder> {
 
     String TAG ="TagsAdapter";

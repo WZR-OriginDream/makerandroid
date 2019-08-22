@@ -1,7 +1,8 @@
 package com.lipiao.makerandroid.Bean;
 
 /**
- * top文章
+ * top文章bean类简化版
+ * 用于首页
  */
 public class ArticleBean {
     private String author;
