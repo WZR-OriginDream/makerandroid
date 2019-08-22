@@ -2,6 +2,8 @@ package com.lipiao.makerandroid.Utils;
 
 import android.support.v4.app.Fragment;
 
+import com.lipiao.makerandroid.View.Fragment.ProjectCategoryFragment;
+import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
 import com.lipiao.makerandroid.View.Fragment.SystemFragment;
 
 import java.util.HashMap;
@@ -17,30 +19,47 @@ public class FragmentFactoryUtil {
      * 2.2导向碎片——拓维导航
      */
     public static final int TAB_NAVIGATION = 1;
+
     /**
-     * 3.1项目碎片——
+     * 项目分类碎片根据所传递过来的String 来生成对应的碎片
      */
 
 
+    //保存碎片信息，以便复用，防止重复加载资源
+    //导向碎片中的碎片(以int类型区分)
+    private static Map<Integer, Fragment> leadFragmentMap = new HashMap<>();
+    //项目碎片中的碎片(以String类型区分)
+    private static Map<String, Fragment> projectFragmentMap = new HashMap<>();
 
-
-    private static Map<Integer, Fragment> mFragmentMap = new HashMap<>();
-
-    public static Fragment creatFragment(int index){
-        Fragment fragment = mFragmentMap.get(index);
+    //根据下标创建碎片 适用于导向碎片中创建碎片
+    public static Fragment initFragment(int index) {
+        Fragment fragment = leadFragmentMap.get(index);
         //如果之前没有创建，就创建新的
-        if (fragment == null){
-            switch (index){
+        if (fragment == null) {
+            switch (index) {
                 case TAB_TREE:
-                    fragment =  SystemFragment.newInstance("tree");//知识体系
+                    fragment = SystemFragment.newInstance("tree");//知识体系
                     break;
                 case TAB_NAVIGATION:
                     fragment = SystemFragment.newInstance("navigation");//拓维导航
                     break;
             }
             //把创建的fragment存起来
-            mFragmentMap.put(index,fragment);
+            leadFragmentMap.put(index, fragment);
         }
+        return fragment;
+    }
+
+    //重写initFragment
+    //根据String创建碎片 适用于项目碎片中创建项目分类碎片
+    public static Fragment initFragment(String projectCategory) {
+        Fragment fragment = projectFragmentMap.get(projectCategory);
+        //如果之前没有创建，就创建新的
+        if (fragment == null) {
+            fragment = ProjectCategoryFragment.newInstance(projectCategory);//根据项目分类类别来创建fragment
+        }
+        //把创建的fragment存起来
+        projectFragmentMap.put(projectCategory, fragment);
         return fragment;
     }
 }
