@@ -80,13 +80,13 @@ public class LeadFragment extends Fragment {
         switch (strFragmentKind) {
             case "leadFragment":
                 initLeadFragment();
-                tabLayout.setTabMode(TabLayout.MODE_FIXED);//设置Tab滚动方式为：固定
-                // 可以通过xml布局文件修改 app:tabMode="scrollable"app:tabMode="fixed"
-                //此处由于需要两种都要用 所以使用java修改滚动方式 提高布局文件复用率
+//                tabLayout.setTabMode(TabLayout.MODE_FIXED);//设置Tab滚动方式为：固定
+//                // 可以通过xml布局文件修改 app:tabMode="scrollable"app:tabMode="fixed"
+//                //此处由于需要两种都要用 所以使用java修改滚动方式 提高布局文件复用率
                 break;
             case "projectFragment":
                 initProjectFragment();
-                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
+//                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
                 break;
         }
 
@@ -97,7 +97,7 @@ public class LeadFragment extends Fragment {
         viewPager.setAdapter(tabPagerAdapter);
         //将TabLayout和ViewPager绑定
         tabLayout.setupWithViewPager(viewPager);
-        //tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
 
 
     }
