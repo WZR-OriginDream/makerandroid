@@ -28,7 +28,8 @@
 
     <!--TabLayout字体大小样式设置-->
     <style name="TabLayoutTextStyle">
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">16dp</item>
+
     </style>
 
 

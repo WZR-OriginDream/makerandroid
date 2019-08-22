@@ -80,13 +80,9 @@ public class LeadFragment extends Fragment {
         switch (strFragmentKind) {
             case "leadFragment":
                 initLeadFragment();
-//                tabLayout.setTabMode(TabLayout.MODE_FIXED);//设置Tab滚动方式为：固定
-//                // 可以通过xml布局文件修改 app:tabMode="scrollable"app:tabMode="fixed"
-//                //此处由于需要两种都要用 所以使用java修改滚动方式 提高布局文件复用率
                 break;
             case "projectFragment":
                 initProjectFragment();
-//                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
                 break;
         }
 
@@ -126,10 +122,12 @@ public class LeadFragment extends Fragment {
         titles =new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
         for (int i = 0; i< projectCategoryDataBeanList.size() ; i++ ) {
             String category=projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
+            int categoryCID=projectCategoryDataBeanList.get(i).getId();
             Log.d(TAG, "initProjectFragment: category"+category);
             titles[i]=category;//初始化titles，用于传入适配器，与tag名称一致
             tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
-            fragments.add(FragmentFactoryUtil.initFragment(category));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
+            //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
+            fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
         }
 
 

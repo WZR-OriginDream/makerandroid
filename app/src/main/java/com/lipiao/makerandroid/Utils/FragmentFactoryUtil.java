@@ -21,7 +21,7 @@ public class FragmentFactoryUtil {
     public static final int TAB_NAVIGATION = 1;
 
     /**
-     * 项目分类碎片根据所传递过来的String 来生成对应的碎片
+     * 项目分类碎片根据所传递过来的CID （也是int类型） 来生成对应的碎片
      */
 
 
@@ -29,7 +29,7 @@ public class FragmentFactoryUtil {
     //导向碎片中的碎片(以int类型区分)
     private static Map<Integer, Fragment> leadFragmentMap = new HashMap<>();
     //项目碎片中的碎片(以String类型区分)
-    private static Map<String, Fragment> projectFragmentMap = new HashMap<>();
+   // private static Map<String, Fragment> projectFragmentMap = new HashMap<>();
 
     //根据下标创建碎片 适用于导向碎片中创建碎片
     public static Fragment initFragment(int index) {
@@ -43,6 +43,9 @@ public class FragmentFactoryUtil {
                 case TAB_NAVIGATION:
                     fragment = SystemFragment.newInstance("navigation");//拓维导航
                     break;
+                default:
+                    fragment = ProjectCategoryFragment.newInstance(index);//根据项目分类CID来创建fragment
+
             }
             //把创建的fragment存起来
             leadFragmentMap.put(index, fragment);
@@ -50,16 +53,16 @@ public class FragmentFactoryUtil {
         return fragment;
     }
 
-    //重写initFragment
-    //根据String创建碎片 适用于项目碎片中创建项目分类碎片
-    public static Fragment initFragment(String projectCategory) {
-        Fragment fragment = projectFragmentMap.get(projectCategory);
-        //如果之前没有创建，就创建新的
-        if (fragment == null) {
-            fragment = ProjectCategoryFragment.newInstance(projectCategory);//根据项目分类类别来创建fragment
-        }
-        //把创建的fragment存起来
-        projectFragmentMap.put(projectCategory, fragment);
-        return fragment;
-    }
+//    //重写initFragment
+//    //根据String创建碎片 适用于项目碎片中创建项目分类碎片
+//    public static Fragment initProjectItemFragment(int projectCategoryCID) {
+//        Fragment fragment = projectFragmentMap.get(projectCategoryCID);
+//        //如果之前没有创建，就创建新的
+//        if (fragment == null) {
+//            fragment = ProjectCategoryFragment.newInstance(projectCategoryCID);//根据项目分类类别来创建fragment
+//        }
+//        //把创建的fragment存起来
+//        projectFragmentMap.put(projectCategoryCID, fragment);
+//        return fragment;
+//    }
 }
