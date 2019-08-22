@@ -77,7 +77,7 @@ public class SystemFragment extends Fragment {
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         //获取kind类型值
-        strKind=getArguments().getString("kind");
+        strKind = getArguments().getString("kind");
         initData();
         initView();
 //        initListener();
@@ -93,6 +93,30 @@ public class SystemFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
+        switch (strKind) {
+            case "tree":
+                initTree();
+                break;
+            case "navigation":
+                initNavigation();
+                break;
+        }
+
+
+        //实例化MyAdapter并传入mList对象
+        tagsAdapter = new TagsAdapter(systemSimpleBeanList);
+        Log.d(TAG, "initData: " + systemSimpleBeanList.size());
+//为RecyclerView对象mRecyclerView设置adapter
+        mRecyclerView.setAdapter(tagsAdapter);
+
+        Log.d(TAG, "initData:  rcyc ok");
+    }
+
+    private void initNavigation() {
+
+    }
+
+    private void initTree() {
         //处理数据
         JSONObject jsonObject = null;
         SystemBean systemBean;
@@ -120,14 +144,6 @@ public class SystemFragment extends Fragment {
             SystemSimpleBean systemSimpleBean = new SystemSimpleBean(systemDataBean.getName(), mVals);
             systemSimpleBeanList.add(systemSimpleBean);
         }
-
-        //实例化MyAdapter并传入mList对象
-        tagsAdapter = new TagsAdapter(systemSimpleBeanList);
-        Log.d(TAG, "initData: " + systemSimpleBeanList.size());
-//为RecyclerView对象mRecyclerView设置adapter
-        mRecyclerView.setAdapter(tagsAdapter);
-
-        Log.d(TAG, "initData:  rcyc ok");
     }
 
     private void initView() {
