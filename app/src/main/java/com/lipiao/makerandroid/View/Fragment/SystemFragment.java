@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+//知识体系
 public class SystemFragment extends Fragment {
 
     String TAG="SystemFragment";
@@ -47,9 +48,6 @@ public class SystemFragment extends Fragment {
 //    @BindView(R.id.srl_sf)
 //    RefreshLayout refreshLayout;
 
-//    //流式布局
-//    @BindView(R.id.id_flow_layout)
-//    TagFlowLayout tagFlowLayout;
 
     @BindView(R.id.rv_fragment_system)
     RecyclerView mRecyclerView;
@@ -57,10 +55,6 @@ public class SystemFragment extends Fragment {
     private List<SystemBean.DataBean> systemDataBeanList;
     private List<SystemSimpleBean> systemSimpleBeanList=new ArrayList<>();
 
-    //放入流式布局标签中的内容
-    private String[] mVals = new String[]
-            {"有信用卡", "有微粒贷", "我有房", "我有车", "有社保", "有公积金",
-                    "有人寿保险", "工资银行卡转账", "啥都没有"};
 
     public SystemFragment() {
         // Required empty public constructor
@@ -103,12 +97,6 @@ public class SystemFragment extends Fragment {
         systemBean = gson.fromJson(jsonObject.toString(), SystemBean.class);
         systemDataBeanList = systemBean.getData();
 
-
-//        //实例化MyAdapter并传入mList对象
-//        tagsAdapter = new TagsAdapter(systemDataBeanList);
-////为RecyclerView对象mRecyclerView设置adapter
-//        mRecyclerView.setAdapter(tagsAdapter);
-
         //通过其get()方法可以获得其中的对象
         for (int i=0;i<systemDataBeanList.size();i++){
             SystemBean.DataBean systemDataBean = systemDataBeanList.get(i);
@@ -136,34 +124,6 @@ public class SystemFragment extends Fragment {
     private void initView() {
 
     }
-
-
-//    private void initView() {
-//        //获取布局填充器,一会将tv.xml文件填充到标签内.
-//        final LayoutInflater mInflater = LayoutInflater.from(getActivity());
-//
-//        //流式布局
-//        tagFlowLayout.setAdapter(new TagAdapter<String>(mVals) {
-//            @Override
-//            public View getView(FlowLayout parent, int position, String s) {
-//                TextView tv = (TextView) mInflater.inflate(R.layout.flow_tv_item,
-//                        tagFlowLayout, false);
-//                tv.setText(s);
-//                return tv;
-//            }
-//        });
-//
-//        //          为点击标签设置点击事件.
-//        tagFlowLayout.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-//            @Override
-//            public boolean onTagClick(View view, int position, com.zhy.view.flowlayout.FlowLayout parent) {
-//                Toast.makeText(getContext(), mVals[position], Toast.LENGTH_SHORT).show();
-//                return true;
-//            }
-//        });
-//
-//    }
-
 
 //    private void initListener() {
 //        refreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);

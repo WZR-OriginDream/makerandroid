@@ -29,7 +29,7 @@ public class TopArticleAdapter  extends RecyclerView.Adapter<TopArticleAdapter.C
     @Override
     public TopArticleAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.artcile_card_item, viewGroup, false);
+                inflate(R.layout.article_card_item, viewGroup, false);
         return new ContactViewHolder(itemView);
 
     }
