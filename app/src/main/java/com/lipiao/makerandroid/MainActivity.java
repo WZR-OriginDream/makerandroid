@@ -9,6 +9,7 @@ import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
 import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
 import com.lipiao.makerandroid.View.Fragment.SystemFragment;
+import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -27,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     private List<Fragment> mList = new ArrayList<>();
     private MainFragment mainFragment;
     private ProjectFragment projectFragment;
-    private SystemFragment systemFragment;
-    private LeadFragment userFragment;
+    private LeadFragment leadFragment;
+    //private SystemFragment systemFragment;
+    private UserFragment userFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
             mainFragment = MainFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.main, R.mipmap.main_no, "首页", mainFragment));
         }
-        if (systemFragment == null) {
-            systemFragment = systemFragment.newInstance();
+        if (leadFragment == null) {
+            leadFragment = leadFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", systemFragment));
         }
         if (projectFragment == null) {
@@ -51,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
-            userFragment = LeadFragment.newInstance();
+            userFragment = userFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
         //getSupportFragmentManager() 需要基类继承自AppCompatActivity
