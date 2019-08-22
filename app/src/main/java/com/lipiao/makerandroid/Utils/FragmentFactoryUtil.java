@@ -26,10 +26,10 @@ public class FragmentFactoryUtil {
         if (fragment == null){
             switch (index){
                 case TAB_RECOMMEND:
-                    fragment = new SystemFragment();
+                    fragment =  SystemFragment.newInstance("tree");//知识体系
                     break;
                 case TAB_CATEGORY:
-                    fragment = new SystemFragment();
+                    fragment = SystemFragment.newInstance("navigation");//拓维导航
                     break;
             }
             //把创建的fragment存起来
