@@ -34,10 +34,10 @@ public class LeadFragment extends Fragment {
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
-    @BindView(R.id.tl_user_fragment)
+    @BindView(R.id.tl_lead_fragment)
     TabLayout tabLayout;
 
-    @BindView(R.id.vp_user_fragment)
+    @BindView(R.id.vp_lead_fragment)
     ViewPager viewPager;
 
     private TabPagerAdapter tabPagerAdapter;//注意导包

@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.TabLayout
-        android:id="@+id/tl_user_fragment"
+        android:id="@+id/tl_lead_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:tabIndicatorColor="@color/text_tags_select"
@@ -16,10 +16,10 @@
     </android.support.design.widget.TabLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/vp_user_fragment"
+        android:id="@+id/vp_lead_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tl_user_fragment" />
+        android:layout_below="@id/tl_lead_fragment" />
 
 
 </RelativeLayout>
