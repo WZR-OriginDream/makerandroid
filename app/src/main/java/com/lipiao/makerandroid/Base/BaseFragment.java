@@ -29,6 +29,7 @@ public abstract class BaseFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         //已经加载过则直接使用
+
         if (mRootView != null) {
             return mRootView;
         }
