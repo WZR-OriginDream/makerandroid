@@ -1,6 +1,7 @@
 package com.lipiao.makerandroid.Bean;
 
 //体系标签简化Bean类 体系大标题+下属的小标签集合
+//与导航解析使用统一简化Bean类（需求相同title+tags），提高代码复用率
 public class SystemSimpleBean {
     String title;
     String[] tags;
