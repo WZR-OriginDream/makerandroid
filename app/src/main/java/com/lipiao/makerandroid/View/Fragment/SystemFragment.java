@@ -40,7 +40,8 @@ import butterknife.Unbinder;
 //知识体系
 public class SystemFragment extends Fragment {
 
-    String TAG="SystemFragment";
+    String TAG = "SystemFragment";
+    String strKind;
     View rootView;
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
@@ -53,15 +54,20 @@ public class SystemFragment extends Fragment {
     RecyclerView mRecyclerView;
     TagsAdapter tagsAdapter;
     private List<SystemBean.DataBean> systemDataBeanList;
-    private List<SystemSimpleBean> systemSimpleBeanList=new ArrayList<>();
+    private List<SystemSimpleBean> systemSimpleBeanList = new ArrayList<>();
 
 
     public SystemFragment() {
         // Required empty public constructor
     }
 
-    public static SystemFragment newInstance() {
-        return new SystemFragment();
+    //分类，知识体系和拓维导航两种碎片leadFragment中包含两个碎片
+    public static SystemFragment newInstance(String arg) {
+        SystemFragment fragment = new SystemFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("kind", arg);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -70,13 +76,15 @@ public class SystemFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_system, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
+        //获取kind类型值
+        strKind=getArguments().getString("kind");
         initData();
         initView();
 //        initListener();
         return rootView;
     }
 
-    private void initData()  {
+    private void initData() {
 
         //top rv
         mRecyclerView.setHasFixedSize(true);
@@ -99,23 +107,23 @@ public class SystemFragment extends Fragment {
         systemDataBeanList = systemBean.getData();
 
         //通过其get()方法可以获得其中的对象
-        for (int i=0;i<systemDataBeanList.size();i++){
+        for (int i = 0; i < systemDataBeanList.size(); i++) {
             SystemBean.DataBean systemDataBean = systemDataBeanList.get(i);
-            Log.d(TAG, "@@@@@title: "+systemDataBean.getName());
+            Log.d(TAG, "@@@@@title: " + systemDataBean.getName());
 
-            List<SystemBean.DataBean.ChildrenBean> childrenBeanList=systemDataBean.getChildren();
-            String[] mVals =new String[childrenBeanList.size()];
-            for (int index=0;index<childrenBeanList.size();index++){
-                mVals[index]=childrenBeanList.get(index).getName();
-                Log.d(TAG, "child: "+childrenBeanList.get(index).getName());
+            List<SystemBean.DataBean.ChildrenBean> childrenBeanList = systemDataBean.getChildren();
+            String[] mVals = new String[childrenBeanList.size()];
+            for (int index = 0; index < childrenBeanList.size(); index++) {
+                mVals[index] = childrenBeanList.get(index).getName();
+                Log.d(TAG, "child: " + childrenBeanList.get(index).getName());
             }
-            SystemSimpleBean systemSimpleBean=new SystemSimpleBean(systemDataBean.getName(),mVals);
+            SystemSimpleBean systemSimpleBean = new SystemSimpleBean(systemDataBean.getName(), mVals);
             systemSimpleBeanList.add(systemSimpleBean);
         }
 
         //实例化MyAdapter并传入mList对象
         tagsAdapter = new TagsAdapter(systemSimpleBeanList);
-        Log.d(TAG, "initData: "+systemSimpleBeanList.size());
+        Log.d(TAG, "initData: " + systemSimpleBeanList.size());
 //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(tagsAdapter);
 
