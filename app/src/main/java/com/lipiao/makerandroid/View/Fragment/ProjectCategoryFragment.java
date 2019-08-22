@@ -15,7 +15,7 @@ import butterknife.Unbinder;
 public class ProjectCategoryFragment extends Fragment {
     View rootView;
     String TAG="ProjectCategoryFragment";
-    String strProjectCategory;//项目种类
+    int intProjectCategoryCID;//项目种类编号，访问接口需要
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
@@ -23,10 +23,10 @@ public class ProjectCategoryFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ProjectCategoryFragment newInstance(String strProjectCategory) {
+    public static ProjectCategoryFragment newInstance(int intProjectCategoryCID) {
         ProjectCategoryFragment fragment = new ProjectCategoryFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("strProjectCategory", strProjectCategory);
+        bundle.putInt("categoryCid",intProjectCategoryCID);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -37,6 +37,8 @@ public class ProjectCategoryFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_simple, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
+        //获取fragmentKind类型值 判断是初始化何种碎片
+        intProjectCategoryCID = getArguments().getInt("categoryCid");
         initData();
         initView();
         initListener();
