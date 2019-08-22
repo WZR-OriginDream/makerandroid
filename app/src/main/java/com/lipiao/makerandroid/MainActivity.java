@@ -26,11 +26,12 @@ public class MainActivity extends AppCompatActivity {
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private List<Fragment> mList = new ArrayList<>();
-    private MainFragment mainFragment;
-    private ProjectFragment projectFragment;
-    private LeadFragment leadFragment;
-    //private SystemFragment systemFragment;
-    private UserFragment userFragment;
+    private MainFragment mainFragment;//首页
+
+    //private ProjectFragment projectFragment;
+    private LeadFragment leadFragment;//导向
+    private LeadFragment projectFragment;//导向
+    private UserFragment userFragment;//我的
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,11 +46,11 @@ public class MainActivity extends AppCompatActivity {
             tabViewChildList.add(new TabViewChild(R.mipmap.main, R.mipmap.main_no, "首页", mainFragment));
         }
         if (leadFragment == null) {
-            leadFragment = leadFragment.newInstance();
+            leadFragment = leadFragment.newInstance("leadFragment");
             tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", leadFragment));
         }
         if (projectFragment == null) {
-            projectFragment = ProjectFragment.newInstance();
+            projectFragment = projectFragment.newInstance("projectFragment");
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
