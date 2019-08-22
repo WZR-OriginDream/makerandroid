@@ -20,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+//导向与项目碎片复用 结构相似tags+fragments
 public class LeadFragment extends Fragment {
     View rootView;
     //碎片中使用butterknife略有不同

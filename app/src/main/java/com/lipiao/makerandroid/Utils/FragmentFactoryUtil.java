@@ -7,16 +7,22 @@ import com.lipiao.makerandroid.View.Fragment.SystemFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-//碎片工厂工具类，适用于tags+fragment
+//碎片工厂工具类，适用于tags+fragment（导向碎片和项目碎片复用，用于生成子碎片）
 public class FragmentFactoryUtil {
     /**
-     * 知识体系
+     * 2.1导向碎片——知识体系
      */
-    public static final int TAB_RECOMMEND = 0;
+    public static final int TAB_TREE = 0;
     /**
-     * 拓维导航
+     * 2.2导向碎片——拓维导航
      */
-    public static final int TAB_CATEGORY = 1;
+    public static final int TAB_NAVIGATION = 1;
+    /**
+     * 3.1项目碎片——
+     */
+
+
+
 
     private static Map<Integer, Fragment> mFragmentMap = new HashMap<>();
 
@@ -25,10 +31,10 @@ public class FragmentFactoryUtil {
         //如果之前没有创建，就创建新的
         if (fragment == null){
             switch (index){
-                case TAB_RECOMMEND:
+                case TAB_TREE:
                     fragment =  SystemFragment.newInstance("tree");//知识体系
                     break;
-                case TAB_CATEGORY:
+                case TAB_NAVIGATION:
                     fragment = SystemFragment.newInstance("navigation");//拓维导航
                     break;
             }

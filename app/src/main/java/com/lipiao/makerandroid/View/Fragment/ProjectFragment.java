@@ -22,7 +22,6 @@ public class ProjectFragment extends Fragment {
 
     @BindView(R.id.srl_pf)
     RefreshLayout refreshLayout;
-    //SmartRefreshLayout smartRefreshLayout;
 
     public ProjectFragment() {
         // Required empty public constructor

@@ -27,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-//知识体系
+//知识体系与拓维导航复用同一个模板碎片
 public class SystemFragment extends Fragment {
 
     String TAG = "SystemFragment";
