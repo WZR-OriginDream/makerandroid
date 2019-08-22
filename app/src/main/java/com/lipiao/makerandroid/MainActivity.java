@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
 import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
 import com.lipiao.makerandroid.View.Fragment.SystemFragment;
-import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private MainFragment mainFragment;
     private ProjectFragment projectFragment;
     private SystemFragment systemFragment;
-    private UserFragment userFragment;
+    private LeadFragment userFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
-            userFragment = UserFragment.newInstance();
+            userFragment = LeadFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
         //getSupportFragmentManager() 需要基类继承自AppCompatActivity
