@@ -11,7 +11,7 @@ import com.lipiao.makerandroid.R;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-
+//项目分类 一个类别生成一个碎片
 public class ProjectCategoryFragment extends Fragment {
     View rootView;
     String TAG="ProjectCategoryFragment";
@@ -35,7 +35,7 @@ public class ProjectCategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //试图文件复用fragment_project  由于结构一致
-        rootView = inflater.inflate(R.layout.fragment_project, container, false);
+        rootView = inflater.inflate(R.layout.fragment_project_category, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         //获取fragmentKind类型值 判断是初始化何种碎片
