@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,7 @@ public class LeadFragment extends Fragment {
     ViewPager viewPager;
 
     private TabPagerAdapter tabPagerAdapter;//注意导包
-    private String[] titles = {"知识体系", "拓维导航"};
+    private String[] titles ;
     private List<Fragment> fragments;
 
 
@@ -79,9 +80,13 @@ public class LeadFragment extends Fragment {
         switch (strFragmentKind) {
             case "leadFragment":
                 initLeadFragment();
+                tabLayout.setTabMode(TabLayout.MODE_FIXED);//设置Tab滚动方式为：固定
+                // 可以通过xml布局文件修改 app:tabMode="scrollable"app:tabMode="fixed"
+                //此处由于需要两种都要用 所以使用java修改滚动方式 提高布局文件复用率
                 break;
             case "projectFragment":
                 initProjectFragment();
+                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
                 break;
         }
 
@@ -92,7 +97,7 @@ public class LeadFragment extends Fragment {
         viewPager.setAdapter(tabPagerAdapter);
         //将TabLayout和ViewPager绑定
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        //tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
 
 
     }
@@ -116,8 +121,11 @@ public class LeadFragment extends Fragment {
         //1.将其作为Tab添加至tabLayout中
         //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
         fragments = new ArrayList<>();
+        titles =new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
         for (int i = 0; i< projectCategoryDataBeanList.size() ; i++ ) {
             String category=projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
+            Log.d(TAG, "initProjectFragment: category"+category);
+            titles[i]=category;//初始化titles，用于传入适配器，与tag名称一致
             tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
             fragments.add(FragmentFactoryUtil.initFragment(category));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
         }
@@ -133,16 +141,19 @@ public class LeadFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("知识体系"));
         tabLayout.addTab(tabLayout.newTab().setText("拓维导航"));
 
+        titles= new String[]{"知识体系", "拓维导航"};
         fragments = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             fragments.add(FragmentFactoryUtil.initFragment(i));
         }
+
 //        tabPagerAdapter.setTitles(titles);
 //        tabPagerAdapter.setFragments(fragments);
 //        viewPager.setAdapter(tabPagerAdapter);
 //        //将TabLayout和ViewPager绑定
 //        tabLayout.setupWithViewPager(viewPager);
 //        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+//
 
         //为指示器添加图片（此处不用了）
 //        tabLayout.addTab(tabLayout.newTab().setText("知识体系").setIcon(R.mipmap.tree));
