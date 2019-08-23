@@ -58,9 +58,9 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
     class ContactViewHolder extends RecyclerView.ViewHolder {
         //create the viewHolder class
         protected TextView author;
+
         protected TextView title;
         protected TextView time;
-
         protected TextView kind;
 
         public ContactViewHolder(View itemView) {
