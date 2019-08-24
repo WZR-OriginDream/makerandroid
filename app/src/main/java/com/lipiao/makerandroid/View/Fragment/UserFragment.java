@@ -55,7 +55,7 @@ public class UserFragment extends Fragment {
     private void demoForRetrofit() {
         //初始化网络请求
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.apiopen.top/weatherApi")
+                .baseUrl("https://www.apiopen.top/")
                 .build();
         WeatherService weatherService = retrofit.create(WeatherService.class);
         //接口参数
@@ -81,14 +81,12 @@ public class UserFragment extends Fragment {
                      * 以获取近五天的天气为例
                      */
 
-                    for (int i=0;i<5;i++){
-                        Log.d(TAG, "onResponse: "+
-                                "日期"+weatherBean.getData().getForecast().get(i).getDate()+
-                                "天气："+weatherBean.getData().getForecast().get(i).getType()+"\n" +
+                    for (int i = 0; i < 5; i++) {
+                        Log.d(TAG, "onResponse: " +
+                                "日期" + weatherBean.getData().getForecast().get(i).getDate() +
+                                "天气：" + weatherBean.getData().getForecast().get(i).getType() + "\n" +
                                 "");
                     }
-
-
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
