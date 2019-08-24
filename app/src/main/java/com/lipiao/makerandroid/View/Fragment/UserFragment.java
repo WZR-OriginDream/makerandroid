@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
 import com.lipiao.makerandroid.Bean.WeatherBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WeatherService;
@@ -59,8 +58,8 @@ public class UserFragment extends Fragment {
                 .build();
         WeatherService weatherService = retrofit.create(WeatherService.class);
         //接口参数
-        String strLocation = "长沙";
-        Call<ResponseBody> call = weatherService.getWeather(strLocation);
+        String strCity = "长沙";
+        Call<ResponseBody> call = weatherService.getWeather(strCity);
 
         //网络请求
         call.enqueue(new Callback<ResponseBody>() {
@@ -99,6 +98,15 @@ public class UserFragment extends Fragment {
                 Log.d(TAG, "onFailure: 请求失败");
             }
         });
+    }
+
+    /**
+     * onDestroyView中进行解绑操作
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
 }
