@@ -2,13 +2,17 @@ package com.lipiao.makerandroid.View.Fragment;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
+import com.just.agentweb.AgentWeb;
 import com.lipiao.makerandroid.Bean.WeatherBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WeatherService;
@@ -17,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,6 +38,9 @@ public class UserFragment extends Fragment {
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
+    AgentWeb mAgentWeb;
+
+
     public UserFragment() {
         // Required empty public constructor
     }
@@ -41,14 +49,47 @@ public class UserFragment extends Fragment {
         return new UserFragment();
     }
 
+    //使用agent web
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+//        //fragment
+////        mAgentWeb = AgentWeb.with(this)//这里需要把Fragment传入
+////                .setAgentWebParent((ViewGroup) view, new LinearLayout.LayoutParams(-1, -1))// 设置 AgentWeb 的父控件 ， 这里的view 是 LinearLayout ， 那么需要传入 LinearLayout.LayoutParams
+////                .useDefaultIndicator()// 使用默认进度条
+////                .createAgentWeb()//
+////                .ready()//
+////                .go("https://www.baidu.com");
+        mAgentWeb = AgentWeb.with(this)
+                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1, -1))
+                .useDefaultIndicator()
+                .createAgentWeb()
+                .ready()
+                .go("http://www.jd.com");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_userr, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
-        demoForRetrofit();
+        //demoForRetrofit();
+        //agentWeb();
+
         return rootView;
+    }
+
+    private void agentWeb() {
+
+
+//        //activity
+//        mAgentWeb = AgentWeb.with(this)
+//                .setAgentWebParent((LinearLayout) rootView, new LinearLayout.LayoutParams(-1, -1))
+//                .useDefaultIndicator()
+//                .createAgentWeb()
+//                .ready()
+//                .go("http://www.jd.com");
     }
 
     private void demoForRetrofit() {
