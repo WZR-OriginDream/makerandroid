@@ -54,7 +54,6 @@ public class ProjectFragment extends Fragment {
 
     private void initListener() {
 
-        refreshLayout.setPrimaryColorsId(R.color.colorPrimaryDark, android.R.color.white);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
