@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
-    private List<Fragment> mList = new ArrayList<>();
     private MainFragment mainFragment;//首页
 
     //private ProjectFragment projectFragment;
