@@ -6,6 +6,7 @@
     xmlns:zhy="http://schemas.android.com/tools">
 
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
+
         android:id="@+id/srl_sf"
         app:srlAccentColor="@android:color/white"
         app:srlPrimaryColor="@color/colorPrimaryDark"
@@ -21,11 +22,9 @@
             android:layout_height="match_parent"
             android:visibility="visible" />
 
-        <com.scwang.smartrefresh.header.StoreHouseHeader
-            app:srlTextSizeTitle="10sp"
-            app:shhText="Stay hungry "
+        <com.scwang.smartrefresh.header.TaurusHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 </FrameLayout>

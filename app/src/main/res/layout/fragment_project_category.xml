@@ -23,10 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <com.scwang.smartrefresh.header.StoreHouseHeader
+        <com.scwang.smartrefresh.header.TaurusHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:shhText="Stay foolish" />
+            android:layout_height="wrap_content" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </FrameLayout>

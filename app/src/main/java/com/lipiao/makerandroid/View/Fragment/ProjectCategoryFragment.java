@@ -23,7 +23,7 @@ public class ProjectCategoryFragment extends Fragment {
 
 
 
-    @BindView(R.id.rv_fragment_project_category)
+    @BindView(R.id.rv_fragment_system)
     RecyclerView mRecyclerView;
 
     public ProjectCategoryFragment() {
@@ -41,7 +41,8 @@ public class ProjectCategoryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_project_category, container, false);
+        //fragment_project_category可与fragment_system复用
+        rootView = inflater.inflate(R.layout.fragment_system, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         //获取fragmentKind类型值 判断是初始化何种碎片
