@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,20 +9,24 @@
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/srl_pf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.scwang.smartrefresh.header.DropBoxHeader
+        android:layout_height="match_parent"
+        app:srlAccentColor="@android:color/white"
+        app:srlPrimaryColor="@color/colorPrimaryDark">
+
+        <com.scwang.smartrefresh.header.StoreHouseHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:shhText="hnust-it" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_fragment_project_category"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+            android:layout_height="match_parent" />
 
-        <com.scwang.smartrefresh.header.TaurusHeader
+        <com.scwang.smartrefresh.header.StoreHouseHeader
             android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            app:shhText="Stay foolish" />
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 </FrameLayout>
