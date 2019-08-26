@@ -10,6 +10,16 @@ public class ProjectArticleBean {
     private String author;//作者
     private String title;//文章标题
     private String time;//发布时间
+    private String describe;//文章简介
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
     private String previewPicUrl;//项目预览图片
 
     public String getAuthor() {
@@ -44,12 +54,13 @@ public class ProjectArticleBean {
         this.previewPicUrl = previewPicUrl;
     }
 
-    public ProjectArticleBean(String author, String title, String time, String previewPicUrl) {
+    public ProjectArticleBean(String author, String title, String time, String describe, String previewPicUrl) {
         this.author = author;
         this.title = title;
         this.time = time;
+        this.describe = describe;
         this.previewPicUrl = previewPicUrl;
-
     }
+
 }
 

@@ -1,5 +1,6 @@
 package com.lipiao.makerandroid;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -17,6 +18,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static Context context;//获取context
+
+    public static Context getContext() {
+        return context;
+    }
+
     @BindView(R.id.tabView)
     TabView tabView;
 

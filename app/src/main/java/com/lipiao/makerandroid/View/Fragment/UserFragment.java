@@ -5,7 +5,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,7 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -277,6 +275,7 @@ public class UserFragment extends Fragment {
         public void onReceivedTitle(WebView view, String title) {
             super.onReceivedTitle(view, title);
             if (mTitleTextView != null && !TextUtils.isEmpty(title)) {
+                //若网页标题大于10的字符长度，则截取前十字符，后面内容用...代替
                 if (title.length() > 10) {
                     title = title.substring(0, 10).concat("...");
                 }

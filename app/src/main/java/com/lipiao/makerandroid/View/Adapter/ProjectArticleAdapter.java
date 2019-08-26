@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.lipiao.makerandroid.Bean.ArticleBean;
+import com.bumptech.glide.Glide;
 import com.lipiao.makerandroid.Bean.ProjectArticleBean;
+import com.lipiao.makerandroid.MainActivity;
 import com.lipiao.makerandroid.R;
 
 import java.util.List;
@@ -33,7 +35,7 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
     @Override
     public ProjectArticleAdapter.ContactViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).
-                inflate(R.layout.article_card_item, viewGroup, false);
+                inflate(R.layout.article_card_item_pic, viewGroup, false);
         return new ProjectArticleAdapter.ContactViewHolder(itemView);
 
     }
@@ -43,10 +45,14 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
         //citybeanList中包含的都是citybean类的对象
         //通过其get()方法可以获得其中的对象
         ProjectArticleBean projectArticleBean = projectArticleBeanList.get(i);
-        contactViewHolder.author.setText(projectArticleBean.getAuthor());
-        contactViewHolder.title.setText(projectArticleBean.getTitle());
-        contactViewHolder.time.setText(projectArticleBean.getTime());
+        contactViewHolder.tvAuthor.setText(projectArticleBean.getAuthor());
+        contactViewHolder.tvTitle.setText(projectArticleBean.getTitle());
+        contactViewHolder.tvDate.setText(projectArticleBean.getTime());
+        contactViewHolder.tvDescribe.setText(projectArticleBean.getDescribe());
+        Glide.with(MainActivity.getContext()).load(projectArticleBean.getPreviewPicUrl()).into(contactViewHolder.ivPreview);
+//        contactViewHolder.ivPreview.
         //图片
+
     }
 
     @Override
@@ -57,18 +63,20 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
     //重点：该泛型必须是 自定义的适配器(如MyAdapter).ViewHolder
     class ContactViewHolder extends RecyclerView.ViewHolder {
         //create the viewHolder class
-        protected TextView author;
+        protected TextView tvAuthor;
+        protected TextView tvTitle;
+        protected TextView tvDate;
+        protected TextView tvDescribe;
+        protected ImageView ivPreview;
 
-        protected TextView title;
-        protected TextView time;
-        protected TextView kind;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
-            author = itemView.findViewById(R.id.tv_top_article_author);
-            title = itemView.findViewById(R.id.tv_top_article_title);
-            time = itemView.findViewById(R.id.tv_top_article_time);
-            kind = itemView.findViewById(R.id.tv_top_article_kind);
+            tvAuthor = itemView.findViewById(R.id.tv_project_article_author);
+            tvTitle = itemView.findViewById(R.id.tv_project_article_title);
+            tvDate = itemView.findViewById(R.id.tv_project_article_date);
+            tvDescribe = itemView.findViewById(R.id.tv_project_article_describe);
+            ivPreview = itemView.findViewById(R.id.iv_project_article_preview);
         }
     }
 
