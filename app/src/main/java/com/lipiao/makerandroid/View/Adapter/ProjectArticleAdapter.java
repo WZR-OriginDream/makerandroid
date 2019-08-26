@@ -1,5 +1,6 @@
 package com.lipiao.makerandroid.View.Adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,10 +25,12 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
 
     //MyAdapter的成员变量contactInfoList, 这里被我们用作数据的来源
     private List<ProjectArticleBean> projectArticleBeanList;
+    private Context context;
 
-    //构造函数
-    public ProjectArticleAdapter(List<ProjectArticleBean> projectArticleBeanList) {
+    //构造函数 增加context glide加载图片要使用
+    public ProjectArticleAdapter(List<ProjectArticleBean> projectArticleBeanList, Context context) {
         this.projectArticleBeanList = projectArticleBeanList;
+        this.context=context;
     }
 
     //重写3个抽象方法
@@ -49,7 +52,7 @@ public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAd
         contactViewHolder.tvTitle.setText(projectArticleBean.getTitle());
         contactViewHolder.tvDate.setText(projectArticleBean.getTime());
         contactViewHolder.tvDescribe.setText(projectArticleBean.getDescribe());
-        Glide.with(MainActivity.getContext()).load(projectArticleBean.getPreviewPicUrl()).into(contactViewHolder.ivPreview);
+        Glide.with(context).load(projectArticleBean.getPreviewPicUrl()).into(contactViewHolder.ivPreview);
 //        contactViewHolder.ivPreview.
         //图片
 
