@@ -1,14 +1,11 @@
 package com.lipiao.makerandroid;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
-import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
-import com.lipiao.makerandroid.View.Fragment.SystemFragment;
 import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
@@ -31,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private LeadFragment leadFragment;//导向
     private LeadFragment projectFragment;//导向
     private UserFragment userFragment;//我的
+    private AgentWebFragment agentWebFragment;//web碎片测试
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
             userFragment = userFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
+
+
         //getSupportFragmentManager() 需要基类继承自AppCompatActivity
         tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
 
