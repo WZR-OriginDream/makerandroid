@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
+import com.just.agentweb.AgentWebConfig;
+import com.just.agentweb.DefaultWebClient;
 import com.lipiao.makerandroid.Bean.WeatherBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WeatherService;
@@ -56,19 +58,25 @@ public class UserFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        //fragment
-////        mAgentWeb = AgentWeb.with(this)//这里需要把Fragment传入
-////                .setAgentWebParent((ViewGroup) view, new LinearLayout.LayoutParams(-1, -1))// 设置 AgentWeb 的父控件 ， 这里的view 是 LinearLayout ， 那么需要传入 LinearLayout.LayoutParams
-////                .useDefaultIndicator()// 使用默认进度条
-////                .createAgentWeb()//
-////                .ready()//
-////                .go("https://www.baidu.com");
-        mAgentWeb = AgentWeb.with(this)
-                .setAgentWebParent(linearLayout, new LinearLayout.LayoutParams(-1, -1))
-                .useDefaultIndicator()
-                .createAgentWeb()
-                .ready()
-                .go("http://www.jd.com");
+//        mAgentWeb = AgentWeb.with(this)
+//                .setAgentWebParent(linearLayout, new LinearLayout.LayoutParams(-1, -1))
+//                .useDefaultIndicator()
+//                .createAgentWeb()
+//                .ready()
+//                .go("http://www.jd.com");
+        mAgentWeb = AgentWeb.with(this)//
+                .setAgentWebParent((LinearLayout) view, -1, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//传入AgentWeb的父控件。
+                .useDefaultIndicator(-1, 3)//设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
+                .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
+                .setMainFrameErrorView(R.layout.agentweb_error_page, -1) //参数1是错误显示的布局，参数2点击刷新控件ID -1表示点击整个布局都刷新， AgentWeb 3.0.0 加入。
+                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.ASK)//打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
+                .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
+                .createAgentWeb()//创建AgentWeb。
+                .ready()//设置 WebSettings。
+                .go("https://blog.csdn.net/qq_42391904"); //WebView载入该url地址的页面并显示。
+
+
+        AgentWebConfig.debug();
     }
 
     @Override
