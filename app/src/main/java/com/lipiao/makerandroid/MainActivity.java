@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private LeadFragment leadFragment;//导向
     private LeadFragment projectFragment;//导向
     private UserFragment userFragment;//我的
-    private AgentWebFragment agentWebFragment;//web碎片测试
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,23 +1,34 @@
 package com.lipiao.makerandroid.View.Fragment;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.DefaultWebClient;
+import com.just.agentweb.WebChromeClient;
 import com.lipiao.makerandroid.Bean.WeatherBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WeatherService;
@@ -48,6 +59,18 @@ public class UserFragment extends Fragment {
     @BindView(R.id.ll_agent_web)
     LinearLayout linearLayout;
 
+
+    @BindView(R.id.iv_back)
+    ImageView mBackImageView;
+    @BindView(R.id.iv_finish)
+    ImageView mFinishImageView;
+    @BindView(R.id.toolbar_title)
+    TextView mTitleTextView;
+    @BindView(R.id.iv_more)
+    ImageView mMoreImageView;
+
+    private PopupMenu mPopupMenu;
+
     public UserFragment() {
         // Required empty public constructor
     }
@@ -75,6 +98,14 @@ public class UserFragment extends Fragment {
 
         AgentWebConfig.debug();
 
+        initView(view);
+
+    }
+
+    private void initView(View view) {
+        mBackImageView.setOnClickListener(mOnClickListener);
+        mFinishImageView.setOnClickListener(mOnClickListener);
+        mMoreImageView.setOnClickListener(mOnClickListener);
     }
 
     @Override
@@ -88,6 +119,170 @@ public class UserFragment extends Fragment {
 
         return rootView;
     }
+
+
+    private View.OnClickListener mOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+
+            switch (v.getId()) {
+                case R.id.iv_back:
+                    // true表示AgentWeb处理了该事件
+                    if (!mAgentWeb.back()) {
+                        UserFragment.this.getActivity().finish();
+                    }
+                    break;
+                case R.id.iv_finish:
+                    UserFragment.this.getActivity().finish();
+                    break;
+                case R.id.iv_more:
+                    showPoPup(v);
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+    };
+
+    /**
+     * 显示更多菜单
+     *
+     * @param view 菜单依附在该View下面
+     */
+    private void showPoPup(View view) {
+        if (mPopupMenu == null) {
+            mPopupMenu = new PopupMenu(this.getActivity(), view);
+            mPopupMenu.inflate(R.menu.toolbar_menu);
+            mPopupMenu.setOnMenuItemClickListener(mOnMenuItemClickListener);
+        }
+        mPopupMenu.show();
+    }
+
+    /**
+     * 菜单事件
+     */
+    private PopupMenu.OnMenuItemClickListener mOnMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+
+            switch (item.getItemId()) {
+
+                case R.id.refresh:
+                    if (mAgentWeb != null) {
+                        mAgentWeb.getUrlLoader().reload(); // 刷新
+                    }
+                    return true;
+
+                case R.id.copy:
+                    if (mAgentWeb != null) {
+                        toCopy(UserFragment.this.getContext(), mAgentWeb.getWebCreator().getWebView().getUrl());
+                    }
+                    return true;
+                case R.id.default_browser:
+                    if (mAgentWeb != null) {
+                        openBrowser(mAgentWeb.getWebCreator().getWebView().getUrl());
+                    }
+                    return true;
+                case R.id.default_clean:
+                    toCleanWebCache();
+                    return true;
+                case R.id.error_website:
+                    loadErrorWebSite();
+                    // test DownloadingService
+//			        LogUtils.i(TAG, " :" + mDownloadingService + "  " + (mDownloadingService == null ? "" : mDownloadingService.isShutdown()) + "  :" + mExtraService);
+//                    if (mDownloadingService != null && !mDownloadingService.isShutdown()) {
+//                        mExtraService = mDownloadingService.shutdownNow();
+//                        LogUtils.i(TAG, "mExtraService::" + mExtraService);
+//                        return true;
+//                    }
+//                    if (mExtraService != null) {
+//                        mExtraService.performReDownload();
+//                    }
+
+                    return true;
+                default:
+                    return false;
+            }
+
+        }
+    };
+
+    /**
+     * 测试错误页的显示
+     */
+    private void loadErrorWebSite() {
+        if (mAgentWeb != null) {
+            mAgentWeb.getUrlLoader().loadUrl("http://www.unkownwebsiteblog.me");
+        }
+    }
+
+    /**
+     * 清除 WebView 缓存
+     */
+    private void toCleanWebCache() {
+
+        if (this.mAgentWeb != null) {
+
+            //清理所有跟WebView相关的缓存 ，数据库， 历史记录 等。
+            this.mAgentWeb.clearWebCache();
+            Toast.makeText(getActivity(), "已清理缓存", Toast.LENGTH_SHORT).show();
+            //清空所有 AgentWeb 硬盘缓存，包括 WebView 的缓存 , AgentWeb 下载的图片 ，视频 ，apk 等文件。
+//            AgentWebConfig.clearDiskCache(this.getContext());
+        }
+
+    }
+
+    /**
+     * 复制字符串
+     *
+     * @param context
+     * @param text
+     */
+    private void toCopy(Context context, String text) {
+
+        ClipboardManager mClipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        mClipboardManager.setPrimaryClip(ClipData.newPlainText(null, text));
+
+    }
+
+    /**
+     * 打开浏览器
+     *
+     * @param targetUrl 外部浏览器打开的地址
+     */
+    private void openBrowser(String targetUrl) {
+        if (TextUtils.isEmpty(targetUrl) || targetUrl.startsWith("file://")) {
+            Toast.makeText(this.getContext(), targetUrl + " 该链接无法使用浏览器打开。", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent();
+        intent.setAction("android.intent.action.VIEW");
+        Uri mUri = Uri.parse(targetUrl);
+        intent.setData(mUri);
+        startActivity(intent);
+    }
+
+    protected com.just.agentweb.WebChromeClient mWebChromeClient = new WebChromeClient() {
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            //  super.onProgressChanged(view, newProgress);
+            Log.i(TAG, "onProgressChanged:" + newProgress + "  view:" + view);
+        }
+
+        @Override
+        public void onReceivedTitle(WebView view, String title) {
+            super.onReceivedTitle(view, title);
+            if (mTitleTextView != null && !TextUtils.isEmpty(title)) {
+                if (title.length() > 10) {
+                    title = title.substring(0, 10).concat("...");
+                }
+            }
+            mTitleTextView.setText(title);
+        }
+    };
 
     private void agentWeb() {
 
@@ -171,8 +366,6 @@ public class UserFragment extends Fragment {
         mAgentWeb.getWebLifeCycle().onPause(); //暂停应用内所有WebView ， 调用mWebView.resumeTimers();/mAgentWeb.getWebLifeCycle().onResume(); 恢复。
         super.onPause();
     }
-
-
 
 
 }
