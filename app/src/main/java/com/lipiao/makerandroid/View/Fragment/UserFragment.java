@@ -1,6 +1,7 @@
 package com.lipiao.makerandroid.View.Fragment;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
@@ -45,6 +48,10 @@ public class UserFragment extends Fragment {
     @BindView(R.id.ll_agent_web)
     LinearLayout linearLayout;
 
+    @BindView(R.id.image_back)
+    ImageView image_back;
+
+    public static  String urlStr = "https://blog.csdn.net/qq_42391904";
 
     public UserFragment() {
         // Required empty public constructor
@@ -64,6 +71,7 @@ public class UserFragment extends Fragment {
 //                .createAgentWeb()
 //                .ready()
 //                .go("http://www.jd.com");
+//        可用
         mAgentWeb = AgentWeb.with(this)//
                 .setAgentWebParent((LinearLayout) view, -1, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//传入AgentWeb的父控件。
                 .useDefaultIndicator(-1, 3)//设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
@@ -77,6 +85,31 @@ public class UserFragment extends Fragment {
 
 
         AgentWebConfig.debug();
+
+        image_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mAgentWeb.getWebCreator().getWebView().canGoBack()) { // 表示按返回键时的操作
+                    mAgentWeb.getWebCreator().getWebView().goBack(); // 后退
+                    // webview.goForward();//前进
+                }
+            }
+        });
+
+//        mAgentWeb = AgentWeb.with(this)//
+//                .setAgentWebParent((LinearLayout) view, -1, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//传入AgentWeb的父控件。
+//                .useDefaultIndicator(-1, 3)//设置进度条颜色与高度，-1为默认值，高度为2，单位为dp。
+//                .setSecurityType(AgentWeb.SecurityType.STRICT_CHECK) //严格模式 Android 4.2.2 以下会放弃注入对象 ，使用AgentWebView没影响。
+//                .setWebViewClient(mWebViewClient)//WebViewClient ， 与 WebView 使用一致 ，但是请勿获取WebView调用setWebViewClient(xx)方法了,会覆盖AgentWeb DefaultWebClient,同时相应的中间件也会失效。
+//                .setMainFrameErrorView(R.layout.agentweb_error_page, -1) //参数1是错误显示的布局，参数2点击刷新控件ID -1表示点击整个布局都刷新， AgentWeb 3.0.0 加入。
+//                .setOpenOtherPageWays(DefaultWebClient.OpenOtherPageWays.DISALLOW)//打开其他页面时，弹窗质询用户前往其他应用 AgentWeb 3.0.0 加入。
+//                .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
+//                .createAgentWeb()//创建AgentWeb。
+//                .ready()//设置 WebSettings。
+//                .go(urlStr); //WebView载入该url地址的页面并显示。
+//
+//
+//        AgentWebConfig.debug();
     }
 
     @Override
@@ -158,7 +191,36 @@ public class UserFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mAgentWeb.getWebLifeCycle().onDestroy();
         unbinder.unbind();
     }
+
+    @Override
+    public void onResume() {
+        mAgentWeb.getWebLifeCycle().onResume();//恢复
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        mAgentWeb.getWebLifeCycle().onPause(); //暂停应用内所有WebView ， 调用mWebView.resumeTimers();/mAgentWeb.getWebLifeCycle().onResume(); 恢复。
+        super.onPause();
+    }
+
+
+    private com.just.agentweb.WebViewClient mWebViewClient = new com.just.agentweb.WebViewClient() {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            if (urlStr.equals(url)) {
+                image_back.setVisibility(View.GONE);
+
+            } else {
+                image_back.setVisibility(View.VISIBLE);
+
+            }
+        }
+    };
+
 
 }
