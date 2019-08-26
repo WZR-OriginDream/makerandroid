@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import okhttp3.ResponseBody;
@@ -39,6 +40,8 @@ public class UserFragment extends Fragment {
     private Unbinder unbinder;
 
     AgentWeb mAgentWeb;
+    @BindView(R.id.ll_agent_web)
+    LinearLayout linearLayout;
 
 
     public UserFragment() {
@@ -61,7 +64,7 @@ public class UserFragment extends Fragment {
 ////                .ready()//
 ////                .go("https://www.baidu.com");
         mAgentWeb = AgentWeb.with(this)
-                .setAgentWebParent((LinearLayout) view, new LinearLayout.LayoutParams(-1, -1))
+                .setAgentWebParent(linearLayout, new LinearLayout.LayoutParams(-1, -1))
                 .useDefaultIndicator()
                 .createAgentWeb()
                 .ready()
