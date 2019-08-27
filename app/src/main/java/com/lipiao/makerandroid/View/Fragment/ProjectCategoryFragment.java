@@ -119,7 +119,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
                     String strBack = response.body().string();
-                    Log.d(TAG, "onFailure: 请求成功\n" + intProjectCategoryCID + "返回的数据如下\n" + strBack);
+                    //Log.d(TAG, "onFailure: 请求成功\n" + intProjectCategoryCID + "返回的数据如下\n" + strBack);
                     //处理数据
                     JSONObject jsonObject = null;
                     ProjectContentBean projectContentBean;
@@ -140,7 +140,8 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                                 "" + projectContentBean.getData().getDatas().get(i).getDesc(),
                                 "" + projectContentBean.getData().getDatas().get(i).getEnvelopePic()
                         );
-                        LogUtil.d(TAG, projectArticleBean.outString());
+                        //使用工具类
+                        // LogUtil.d(TAG, projectArticleBean.outString());
                         mList.add(projectArticleBean);
                     }
 
