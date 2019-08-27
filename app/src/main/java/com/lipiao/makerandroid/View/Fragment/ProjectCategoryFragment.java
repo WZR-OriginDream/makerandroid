@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Unbinder;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
