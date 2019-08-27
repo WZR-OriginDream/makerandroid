@@ -84,7 +84,6 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
-
     }
 
     @Override
