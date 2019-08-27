@@ -15,5 +15,4 @@
         android:layout_alignParentBottom="true">
     </com.ycl.tabview.library.TabView>
 
-
 </RelativeLayout>

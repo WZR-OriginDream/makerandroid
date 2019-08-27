@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="?android:actionBarSize"
     android:background="?attr/colorPrimary"
+    android:titleTextColor="@android:color/white"
     app:contentInsetLeft="0dp"
     app:contentInsetStart="0dp"
-    android:titleTextColor="@android:color/white"
-    app:titleTextColor="@android:color/white"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:titleTextColor="@android:color/white">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,47 +19,45 @@
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:src="@mipmap/back"
-            android:scaleType="center"
             android:clickable="true"
-            />
+            android:scaleType="center"
+            android:src="@mipmap/back" />
+
         <View
             android:id="@+id/view_line"
             android:layout_width="1px"
+            android:layout_height="match_parent"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_height="match_parent"
-            android:background="@color/black"
             android:layout_toRightOf="@+id/iv_back"
-            ></View>
+            android:background="@color/black"></View>
+
         <ImageView
             android:id="@+id/iv_finish"
-            android:layout_toRightOf="@+id/view_line"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:src="@mipmap/close"
+            android:layout_toRightOf="@+id/view_line"
             android:scaleType="center"
-            />
+            android:src="@mipmap/close" />
 
         <TextView
-            android:text="文章标题"
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:singleLine="true"
+            android:text="文章标题"
             android:textColor="@android:color/white"
-            android:textSize="14sp"/>
+            android:textSize="14sp" />
 
 
         <ImageView
             android:id="@+id/iv_more"
             android:layout_width="55dp"
             android:layout_height="match_parent"
-            android:src="@mipmap/more"
-            android:scaleType="center"
             android:layout_alignParentRight="true"
-            />
+            android:scaleType="center"
+            android:src="@mipmap/more" />
     </RelativeLayout>
 
 

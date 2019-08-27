@@ -11,7 +11,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="15dp">
 
         <TextView
             android:id="@+id/tv_project_article_title"
@@ -19,7 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginEnd="70dp"
-            android:layout_marginBottom="8dp"
             android:maxWidth="200dp"
             android:maxLines="1"
             android:text="文章标题文章标题文章标题"
@@ -32,12 +31,12 @@
             android:layout_alignParentEnd="true"
             android:scaleType="centerCrop" />
 
-
         <TextView
             android:id="@+id/tv_project_article_describe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_project_article_title"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="8dp"
             android:layout_toStartOf="@+id/iv_project_article_preview"
             android:ellipsize="end"
