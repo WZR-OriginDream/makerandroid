@@ -6,21 +6,39 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ProjectArticleBean;
+import com.lipiao.makerandroid.Bean.ProjectContentBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Service.WandroidService;
+import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 //项目分类 一个类别生成一个碎片
 public class ProjectCategoryFragment extends LazyLoadFragment {
     String TAG = "ProjectCategoryFragment";
+
     int intProjectCategoryCID;//项目种类编号，访问接口需要
+
     RecyclerView mRecyclerView;
+
+    RefreshLayout refreshLayout;
 
     private List<ProjectArticleBean> mList = new ArrayList<>();
 
@@ -56,6 +74,10 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         //获取项目种类cid
         intProjectCategoryCID = getArguments().getInt("categoryCid");
 
+        refreshLayout=root.findViewById(R.id.srl_sf);
+        //手动刷新UI
+//        refreshLayout.autoRefreshAnimationOnly();
+
         mRecyclerView = root.findViewById(R.id.rv_fragment_system);
         mRecyclerView.setHasFixedSize(true);
         //平常的水平一个item布局的流
@@ -79,14 +101,74 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
     @Override
     public void fetchData() {
         Log.d(TAG, intProjectCategoryCID + "fetchData: f1的网络请求");
-        ProjectArticleBean projectArticleBean = new ProjectArticleBean(
-                "" + "星蔚",
-                "" + "文章标题demo",
-                "" + "2019.08.26",
-                "" + "这是个wanandroid项目",
-                "" + "https://img-blog.csdnimg.cn/20190806195819928.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzkxOTA0,size_16,color_FFFFFF,t_70"
-        );
-        mList.add(projectArticleBean);
+        //手动刷新UI
+        refreshLayout.autoRefreshAnimationOnly();
+        refreshLayout.finishRefresh(1500/*,false*/);//传入false表示刷新失败//手动设置动画时长为一秒
+//        ProjectArticleBean projectArticleBean = new ProjectArticleBean(
+//                "" + "星蔚",
+//                "" + "文章标题demo",
+//                "" + "2019.08.26",
+//                "" + "这是个wanandroid项目",
+//                "" + "https://img-blog.csdnimg.cn/20190806195819928.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzkxOTA0,size_16,color_FFFFFF,t_70"
+//        );
+//        mList.add(projectArticleBean);
+//        initData();
+
+
+        //添加网络请求
+        //初始化网络请求https://www.wanandroid.com/project/list/1/json?cid=294
+        int page = 1;
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://www.wanandroid.com/project/list/")
+                .build();
+        WandroidService wandroidService = retrofit.create(WandroidService.class);
+        //接口参数 page cid
+        Call<ResponseBody> call = wandroidService.getProjectArticle(page, intProjectCategoryCID);
+
+        //网络请求
+        call.enqueue(new Callback<ResponseBody>() {
+            //网络请求成功时调用
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String strBack = response.body().string();
+                    Log.d(TAG, "onFailure: 请求成功\n" + intProjectCategoryCID + "返回的数据如下\n" + strBack);
+                    //处理数据
+                    JSONObject jsonObject = null;
+                    ProjectContentBean projectContentBean;
+                    jsonObject = new JSONObject(strBack);
+                    Gson gson = new Gson();
+                    projectContentBean = gson.fromJson(jsonObject.toString(), ProjectContentBean.class);
+                    /**获取里面的数据
+                     * 打印出来试试 看是否操作成功
+                     * 以获取近五天的天气为例
+                     */
+                    //获取本次结果的文章数量
+                    int articleCount = projectContentBean.getData().getDatas().size();
+                    for (int i = 0; i < articleCount; i++) {
+                        ProjectArticleBean projectArticleBean = new ProjectArticleBean(
+                                "" + projectContentBean.getData().getDatas().get(i).getAuthor(),
+                                "" + projectContentBean.getData().getDatas().get(i).getTitle(),
+                                "" + projectContentBean.getData().getDatas().get(i).getPublishTime(),
+                                "" + projectContentBean.getData().getDatas().get(i).getDesc(),
+                                "" + projectContentBean.getData().getDatas().get(i).getEnvelopePic()
+                        );
+                        LogUtil.d(TAG, projectArticleBean.outString());
+                        mList.add(projectArticleBean);
+                    }
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //网络请求失败时调用
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "onFailure: 请求失败");
+            }
+        });
+
         initData();
     }
 

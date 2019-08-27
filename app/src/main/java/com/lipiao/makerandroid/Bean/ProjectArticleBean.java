@@ -62,5 +62,8 @@ public class ProjectArticleBean {
         this.previewPicUrl = previewPicUrl;
     }
 
+    public String outString() {
+        return this.author+this.title+this.time+this.describe+this.previewPicUrl;
+    }
 }
 
