@@ -9,35 +9,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.Gson;
+import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ProjectArticleBean;
-import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
-import com.lipiao.makerandroid.Bean.ProjectContentBean;
-import com.lipiao.makerandroid.Bean.WeatherBean;
 import com.lipiao.makerandroid.R;
-import com.lipiao.makerandroid.Service.WandroidService;
-import com.lipiao.makerandroid.Service.WeatherService;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
-import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 //项目分类 一个类别生成一个碎片
-public class ProjectCategoryFragment extends Fragment {
+public class ProjectCategoryFragment extends LazyLoadFragment {
     View rootView;
     String TAG = "ProjectCategoryFragment";
     int intProjectCategoryCID;//项目种类编号，访问接口需要
@@ -45,11 +31,10 @@ public class ProjectCategoryFragment extends Fragment {
     private Unbinder unbinder;
 
 
-    @BindView(R.id.rv_fragment_system)
+    //@BindView(R.id.rv_fragment_system)
     RecyclerView mRecyclerView;
 
-    static ProjectArticleAdapter projectArticleAdapter;
-    static List<ProjectArticleBean> mList = new ArrayList<>();
+    private List<ProjectArticleBean> mList = new ArrayList<>();
 
     public ProjectCategoryFragment() {
         // Required empty public constructor
@@ -63,47 +48,60 @@ public class ProjectCategoryFragment extends Fragment {
         return fragment;
     }
 
+
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        //fragment_project_category可与fragment_system复用
+//        rootView = inflater.inflate(R.layout.fragment_system, container, false);
+//        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
+//        unbinder = ButterKnife.bind(this, rootView);
+//        //获取fragmentKind类型值 判断是初始化何种碎片
+//        intProjectCategoryCID = getArguments().getInt("categoryCid");
+//        initData();
+//        return rootView;
+//    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        //fragment_project_category可与fragment_system复用
-        rootView = inflater.inflate(R.layout.fragment_system, container, false);
-        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
-        unbinder = ButterKnife.bind(this, rootView);
-        //获取fragmentKind类型值 判断是初始化何种碎片
+    protected void injectPresenter() {
+        Log.d(TAG, "injectPresenter: ");
+    }
+
+    @Override
+    protected int attachLayoutId() {
+        Log.d(TAG, "attachLayoutId: ");
+        return R.layout.fragment_system;
+    }
+
+    //初始化布局 findviewbyid
+    @Override
+    protected void initView(View root) {
+        Log.d(TAG, "initView: ");
         intProjectCategoryCID = getArguments().getInt("categoryCid");
-        initData();
-        initView();
-        initListener();
-        return rootView;
-    }
-
-    private void initListener() {
-
-    }
-
-    private void initView() {
-
-    }
-
-    private void initData() {
+        mRecyclerView=root.findViewById(R.id.rv_fragment_system);
         mRecyclerView.setHasFixedSize(true);
         //平常的水平一个item布局的流
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-
-//初始化mList
-        initArticleBeanList();
-//实例化MyAdapter并传入mList对象
-        projectArticleAdapter = new ProjectArticleAdapter(mList, getContext());
-//为RecyclerView对象mRecyclerView设置adapter
-        mRecyclerView.setAdapter(projectArticleAdapter);
+        
+        
 
     }
 
-    private void initArticleBeanList() {
-//        for (int i = 0; i < 10; i++) {
+    @Override
+    protected void initData() throws NullPointerException {
+        Log.d(TAG, "initData: ");
+        //实例化MyAdapter并传入mList对象
+        ProjectArticleAdapter projectArticleAdapter = new ProjectArticleAdapter(mList, getContext());
+//为RecyclerView对象mRecyclerView设置adapter
+        mRecyclerView.setAdapter(projectArticleAdapter);
+        projectArticleAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void fetchData() {
+        Log.d(TAG, intProjectCategoryCID+"fetchData: f1的网络请求");
         ProjectArticleBean projectArticleBean = new ProjectArticleBean(
                 "" + "星蔚",
                 "" + "文章标题demo",
@@ -112,8 +110,38 @@ public class ProjectCategoryFragment extends Fragment {
                 "" + "https://img-blog.csdnimg.cn/20190806195819928.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzkxOTA0,size_16,color_FFFFFF,t_70"
         );
         mList.add(projectArticleBean);
-//        }
+       // mRecyclerView.notifyAll();
     }
+
+//    private void initData() {
+//        mRecyclerView.setHasFixedSize(true);
+//        //平常的水平一个item布局的流
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        mRecyclerView.setLayoutManager(layoutManager);
+//
+////初始化mList
+//        initArticleBeanList();
+////实例化MyAdapter并传入mList对象
+//        projectArticleAdapter = new ProjectArticleAdapter(mList, getContext());
+////为RecyclerView对象mRecyclerView设置adapter
+//        mRecyclerView.setAdapter(projectArticleAdapter);
+//
+//    }
+//
+//    private void initArticleBeanList() {
+////        for (int i = 0; i < 10; i++) {
+//        ProjectArticleBean projectArticleBean = new ProjectArticleBean(
+//                "" + "星蔚",
+//                "" + "文章标题demo",
+//                "" + "2019.08.26",
+//                "" + "这是个wanandroid项目",
+//                "" + "https://img-blog.csdnimg.cn/20190806195819928.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzkxOTA0,size_16,color_FFFFFF,t_70"
+//        );
+//        mList.add(projectArticleBean);
+////        }
+//    }
+
 
 //    private void initArticleBeanList() {
 //        // ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
