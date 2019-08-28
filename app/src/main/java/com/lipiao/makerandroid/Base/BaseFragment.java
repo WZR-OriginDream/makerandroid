@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 /**
  * Fragment的基类
+ * 懒加载基类需使用
  */
 public abstract class BaseFragment extends Fragment {
 
