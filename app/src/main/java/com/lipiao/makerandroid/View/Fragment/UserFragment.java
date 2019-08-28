@@ -99,9 +99,9 @@ public class UserFragment extends Fragment {
                 .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                 .createAgentWeb()//创建AgentWeb。
                 .ready()//设置 WebSettings。
-                .go("https://www.wanandroid.com/blog/show/2650");
+//                .go("https://www.wanandroid.com/blog/show/2650");
 //                .go("https://blog.csdn.net/qq_42391904"); //WebView载入该url地址的页面并显示。
-//                .go(strWebURL); //WebView载入该url地址的页面并显示。
+                .go(strWebURL); //WebView载入该url地址的页面并显示。
 
         AgentWebConfig.debug();
 
