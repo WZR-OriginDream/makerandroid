@@ -99,13 +99,13 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
             public void onItemClick(View view, int position) {
                 //根据URL创建web碎片
 
-                Toast.makeText(getContext(), "点击事件：查看" +mList.get (position + 1).getPreviewPicUrl(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "点击事件：查看" + mList.get(position).getPreviewPicUrl(), Toast.LENGTH_SHORT).show();
             }
 
             //长按
             @Override
             public void onItemLongClick(View view, int position) {
-                Toast.makeText(getContext(), "长按事件：收藏" +mList.get (position + 1).getDescribe(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "长按事件：收藏" + mList.get(position).getDescribe(), Toast.LENGTH_SHORT).show();
             }
         });
 
