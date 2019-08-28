@@ -5,11 +5,11 @@
     android:layout_margin="4dp"
     android:background="@drawable/bg_tag"
     android:paddingLeft="8dp"
-    android:paddingRight="8dp"
     android:paddingTop="3dp"
+    android:paddingRight="8dp"
     android:paddingBottom="3dp"
     android:text="Helloworld"
-    android:textSize="16dp"
-    android:textColor="@color/black_tag_text">
+    android:textColor="@color/black_tag_text"
+    android:textSize="16dp">
 
 </TextView>

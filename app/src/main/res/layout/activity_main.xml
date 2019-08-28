@@ -8,11 +8,10 @@
 
     <!--MainActivity视图文件-->
     <com.ycl.tabview.library.TabView
-        app:tab_textViewSelColor="#2E85ED"
         android:id="@+id/tabView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true">
-    </com.ycl.tabview.library.TabView>
+        android:layout_alignParentBottom="true"
+        app:tab_textViewSelColor="#2E85ED"></com.ycl.tabview.library.TabView>
 
 </RelativeLayout>

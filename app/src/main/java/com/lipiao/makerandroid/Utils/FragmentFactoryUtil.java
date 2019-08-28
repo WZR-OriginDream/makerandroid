@@ -3,7 +3,6 @@ package com.lipiao.makerandroid.Utils;
 import android.support.v4.app.Fragment;
 
 import com.lipiao.makerandroid.View.Fragment.ProjectCategoryFragment;
-import com.lipiao.makerandroid.View.Fragment.ProjectFragment;
 import com.lipiao.makerandroid.View.Fragment.SystemFragment;
 
 import java.util.HashMap;
@@ -53,16 +52,4 @@ public class FragmentFactoryUtil {
         return fragment;
     }
 
-//    //重写initFragment
-//    //根据String创建碎片 适用于项目碎片中创建项目分类碎片
-//    public static Fragment initProjectItemFragment(int projectCategoryCID) {
-//        Fragment fragment = projectFragmentMap.get(projectCategoryCID);
-//        //如果之前没有创建，就创建新的
-//        if (fragment == null) {
-//            fragment = ProjectCategoryFragment.newInstance(projectCategoryCID);//根据项目分类类别来创建fragment
-//        }
-//        //把创建的fragment存起来
-//        projectFragmentMap.put(projectCategoryCID, fragment);
-//        return fragment;
-//    }
 }
