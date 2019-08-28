@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
@@ -90,6 +91,23 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         Log.d(TAG, "initData: ");
         //实例化MyAdapter并传入mList对象
         ProjectArticleAdapter projectArticleAdapter = new ProjectArticleAdapter(mList, getContext());
+
+        //自定义点击事件
+        projectArticleAdapter.setOnItemClickListener(new ProjectArticleAdapter.OnItemClickListener() {
+            //点击
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            //长按
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Toast.makeText(getContext(), "长按事件：收藏" +mList.get (position + 1).getDescribe(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(projectArticleAdapter);
 
