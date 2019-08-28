@@ -11,6 +11,15 @@ public class ProjectArticleBean {
     private String title;//文章标题
     private String time;//发布时间
     private String describe;//文章简介
+    private String webURL;//文章web链接
+
+    public String getWebURL() {
+        return webURL;
+    }
+
+    public void setWebURL(String webURL) {
+        this.webURL = webURL;
+    }
 
     public String getDescribe() {
         return describe;
@@ -54,16 +63,17 @@ public class ProjectArticleBean {
         this.previewPicUrl = previewPicUrl;
     }
 
-    public ProjectArticleBean(String author, String title, String time, String describe, String previewPicUrl) {
+    public ProjectArticleBean(String author, String title, String time, String describe, String webURL, String previewPicUrl) {
         this.author = author;
         this.title = title;
         this.time = time;
         this.describe = describe;
+        this.webURL = webURL;
         this.previewPicUrl = previewPicUrl;
     }
 
     public String outString() {
-        return this.author+this.title+this.time+this.describe+this.previewPicUrl;
+        return this.author + this.title + this.time + this.describe + this.previewPicUrl + this.webURL;
     }
 }
 

@@ -1,5 +1,6 @@
 package com.lipiao.makerandroid.View.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import com.lipiao.makerandroid.Bean.ProjectContentBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WandroidService;
 import com.lipiao.makerandroid.Utils.LogUtil;
+import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -99,7 +102,11 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
             public void onItemClick(View view, int position) {
                 //根据URL创建web碎片
 
-                Toast.makeText(getContext(), "点击事件：查看" + mList.get(position).getPreviewPicUrl(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "点击事件：查看" + mList.get(position).getWebURL(), Toast.LENGTH_SHORT).show();
+                //WebFragment.newInstance(mList.get(position).getWebURL());
+
+                startActivity(new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), WebActivity.class)
+                                .putExtra(mList.get(position).getWebURL(), "webURL"));
             }
 
             //长按
@@ -158,6 +165,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                                 "" + projectContentBean.getData().getDatas().get(i).getTitle(),
                                 "" + projectContentBean.getData().getDatas().get(i).getPublishTime(),
                                 "" + projectContentBean.getData().getDatas().get(i).getDesc(),
+                                "" + projectContentBean.getData().getDatas().get(i).getLink(),
                                 "" + projectContentBean.getData().getDatas().get(i).getEnvelopePic()
                         );
                         //使用工具类
