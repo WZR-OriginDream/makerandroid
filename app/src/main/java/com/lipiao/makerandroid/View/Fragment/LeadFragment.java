@@ -41,7 +41,7 @@ public class LeadFragment extends Fragment {
     ViewPager viewPager;
 
     private TabPagerAdapter tabPagerAdapter;//注意导包
-    private String[] titles ;
+    private String[] titles;
     private List<Fragment> fragments;
 
 
@@ -119,18 +119,16 @@ public class LeadFragment extends Fragment {
         //1.将其作为Tab添加至tabLayout中
         //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
         fragments = new ArrayList<>();
-        titles =new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
-        for (int i = 0; i< projectCategoryDataBeanList.size() ; i++ ) {
-            String category=projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
-            int categoryCID=projectCategoryDataBeanList.get(i).getId();
-            Log.d(TAG, "initProjectFragment: category"+category);
-            titles[i]=category;//初始化titles，用于传入适配器，与tag名称一致
+        titles = new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
+        for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
+            String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
+            int categoryCID = projectCategoryDataBeanList.get(i).getId();
+            Log.d(TAG, "initProjectFragment: category" + category);
+            titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
             tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
             //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
             fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
         }
-
-
 
 
     }
@@ -141,7 +139,7 @@ public class LeadFragment extends Fragment {
         tabLayout.addTab(tabLayout.newTab().setText("知识体系"));
         tabLayout.addTab(tabLayout.newTab().setText("拓维导航"));
 
-        titles= new String[]{"知识体系", "拓维导航"};
+        titles = new String[]{"知识体系", "拓维导航"};
         fragments = new ArrayList<>();
         for (int i = 0; i < titles.length; i++) {
             fragments.add(FragmentFactoryUtil.initFragment(i));
