@@ -163,6 +163,9 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                     //获取本次结果的文章数量
                     int articleCount = projectContentBean.getData().getDatas().size();
                     for (int i = 0; i < articleCount; i++) {
+                        String strhttp=projectContentBean.getData().getDatas().get(i).getLink();
+                        //http修改为https
+                        String strhttps=strhttp
                         ProjectArticleBean projectArticleBean = new ProjectArticleBean(
                                 "" + projectContentBean.getData().getDatas().get(i).getAuthor(),
                                 "" + projectContentBean.getData().getDatas().get(i).getTitle(),
