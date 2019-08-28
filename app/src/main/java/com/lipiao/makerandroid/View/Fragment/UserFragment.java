@@ -50,6 +50,7 @@ import retrofit2.Retrofit;
 public class UserFragment extends Fragment {
     View rootView;
     String TAG = "UserFragment";
+    String strWebURL;//文章url
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
@@ -73,14 +74,19 @@ public class UserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UserFragment newInstance() {
-        return new UserFragment();
+    public static UserFragment newInstance(String webURL) {
+        UserFragment fragment = new UserFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("webURL", webURL);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     //使用agent web
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        strWebURL = getArguments().getString("kind");
         //可用
         mAgentWeb = AgentWeb.with(this)//
                 .setAgentWebParent((LinearLayout) linearLayout, -1, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT))//传入AgentWeb的父控件。
@@ -92,8 +98,8 @@ public class UserFragment extends Fragment {
                 .interceptUnkownUrl() //拦截找不到相关页面的Url AgentWeb 3.0.0 加入。
                 .createAgentWeb()//创建AgentWeb。
                 .ready()//设置 WebSettings。
-                .go("https://blog.csdn.net/qq_42391904"); //WebView载入该url地址的页面并显示。
-
+                //.go("https://blog.csdn.net/qq_42391904"); //WebView载入该url地址的页面并显示。
+                .go(strWebURL); //WebView载入该url地址的页面并显示。
 
         AgentWebConfig.debug();
 
@@ -113,6 +119,7 @@ public class UserFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_userr, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
+        //strWebURL = getArguments().getString("kind");
         //demoForRetrofit();
         //agentWeb();
 

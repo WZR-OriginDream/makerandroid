@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
-            userFragment = userFragment.newInstance();
+            userFragment = userFragment.newInstance("www.baidu.com");
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
 

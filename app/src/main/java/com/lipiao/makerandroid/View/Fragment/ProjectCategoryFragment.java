@@ -105,8 +105,11 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                 Toast.makeText(getContext(), "点击事件：查看" + mList.get(position).getWebURL(), Toast.LENGTH_SHORT).show();
                 //WebFragment.newInstance(mList.get(position).getWebURL());
 
-                startActivity(new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), WebActivity.class)
-                                .putExtra(mList.get(position).getWebURL(), "webURL"));
+                Intent intent=new Intent(getActivity().getApplicationContext(), WebActivity.class);
+                intent.putExtra("webURL",mList.get(position).getWebURL());
+                startActivity(intent);
+//                startActivity(new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), WebActivity.class)
+//                                .putExtra(mList.get(position).getWebURL(), "webURL"));
             }
 
             //长按
