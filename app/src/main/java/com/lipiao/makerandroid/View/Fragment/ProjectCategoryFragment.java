@@ -97,7 +97,9 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
             //点击
             @Override
             public void onItemClick(View view, int position) {
+                //根据URL创建web碎片
 
+                Toast.makeText(getContext(), "点击事件：查看" +mList.get (position + 1).getPreviewPicUrl(), Toast.LENGTH_SHORT).show();
             }
 
             //长按
