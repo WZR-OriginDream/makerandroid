@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lipiao.makerandroid.Bean.SystemSimpleBean;
+import com.lipiao.makerandroid.Bean.TagsSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
@@ -24,11 +24,11 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
     String TAG ="TagsAdapter";
 
     //TagsAdapter的成员变量systemBeanList.DataBean, 这里被我们用作数据的来源
-    private List<SystemSimpleBean> systemSimpleBeanList;
+    private List<TagsSimpleBean> systemSimpleBeanList;
     private Context context;
 
     //构造函数
-    public TagsAdapter(List<SystemSimpleBean> systemSimpleBeanList) {
+    public TagsAdapter(List<TagsSimpleBean> systemSimpleBeanList) {
         this.systemSimpleBeanList = systemSimpleBeanList;
     }
 
@@ -48,7 +48,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
     public void onBindViewHolder(@NonNull ContactViewHolder contactViewHolder, int i) {
 
         //通过其get()方法可以获得其中的对象
-        SystemSimpleBean systemSimpleBean = systemSimpleBeanList.get(i);
+        TagsSimpleBean systemSimpleBean = systemSimpleBeanList.get(i);
         contactViewHolder.tvTitle.setText(systemSimpleBean.getTitle());
         Log.d(TAG, "title: "+systemSimpleBean.getTitle());
 

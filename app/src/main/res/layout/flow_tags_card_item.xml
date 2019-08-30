@@ -19,18 +19,19 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_margin="5dp"
                 android:id="@+id/tv_flow_tags_card_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="体系名称"
                 android:textColor="@color/black_tag_text"
-                android:textSize="20dp" />
+                android:textSize="18dp" />
 
             <com.zhy.view.flowlayout.TagFlowLayout
                 android:id="@+id/id_flow_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
+                android:padding="10dp"
                 zhy:max_select="1"></com.zhy.view.flowlayout.TagFlowLayout>
         </LinearLayout>
 
