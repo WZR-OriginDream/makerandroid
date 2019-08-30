@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lipiao.makerandroid.Bean.ProjectArticleBean;
-import com.lipiao.makerandroid.MainActivity;
 import com.lipiao.makerandroid.R;
 
 import java.util.List;

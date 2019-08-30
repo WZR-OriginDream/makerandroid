@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?><!--userFragment about 子项布局-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp">
+    android:layout_height="50dp"
+    android:id="@+id/rl_user_about_layout"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp">
 
     <ImageView
-        android:id="@+id/iv_about"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:id="@+id/iv_user_about_images"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@mipmap/android" />
 
     <TextView
+        android:id="@+id/tv_user_about_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginStart="20dp"
-        android:layout_toEndOf="@id/iv_about"
+        android:layout_toEndOf="@id/iv_user_about_images"
         android:text="开发者博客"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="17sp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -28,7 +32,7 @@
     <View
         android:id="@+id/view_line"
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="2px"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="10dp"

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
+import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.lipiao.makerandroid.View.Fragment.WebFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     //private ProjectFragment projectFragment;
     private LeadFragment leadFragment;//导向
     private LeadFragment projectFragment;//导向
-    private WebFragment userFragment;//我的
+    private UserFragment userFragment;//我的
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,15 +51,15 @@ public class MainActivity extends AppCompatActivity {
             tabViewChildList.add(new TabViewChild(R.mipmap.main, R.mipmap.main_no, "首页", mainFragment));
         }
         if (leadFragment == null) {
-            leadFragment = leadFragment.newInstance("leadFragment");
+            leadFragment = LeadFragment.newInstance("leadFragment");
             tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", leadFragment));
         }
         if (projectFragment == null) {
-            projectFragment = projectFragment.newInstance("projectFragment");
+            projectFragment = LeadFragment.newInstance("projectFragment");
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
-            userFragment = userFragment.newInstance("www.baidu.com");
+            userFragment = UserFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
 
