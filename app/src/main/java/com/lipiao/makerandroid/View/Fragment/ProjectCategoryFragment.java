@@ -174,14 +174,15 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                     }
 
                 } catch (IOException | JSONException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                    Log.d(TAG, "项目分类数据请求失败");
                 }
             }
 
             //网络请求失败时调用
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(TAG, "onFailure: 请求失败");
+                Log.d(TAG, "项目分类数据请求失败");
             }
         });
 

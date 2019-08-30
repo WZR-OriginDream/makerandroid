@@ -20,10 +20,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static Context context;//获取context
-    public static Context getContext() {
-        return context;
-    }
     @BindView(R.id.tabView)
     TabView tabView;
     List<TabViewChild> tabViewChildList = new ArrayList<>();
