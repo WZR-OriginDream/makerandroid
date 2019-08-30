@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ArticleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
@@ -23,14 +24,14 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class MainFragment extends Fragment {
+public class MainFragment extends LazyLoadFragment {
 
     View rootView;
 
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
-    @BindView(R.id.banner)
+    // @BindView(R.id.banner)
     Banner banner;
 
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
@@ -39,7 +40,7 @@ public class MainFragment extends Fragment {
     //top article
     static TopArticleAdapter topArticleAdapter;
     static List<ArticleBean> mList = new ArrayList<>();
-    @BindView(R.id.rv_top_article)
+    //@BindView(R.id.rv_top_article)
     RecyclerView mRecyclerView;
 
     public MainFragment() {
@@ -50,25 +51,30 @@ public class MainFragment extends Fragment {
         return new MainFragment();
     }
 
+
+    //表示层 暂时不加
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
-        unbinder = ButterKnife.bind(this, rootView);
-        initView();
-        return rootView;
+    protected void injectPresenter() {
+
     }
 
-    private void initView() {
-        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
-        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
-        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
-        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
-        titles.add("标题1");
-        titles.add("标题2");
-        titles.add("标题3");
-        titles.add("标题4");
+    //视图文件
+    @Override
+    protected int attachLayoutId() {
+        return R.layout.fragment_main;
+    }
+
+    //初始化控件
+    @Override
+    protected void initView(View root) {
+        banner = root.findViewById(R.id.banner);
+        mRecyclerView=root.findViewById(R.id.rv_top_article);
+    }
+
+    //懒加载直接使用数据 直接使用images titles mList 抛出空指针异常
+    @Override
+    protected void initData() throws NullPointerException {
+        //初始化banner
         banner.setImages(images).setImageLoader(new GlideImageLoader());
         //设置banner样式 显示圆形指示器和标题（水平显示
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
@@ -78,41 +84,93 @@ public class MainFragment extends Fragment {
         banner.setDelayTime(3000);
         banner.start();
 
-
-        //top rv
+        //初始化topRecyclerView
         mRecyclerView.setHasFixedSize(true);
         //平常的水平一个item布局的流
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-
-//初始化mList
-        initArticleBeanList();
-//实例化MyAdapter并传入mList对象
+        //实例化MyAdapter并传入mList对象
         topArticleAdapter = new TopArticleAdapter(mList);
-//为RecyclerView对象mRecyclerView设置adapter
+        //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(topArticleAdapter);
-    }
-
-    private void initArticleBeanList() {
-        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
-        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
-        mList.add(articleBean1);
-        mList.add(articleBean2);
 
     }
 
-
-    /**
-     * onDestroyView中进行解绑操作
-     */
+    //获取数据 懒加载 初始化images titles mList
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    public void fetchData() {
+
+        //初始化banner所需 images titles
+        //https://www.wanandroid.com/banner/json
+
+        //首次加载需再次调用initData()
+        initData();
     }
 
-    //对于图片轮播库 如果你需要考虑更好的体验，可以这么操作
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
+//        unbinder = ButterKnife.bind(this, rootView);
+//        initView();
+//        return rootView;
+//    }
+//
+//    private void initView() {
+//        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
+//        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
+//        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
+//        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
+//        titles.add("标题1");
+//        titles.add("标题2");
+//        titles.add("标题3");
+//        titles.add("标题4");
+//        banner.setImages(images).setImageLoader(new GlideImageLoader());
+//        //设置banner样式 显示圆形指示器和标题（水平显示
+//        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+//        //设置标题集合（当banner样式有显示title时）
+//        banner.setBannerTitles(titles);
+//        //设置轮播时间
+//        banner.setDelayTime(3000);
+//        banner.start();
+//
+//
+//        //top rv
+//        mRecyclerView.setHasFixedSize(true);
+//        //平常的水平一个item布局的流
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        mRecyclerView.setLayoutManager(layoutManager);
+//
+////初始化mList
+//        initArticleBeanList();
+////实例化MyAdapter并传入mList对象
+//        topArticleAdapter = new TopArticleAdapter(mList);
+////为RecyclerView对象mRecyclerView设置adapter
+//        mRecyclerView.setAdapter(topArticleAdapter);
+//    }
+//
+//    private void initArticleBeanList() {
+//        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
+//        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
+//        mList.add(articleBean1);
+//        mList.add(articleBean2);
+//
+//    }
+//
+//
+//    /**
+//     * onDestroyView中进行解绑操作
+//     */
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//        unbinder.unbind();
+//    }
+//
+    //优化图片轮播库体验
     @Override
     public void onStart() {
         super.onStart();

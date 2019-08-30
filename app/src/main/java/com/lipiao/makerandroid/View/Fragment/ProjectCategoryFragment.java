@@ -13,8 +13,8 @@ import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ProjectArticleBean;
 import com.lipiao.makerandroid.Bean.ProjectContentBean;
 import com.lipiao.makerandroid.R;
-import com.lipiao.makerandroid.Service.WandroidService;
-import com.lipiao.makerandroid.Utils.LogUtil;
+import com.lipiao.makerandroid.Service.WanAndroidService;
+import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -130,15 +129,11 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         refreshLayout.autoRefreshAnimationOnly();
         refreshLayout.finishRefresh(1600/*,false*/);//传入false表示刷新失败//手动设置动画时长为一秒
 
-        //添加网络请求
-        //初始化网络请求https://www.wanandroid.com/project/list/1/json?cid=294
+        //添加网络请求(暂时只写第一页的数据)
         int page = 1;
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://www.wanandroid.com/project/list/")
-                .build();
-        WandroidService wandroidService = retrofit.create(WandroidService.class);
+        WanAndroidService wanAndroidService= HttpUtil.getWanAndroidService();
         //接口参数 page cid
-        Call<ResponseBody> call = wandroidService.getProjectArticle(page, intProjectCategoryCID);
+        Call<ResponseBody> call = wanAndroidService.getProjectArticle(page, intProjectCategoryCID);
 
         //网络请求
         call.enqueue(new Callback<ResponseBody>() {

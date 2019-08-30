@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.lipiao.makerandroid.Service.WanAndroidService;
+import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
 import com.lipiao.makerandroid.View.Fragment.UserFragment;
-import com.lipiao.makerandroid.View.Fragment.WebFragment;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
@@ -17,23 +18,19 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
     private static Context context;//获取context
-
     public static Context getContext() {
         return context;
     }
-
     @BindView(R.id.tabView)
     TabView tabView;
-
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private MainFragment mainFragment;//首页
-
-    //private ProjectFragment projectFragment;
     private LeadFragment leadFragment;//导向
     private LeadFragment projectFragment;//导向
     private UserFragment userFragment;//我的
@@ -42,8 +39,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //绑定初始化ButterKnife
+        //绑定 初始化 ButterKnife
         ButterKnife.bind(this);
+        //初始化 全局网络请求工具类 单例
+        HttpUtil.getInstance();
 
         //先判空后添加
         if (mainFragment == null) {
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             userFragment = UserFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
-
 
         //getSupportFragmentManager() 需要基类继承自AppCompatActivity
         tabView.setTabViewChild(tabViewChildList, getSupportFragmentManager());
