@@ -71,7 +71,7 @@ public class UserFragment extends LazyLoadFragment {
         rvAbout.setLayoutManager(layoutManager);
 //初始化mList
 
-        RvAboutBean myBlog = new RvAboutBean(R.mipmap.csdn, "csdn博客", "https://blog.csdn.net/qq_42391904");
+        RvAboutBean myBlog = new RvAboutBean(R.mipmap.csdn, "CSDN博客", "https://blog.csdn.net/qq_42391904");
         RvAboutBean Maker = new RvAboutBean(R.mipmap.makerlogo, "Maker-IoT官网", "https://www.baidu.com/");
         RvAboutBean mayun = new RvAboutBean(R.mipmap.mayun, "码云首页", "https://gitee.com/lipiaoMKX");
         RvAboutBean hexo = new RvAboutBean(R.mipmap.me, "个人博客网站", "https://lipiaomkx.gitee.io/");

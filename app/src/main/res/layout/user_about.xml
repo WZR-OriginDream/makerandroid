@@ -7,6 +7,7 @@
     android:layout_marginEnd="10dp">
 
     <ImageView
+        android:layout_centerVertical="true"
         android:id="@+id/iv_user_about_images"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -29,13 +30,13 @@
         android:layout_alignParentEnd="true"
         android:src="@mipmap/right" />
 
-    <View
-        android:id="@+id/view_line"
-        android:layout_width="match_parent"
-        android:layout_height="2px"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="2dp"
-        android:background="@color/black" />
+    <!--<View-->
+        <!--android:id="@+id/view_line"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="2.5dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginStart="35dp"-->
+        <!--android:layout_marginEnd="20dp"-->
+        <!--android:layout_marginBottom="2dp"-->
+        <!--android:background="@color/gray" />-->
 </RelativeLayout>
