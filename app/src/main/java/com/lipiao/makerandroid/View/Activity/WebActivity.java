@@ -9,14 +9,14 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.lipiao.makerandroid.R;
-import com.lipiao.makerandroid.View.Fragment.UserFragment;
+import com.lipiao.makerandroid.View.Fragment.WebFragment;
 
 
 public class WebActivity extends AppCompatActivity {
     //文章链接
     String webURL;
     String TAG = "WebActivity";
-    UserFragment userFragment;
+    WebFragment webFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,8 @@ public class WebActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web);
         Intent intent = getIntent();
         webURL = intent.getStringExtra("webURL");
-        if (userFragment == null) {
-            replaceFragment(userFragment=UserFragment.newInstance(webURL));
+        if (webFragment == null) {
+            replaceFragment(webFragment = WebFragment.newInstance(webURL));
         }
 
     }

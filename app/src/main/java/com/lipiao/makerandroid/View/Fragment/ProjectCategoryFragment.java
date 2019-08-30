@@ -33,7 +33,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-//项目分类 一个类别生成一个碎片
+/**项目分类 一个类别生成一个碎片
+ * 使用懒加载（防止重复加载以及recycleView内容重复）
+ * 基于viewPager+fragment+recycleView+懒加载
+ */
 public class ProjectCategoryFragment extends LazyLoadFragment {
     String TAG = "ProjectCategoryFragment";
 
