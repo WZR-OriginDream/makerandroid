@@ -1,15 +1,12 @@
 package com.lipiao.makerandroid.View.Fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.View;
-
 import com.lipiao.makerandroid.Base.BaseFragment;
 import com.lipiao.makerandroid.R;
 
 /**
  * 用户界面碎片
+ * 基于BaseFragment
  * 包含几个简要信息
  * 开发作者及博客地址
  * Maker-IoT官网地址
@@ -32,6 +29,7 @@ public class UserFragment extends BaseFragment {
 
     @Override
     protected void initView(View root) {
+//        root.findViewById(R.id.iv_project_article_preview);
 
     }
 
