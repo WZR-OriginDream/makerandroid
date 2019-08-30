@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.lipiao.makerandroid.Service.WanAndroidService;
 import com.lipiao.makerandroid.Utils.HttpUtil;
-import com.lipiao.makerandroid.View.Fragment.LeadFragment;
+import com.lipiao.makerandroid.View.Fragment.TagsFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
 import com.lipiao.makerandroid.View.Fragment.UserFragment;
 import com.ycl.tabview.library.TabView;
@@ -18,7 +17,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +29,8 @@ public class MainActivity extends AppCompatActivity {
     List<TabViewChild> tabViewChildList = new ArrayList<>();
     private long lastClickBackTime = System.currentTimeMillis() - 3000;
     private MainFragment mainFragment;//首页
-    private LeadFragment leadFragment;//导向
-    private LeadFragment projectFragment;//导向
+    private TagsFragment tagsFragment;//导向
+    private TagsFragment projectFragment;//导向
     private UserFragment userFragment;//我的
 
     @Override
@@ -49,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
             mainFragment = MainFragment.newInstance();
             tabViewChildList.add(new TabViewChild(R.mipmap.main, R.mipmap.main_no, "首页", mainFragment));
         }
-        if (leadFragment == null) {
-            leadFragment = LeadFragment.newInstance("leadFragment");
-            tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", leadFragment));
+        if (tagsFragment == null) {
+            tagsFragment = TagsFragment.newInstance("leadFragment");
+            tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", tagsFragment));
         }
         if (projectFragment == null) {
-            projectFragment = LeadFragment.newInstance("projectFragment");
+            projectFragment = TagsFragment.newInstance("projectFragment");
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {

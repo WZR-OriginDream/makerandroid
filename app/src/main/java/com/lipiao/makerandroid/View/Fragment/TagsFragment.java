@@ -26,10 +26,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-//导向与项目碎片复用 结构相似tags+fragments
-public class LeadFragment extends Fragment {
+/**
+ * 导向与项目碎片复用
+ * 因为结构相似tags+fragments
+ */
+public class TagsFragment extends Fragment {
     View rootView;
-    String TAG = "LeadFragment";
+    String TAG = "TagsFragment";
     String strFragmentKind;
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
@@ -49,12 +52,12 @@ public class LeadFragment extends Fragment {
     private List<ProjectCategoryBean.DataBean> projectCategoryDataBeanList;
 
 
-    public LeadFragment() {
+    public TagsFragment() {
         // Required empty public constructor
     }
 
-    public static LeadFragment newInstance(String FragmentKind) {
-        LeadFragment fragment = new LeadFragment();
+    public static TagsFragment newInstance(String FragmentKind) {
+        TagsFragment fragment = new TagsFragment();
         Bundle bundle = new Bundle();
         bundle.putString("fragmentKind", FragmentKind);
         fragment.setArguments(bundle);
@@ -138,8 +141,6 @@ public class LeadFragment extends Fragment {
 
     //初始化导向碎片界面数据 titles，fragments
     private void initLeadFragment() {
-
-
 
         tabLayout.addTab(tabLayout.newTab().setText("知识体系"));
         tabLayout.addTab(tabLayout.newTab().setText("拓维导航"));

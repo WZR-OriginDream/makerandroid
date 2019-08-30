@@ -30,7 +30,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 /**项目分类 一个类别生成一个碎片
  * 使用懒加载（防止重复加载以及recycleView内容重复）
@@ -131,9 +130,8 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
 
         //添加网络请求(暂时只写第一页的数据)
         int page = 1;
-        WanAndroidService wanAndroidService= HttpUtil.getWanAndroidService();
         //接口参数 page cid
-        Call<ResponseBody> call = wanAndroidService.getProjectArticle(page, intProjectCategoryCID);
+        Call<ResponseBody> call = HttpUtil.getWanAndroidService().getProjectArticle(page, intProjectCategoryCID);
 
         //网络请求
         call.enqueue(new Callback<ResponseBody>() {
