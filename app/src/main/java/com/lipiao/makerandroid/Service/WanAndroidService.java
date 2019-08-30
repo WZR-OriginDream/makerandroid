@@ -28,7 +28,25 @@ public interface WanAndroidService {
 
 
     /**
-     * 3.1获取项目类别
+     * 2.1 知识体系数据
+     * 原接口:https://www.wanandroid.com/tree/json
+     * 方法：GET
+     * 参数：无
+     */
+    @GET("tree/json")
+    Call<ResponseBody> getTree();
+
+    /**
+     * 3.1 导航数据 标题
+     * 原接口:https://www.wanandroid.com/navi/json
+     * @return
+     */
+    @GET("navi/json")
+    Call<ResponseBody> getNavigation();
+
+
+    /**
+     * 4.1 获取项目类别
      * 原接口:https://www.wanandroid.com/project/tree/json
      * 方法： GET
      * 参数： 无
@@ -37,7 +55,7 @@ public interface WanAndroidService {
     Call<ResponseBody> getProjectCategory();
 
     /**
-     * 3.2某个项目类别下的文章
+     * 4.2 项目列表数据 某个项目类别下的文章
      * 原接口:https://www.wanandroid.com/project/list/1/json?cid=294
      * 方法：GET
      * 参数：

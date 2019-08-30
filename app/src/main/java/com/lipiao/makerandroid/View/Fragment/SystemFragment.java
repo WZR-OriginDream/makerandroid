@@ -15,6 +15,8 @@ import com.lipiao.makerandroid.Bean.NavigationDataBean;
 import com.lipiao.makerandroid.Bean.SystemBean;
 import com.lipiao.makerandroid.Bean.SystemSimpleBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Service.WanAndroidService;
+import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.View.Adapter.TagsAdapter;
 
 import org.json.JSONException;
@@ -26,6 +28,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 //知识体系与拓维导航复用同一个模板碎片
 public class SystemFragment extends Fragment {
@@ -103,8 +109,6 @@ public class SystemFragment extends Fragment {
         Log.d(TAG, "initData: " + systemSimpleBeanList.size());
 //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(tagsAdapter);
-
-        Log.d(TAG, "initData:  rcyc ok");
     }
 
     //初始化拓维导航碎片
@@ -150,6 +154,29 @@ public class SystemFragment extends Fragment {
 
     //初始化知识体系碎片
     private void initTree() {
+
+        //添加网络请求(暂时只写第一页的数据)
+        WanAndroidService wanAndroidService= HttpUtil.getWanAndroidService();
+        //获取知识体系数据（标题） 接口参数 无
+        Call<ResponseBody> call = wanAndroidService.getTree();
+
+        //网络请求
+        call.enqueue(new Callback<ResponseBody>() {
+            //请求成功
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            //请求失败
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+
+
         //处理数据
         JSONObject jsonObject = null;
         SystemBean systemBean;

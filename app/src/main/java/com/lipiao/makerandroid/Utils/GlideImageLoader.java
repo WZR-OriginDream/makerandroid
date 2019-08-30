@@ -7,7 +7,7 @@ import com.bumptech.glide.Glide;
 import com.youth.banner.loader.ImageLoader;
 
 /**
- * 工具类整合之——banner图片加载工具类
+ * 工具类整合之——banner图片加载工具类(只用于banner)
  */
 public class GlideImageLoader extends ImageLoader {
     @Override
