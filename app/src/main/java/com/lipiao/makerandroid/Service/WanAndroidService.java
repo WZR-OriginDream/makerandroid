@@ -41,12 +41,25 @@ public interface WanAndroidService {
     Call<ResponseBody> getTree();
 
     /**
+     * 2.2获取知识体系下的数据
+     * https://www.wanandroid.com/article/list/0/json?cid=60
+     * 方法：GET
+     * 参数：
+     * 	cid 分类的id，上述二级目录的id
+     * 	页码：拼接在链接上，从0开始。
+     */
+    @GET("article/list/{page}/json")
+    Call<ResponseBody> getTreeData(@Path("page") int page,@Query("cid") int cid);
+
+
+    /**
      * 3.1 导航数据 标题
      * 原接口:https://www.wanandroid.com/navi/json
      * @return
      */
     @GET("navi/json")
     Call<ResponseBody> getNavigation();
+
 
 
     /**

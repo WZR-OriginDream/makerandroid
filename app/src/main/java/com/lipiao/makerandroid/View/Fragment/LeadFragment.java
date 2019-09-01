@@ -1,5 +1,6 @@
 package com.lipiao.makerandroid.View.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +17,7 @@ import com.lipiao.makerandroid.Bean.SystemBean;
 import com.lipiao.makerandroid.Bean.TagsSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.HttpUtil;
+import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.TagsAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -37,7 +39,6 @@ import retrofit2.Response;
 /**
  * 导向碎片
  * 知识体系与拓维导航复用同一个模板碎片
- *
  */
 public class LeadFragment extends Fragment {
 
@@ -87,6 +88,7 @@ public class LeadFragment extends Fragment {
         initData();
         return rootView;
     }
+
     //初始化RecyclerView RefreshLayout
     private void initView() {
 
@@ -125,6 +127,7 @@ public class LeadFragment extends Fragment {
 
         //实例化MyAdapter并传入mList对象
         tagsAdapter = new TagsAdapter(systemSimpleBeanList);
+
         Log.d(TAG, "initData: " + systemSimpleBeanList.size());
 //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(tagsAdapter);
@@ -153,20 +156,36 @@ public class LeadFragment extends Fragment {
                     for (int i = 0; i < naviDataBeanList.size(); i++) {
                         NavigationDataBean.DataBean naviDataBean = naviDataBeanList.get(i);
                         //Log.d(TAG, "@@@@@title: " + naviDataBean.getName());
-
                         List<NavigationDataBean.DataBean.ArticlesBean> articlesBeanList = naviDataBean.getArticles();
                         String[] mVals = new String[articlesBeanList.size()];
+                        String[] webURLs = new String[articlesBeanList.size()];
                         for (int index = 0; index < articlesBeanList.size(); index++) {
+
+                            //初始化mVals 标签String数组
                             mVals[index] = articlesBeanList.get(index).getTitle();
-                            //Log.d(TAG, "child: " + articlesBeanList.get(index).getTitle());
+
+                            ////初始化webURLs 标签对应的web链接
+                            //统一成https
+                            if (articlesBeanList.get(index).getLink().contains("https")) {
+                                webURLs[index] = articlesBeanList.get(index).getLink();
+                            } else {
+                                String strhttp = articlesBeanList.get(index).getLink();
+                                //http修改为https webAgent需使用https 使用StringBuffer完成
+                                //http://www.wanandroid.com/blog/show/2658 //第五个位置添加s
+                                StringBuffer strhttps = new StringBuffer();
+                                strhttps.append(strhttp).insert(4, "s");
+                                webURLs[index] = strhttps + "";
+                            }
+                            // Log.d(TAG, "child: " + articlesBeanList.get(index).getLink());
                         }
-                        TagsSimpleBean systemSimpleBean = new TagsSimpleBean(naviDataBean.getName(), mVals);
+                        TagsSimpleBean systemSimpleBean = new TagsSimpleBean(naviDataBean.getName(), mVals, webURLs);
                         systemSimpleBeanList.add(systemSimpleBean);
                     }
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
             }
+
             //请求失败
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {

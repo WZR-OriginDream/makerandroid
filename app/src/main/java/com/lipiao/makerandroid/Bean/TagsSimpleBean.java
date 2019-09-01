@@ -6,6 +6,21 @@ package com.lipiao.makerandroid.Bean;
 public class TagsSimpleBean {
     String title;
     String[] tags;
+    String[] webURLs;
+
+    public TagsSimpleBean(String title, String[] tags, String[] webURLs) {
+        this.title = title;
+        this.tags = tags;
+        this.webURLs = webURLs;
+    }
+
+    public String[] getWebURLs() {
+        return webURLs;
+    }
+
+    public void setWebURLs(String[] webURLs) {
+        this.webURLs = webURLs;
+    }
 
     public String getTitle() {
         return title;

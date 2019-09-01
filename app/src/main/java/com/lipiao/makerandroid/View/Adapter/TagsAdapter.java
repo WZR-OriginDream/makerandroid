@@ -1,6 +1,7 @@
 package com.lipiao.makerandroid.View.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.lipiao.makerandroid.Bean.TagsSimpleBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -72,6 +74,9 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
             @Override
             public boolean onTagClick(View view, int position, com.zhy.view.flowlayout.FlowLayout parent) {
                 Toast.makeText(context, systemSimpleBean.getTags()[position], Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, WebActivity.class);
+                intent.putExtra("webURL",systemSimpleBean.getWebURLs()[position]);
+                context.startActivity(intent);
                 return true;
             }
         });
