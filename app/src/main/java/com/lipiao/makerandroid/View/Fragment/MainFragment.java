@@ -1,5 +1,6 @@
 package com.lipiao.makerandroid.View.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +22,7 @@ import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.Utils.LogUtil;
+import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -67,8 +69,8 @@ public class MainFragment extends Fragment {
     @BindView(R.id.rv_top_article)
     RecyclerView mRecyclerView;
 
-    static final int BANNER=1;
-    static final int TOPARTICLE=2;
+    static final int BANNER = 1;
+    static final int TOPARTICLE = 2;
 
 
     public MainFragment() {
@@ -91,12 +93,6 @@ public class MainFragment extends Fragment {
     }
 
     private void initData() {
-
-        //文章所需数据 mList
-//        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
-//        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
-//        mList.add(articleBean1);
-//        mList.add(articleBean2);
 
 
         alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
@@ -124,7 +120,7 @@ public class MainFragment extends Fragment {
 
                     bannerDataBeanList = bannerBean.getData();
                     //初始化images titles
-                    for (int i=0;i<bannerDataBeanList.size();i++){
+                    for (int i = 0; i < bannerDataBeanList.size(); i++) {
                         images.add(bannerDataBeanList.get(i).getImagePath());
                         titles.add(bannerDataBeanList.get(i).getTitle());
                     }
@@ -163,15 +159,17 @@ public class MainFragment extends Fragment {
                     Gson gson = new Gson();
                     TopArticleBean topArticleBean;
                     topArticleBean = gson.fromJson(jsonObject.toString(), TopArticleBean.class);
-                    topDataBeanList=topArticleBean.getData();
+                    topDataBeanList = topArticleBean.getData();
                     //初始化mList
-                    for (int i=0;i<topDataBeanList.size();i++){
+                    for (int i = 0; i < topDataBeanList.size(); i++) {
                         //文章所需数据 mList
                         ArticleBean articleBean = new ArticleBean(
-                                ""+topDataBeanList.get(i).getAuthor(),
-                                ""+topDataBeanList.get(i).getTitle(),
-                                ""+ DateUtil.timeStampDate(topDataBeanList.get(i).getPublishTime()+""),
-                                ""+topDataBeanList.get(i).getChapterName());
+                                "" + topDataBeanList.get(i).getAuthor(),
+                                "" + topDataBeanList.get(i).getTitle(),
+                                "" + DateUtil.timeStampDate(topDataBeanList.get(i).getPublishTime() + ""),
+                                "" + topDataBeanList.get(i).getChapterName(),
+                                "" + topDataBeanList.get(i).getLink()
+                        );
                         mList.add(articleBean);
                     }
                     //获取完数据后UI操作
@@ -199,9 +197,13 @@ public class MainFragment extends Fragment {
     }
 
     private void initView(int i) {
-        switch (i){
-            case  BANNER:initBannerView();break;
-            case TOPARTICLE:initTopArticleView();break;
+        switch (i) {
+            case BANNER:
+                initBannerView();
+                break;
+            case TOPARTICLE:
+                initTopArticleView();
+                break;
         }
     }
 
@@ -217,6 +219,12 @@ public class MainFragment extends Fragment {
 //        initArticleBeanList();
 //实例化MyAdapter并传入mList对象
         topArticleAdapter = new TopArticleAdapter(mList);
+        //点击事件
+        topArticleAdapter.setOnItemClickListener((view, position) -> {
+            Intent intent = new Intent(getActivity().getApplicationContext(), WebActivity.class);
+            intent.putExtra("webURL", mList.get(position).getWebURL());
+            startActivity(intent);
+        });
 //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(topArticleAdapter);
     }

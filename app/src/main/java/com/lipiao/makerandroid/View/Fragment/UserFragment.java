@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Toast;
 
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.RvAboutBean;
@@ -12,7 +11,6 @@ import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.AboutAdapter;
-import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

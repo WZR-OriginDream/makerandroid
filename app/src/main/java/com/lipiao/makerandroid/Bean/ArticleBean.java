@@ -9,6 +9,23 @@ public class ArticleBean {
     private String title;
     private String time;
     private String kind;
+    private String webURL;
+
+    public ArticleBean(String author, String title, String time, String kind, String webURL) {
+        this.author = author;
+        this.title = title;
+        this.time = time;
+        this.kind = kind;
+        this.webURL = webURL;
+    }
+
+    public String getWebURL() {
+        return webURL;
+    }
+
+    public void setWebURL(String webURL) {
+        this.webURL = webURL;
+    }
 
     public String getAuthor() {
         return author;
@@ -42,10 +59,4 @@ public class ArticleBean {
         this.kind = kind;
     }
 
-    public ArticleBean(String author, String title, String time, String kind) {
-        this.author = author;
-        this.title = title;
-        this.time = time;
-        this.kind = kind;
-    }
 }
