@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +46,7 @@ public class TagsFragment extends Fragment {
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
+
     @BindView(R.id.tl_lead_fragment)
     TabLayout tabLayout;
 
@@ -53,6 +56,8 @@ public class TagsFragment extends Fragment {
     private TabPagerAdapter tabPagerAdapter;//注意导包
     private String[] titles;
     private List<Fragment> fragments;
+
+    AlertDialog alertDialog;//模拟加载数据
 
 
     //项目碎片bean类集合 项目类型
@@ -78,21 +83,28 @@ public class TagsFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_lead, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
-        //获取fragmentKind类型值 判断是初始化何种碎片
+        //获取fragmentKind类型值 判断是初始化何种碎片 使用断言判空
+        assert getArguments() != null;
         strFragmentKind = getArguments().getString("fragmentKind");
-        initView();
+        initFragment();
         return rootView;
     }
 
-    private void initView() {
+    private void initFragment() {
         switch (strFragmentKind) {
             case "leadFragment":
                 initLeadFragment();
+                initView();
                 break;
             case "projectFragment":
                 initProjectFragment();
                 break;
         }
+    }
+
+
+    //抛出异常，initProjectFragment需重用此方法（加载数据）
+    private void initView() throws NullPointerException {
         //titles，fragments，viewpager初始完后与适配器绑定
         //getChildFragmentManager()解决滑动卡顿 亲测有效
         tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager());
@@ -105,79 +117,86 @@ public class TagsFragment extends Fragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
     }
 
+
     //初始化项目碎片界面数据 titles，fragments
     private void initProjectFragment() {
+        alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                .setMessage("获取项目数据中...")
+                .setTitle("Maker——IoT").create();
+        alertDialog.show();
+        // 懒加载才可以
+        //接口参数 page cid
+        Call<ResponseBody> call = HttpUtil.getWanAndroidService().getProjectCategory();
+        //网络请求
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String strBack = response.body().string();
+                    //处理数据
+                    JSONObject jsonObject = null;
+                    ProjectCategoryBean projectCategoryBean;
+                    jsonObject = new JSONObject(strBack);
+                    Gson gson = new Gson();
+                    projectCategoryBean = gson.fromJson(jsonObject.toString(), ProjectCategoryBean.class);
+                    projectCategoryDataBeanList = projectCategoryBean.getData();
+                    //遍历 从中获取项目分类名称
+                    //1.将其作为Tab添加至tabLayout中
+                    //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
+                    fragments = new ArrayList<>();
+                    titles = new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
+                    for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
+                        String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
+                        int categoryCID = projectCategoryDataBeanList.get(i).getId();
+                        Log.d(TAG, "initProjectFragment: category" + category);
+                        titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
+                        tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
+                        //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
+                        fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
+                    }
+                    //获取完数据后UI操作
+                    initView();
+                    //主线程将alertDialog提示隐藏
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> alertDialog.hide());
+                } catch (IOException | JSONException e) {
+                    Log.d(TAG, "初始化项目数据失败");
+                }
+            }
 
-        //懒加载才可以
-//        //接口参数 page cid
-//        Call<ResponseBody> call = HttpUtil.getWanAndroidService().getProjectCategory();
-//        //网络请求
-//        call.enqueue(new Callback<ResponseBody>() {
-//            @Override
-//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                try {
-//                    String strBack = response.body().string();
-//                    //处理数据
-//                    JSONObject jsonObject = null;
-//                    ProjectCategoryBean projectCategoryBean;
-//                    jsonObject = new JSONObject(strBack);
-//                    Gson gson = new Gson();
-//                    projectCategoryBean = gson.fromJson(jsonObject.toString(), ProjectCategoryBean.class);
-//                    projectCategoryDataBeanList = projectCategoryBean.getData();
-//                    //遍历 从中获取项目分类名称
-//                    //1.将其作为Tab添加至tabLayout中
-//                    //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
-//                    fragments = new ArrayList<>();
-//                    titles = new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
-//                    for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
-//                        String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
-//                        int categoryCID = projectCategoryDataBeanList.get(i).getId();
-//                        Log.d(TAG, "initProjectFragment: category" + category);
-//                        titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
-//                        tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
-//                        //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
-//                        fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
-//                    }
-//                    initView();
-//                } catch (IOException | JSONException e) {
-////                    e.printStackTrace();
-//                    Log.d(TAG, "初始化项目数据失败");
-//                }
-//            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "初始化项目数据失败");
+            }
+        });
+
+
+//        String t = "{\"data\":[{\"children\":[],\"courseId\":13,\"id\":294,\"name\":\"完整项目\",\"order\":145000,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":0},{\"children\":[],\"courseId\":13,\"id\":402,\"name\":\"跨平台应用\",\"order\":145001,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":367,\"name\":\"资源聚合类\",\"order\":145002,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":323,\"name\":\"动画\",\"order\":145003,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":314,\"name\":\"RV列表动效\",\"order\":145004,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":358,\"name\":\"项目基础功能\",\"order\":145005,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":328,\"name\":\"网络&amp;文件下载\",\"order\":145011,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":331,\"name\":\"TextView\",\"order\":145013,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":336,\"name\":\"键盘\",\"order\":145015,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":337,\"name\":\"快应用\",\"order\":145016,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":338,\"name\":\"日历&amp;时钟\",\"order\":145017,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":339,\"name\":\"K线图\",\"order\":145018,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":340,\"name\":\"硬件相关\",\"order\":145019,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":357,\"name\":\"表格类\",\"order\":145022,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":363,\"name\":\"创意汇\",\"order\":145024,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":380,\"name\":\"ImageView\",\"order\":145029,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":382,\"name\":\"音视频&amp;相机\",\"order\":145030,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":383,\"name\":\"相机\",\"order\":145031,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":310,\"name\":\"下拉刷新\",\"order\":145032,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":385,\"name\":\"架构\",\"order\":145033,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":387,\"name\":\"对话框\",\"order\":145035,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":388,\"name\":\"数据库\",\"order\":145036,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":391,\"name\":\"AS插件\",\"order\":145037,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":400,\"name\":\"ViewPager\",\"order\":145039,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":401,\"name\":\"二维码\",\"order\":145040,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":312,\"name\":\"富文本编辑器\",\"order\":145041,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1}],\"errorCode\":0,\"errorMsg\":\"\"}";
+//        //处理数据
+//        JSONObject jsonObject = null;
+//        ProjectCategoryBean projectCategoryBean;
+//        try {
+//            jsonObject = new JSONObject(t);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        Gson gson = new Gson();
+//        projectCategoryBean = gson.fromJson(jsonObject.toString(), ProjectCategoryBean.class);
+//        projectCategoryDataBeanList = projectCategoryBean.getData();
 //
-//            @Override
-//            public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                Log.d(TAG, "初始化项目数据失败");
-//            }
-//        });
-
-        String t = "{\"data\":[{\"children\":[],\"courseId\":13,\"id\":294,\"name\":\"完整项目\",\"order\":145000,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":0},{\"children\":[],\"courseId\":13,\"id\":402,\"name\":\"跨平台应用\",\"order\":145001,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":367,\"name\":\"资源聚合类\",\"order\":145002,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":323,\"name\":\"动画\",\"order\":145003,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":314,\"name\":\"RV列表动效\",\"order\":145004,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":358,\"name\":\"项目基础功能\",\"order\":145005,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":328,\"name\":\"网络&amp;文件下载\",\"order\":145011,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":331,\"name\":\"TextView\",\"order\":145013,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":336,\"name\":\"键盘\",\"order\":145015,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":337,\"name\":\"快应用\",\"order\":145016,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":338,\"name\":\"日历&amp;时钟\",\"order\":145017,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":339,\"name\":\"K线图\",\"order\":145018,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":340,\"name\":\"硬件相关\",\"order\":145019,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":357,\"name\":\"表格类\",\"order\":145022,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":363,\"name\":\"创意汇\",\"order\":145024,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":380,\"name\":\"ImageView\",\"order\":145029,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":382,\"name\":\"音视频&amp;相机\",\"order\":145030,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":383,\"name\":\"相机\",\"order\":145031,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":310,\"name\":\"下拉刷新\",\"order\":145032,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":385,\"name\":\"架构\",\"order\":145033,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":387,\"name\":\"对话框\",\"order\":145035,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":388,\"name\":\"数据库\",\"order\":145036,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":391,\"name\":\"AS插件\",\"order\":145037,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":400,\"name\":\"ViewPager\",\"order\":145039,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":401,\"name\":\"二维码\",\"order\":145040,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1},{\"children\":[],\"courseId\":13,\"id\":312,\"name\":\"富文本编辑器\",\"order\":145041,\"parentChapterId\":293,\"userControlSetTop\":false,\"visible\":1}],\"errorCode\":0,\"errorMsg\":\"\"}";
-        //处理数据
-        JSONObject jsonObject = null;
-        ProjectCategoryBean projectCategoryBean;
-        try {
-            jsonObject = new JSONObject(t);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        Gson gson = new Gson();
-        projectCategoryBean = gson.fromJson(jsonObject.toString(), ProjectCategoryBean.class);
-        projectCategoryDataBeanList = projectCategoryBean.getData();
-
-        //遍历 从中获取项目分类名称
-        //1.将其作为Tab添加至tabLayout中
-        //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
-        fragments = new ArrayList<>();
-        titles = new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
-        for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
-            String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
-            int categoryCID = projectCategoryDataBeanList.get(i).getId();
-            Log.d(TAG, "initProjectFragment: category" + category);
-            titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
-            tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
-            //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
-            fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
-        }
+//        //遍历 从中获取项目分类名称
+//        //1.将其作为Tab添加至tabLayout中
+//        //2.将其作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
+//        fragments = new ArrayList<>();
+//        titles = new String[projectCategoryDataBeanList.size()];//初始化titles String数组的大小
+//        for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
+//            String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
+//            int categoryCID = projectCategoryDataBeanList.get(i).getId();
+//            Log.d(TAG, "initProjectFragment: category" + category);
+//            titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
+//            tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
+//            //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
+//            fragments.add(FragmentFactoryUtil.initFragment(categoryCID));//作为碎片初始化信息传入碎片工厂工具类初始化碎片的函数中
+//        }
 
 
     }
