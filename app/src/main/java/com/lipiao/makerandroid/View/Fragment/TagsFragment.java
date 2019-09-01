@@ -148,7 +148,7 @@ public class TagsFragment extends Fragment {
                     for (int i = 0; i < projectCategoryDataBeanList.size(); i++) {
                         String category = projectCategoryDataBeanList.get(i).getName();//获取项目种类的名称
                         int categoryCID = projectCategoryDataBeanList.get(i).getId();
-                        Log.d(TAG, "initProjectFragment: category" + category);
+                        //Log.d(TAG, "initProjectFragment: category" + category);
                         titles[i] = category;//初始化titles，用于传入适配器，与tag名称一致
                         tabLayout.addTab(tabLayout.newTab().setText(category));//作为Tab添加至tabLayout中
                         //根据类别CID 此项目类别json为id对应访问文章的接口种为cid 新建对应的项目分类碎片
