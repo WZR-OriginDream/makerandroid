@@ -107,9 +107,9 @@ public class MainFragment extends Fragment {
                     String strBack = response.body().string();
                     //处理数据
                     JSONObject jsonObject = null;
-                    BannerBean bannerBean;
                     jsonObject = new JSONObject(strBack);
                     Gson gson = new Gson();
+                    BannerBean bannerBean;
                     bannerBean = gson.fromJson(jsonObject.toString(), BannerBean.class);
 
                     bannerDataBeanList = bannerBean.getData();

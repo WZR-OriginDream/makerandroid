@@ -6,6 +6,10 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * 玩安卓服务接口
+ * baseURL:https://www.wanandroid.com/
+ */
 public interface WanAndroidService {
 
     /**
