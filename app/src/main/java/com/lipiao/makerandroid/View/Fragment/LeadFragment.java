@@ -34,10 +34,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//知识体系与拓维导航复用同一个模板碎片
-public class SystemFragment extends Fragment {
+/**
+ * 导向碎片
+ * 知识体系与拓维导航复用同一个模板碎片
+ *
+ */
+public class LeadFragment extends Fragment {
 
-    String TAG = "SystemFragment";
+    String TAG = "LeadFragment";
     String strKind;
     View rootView;
     //碎片中使用butterknife略有不同
@@ -58,13 +62,13 @@ public class SystemFragment extends Fragment {
     //简化Bean类与知识体系的相同，复用此类实例systemSimpleBeanList
 
     //无参构造
-    public SystemFragment() {
+    public LeadFragment() {
         // Required empty public constructor
     }
 
     //分类，知识体系和拓维导航两种碎片leadFragment中包含两个碎片
-    public static SystemFragment newInstance(String arg) {
-        SystemFragment fragment = new SystemFragment();
+    public static LeadFragment newInstance(String arg) {
+        LeadFragment fragment = new LeadFragment();
         Bundle bundle = new Bundle();
         bundle.putString("kind", arg);
         fragment.setArguments(bundle);

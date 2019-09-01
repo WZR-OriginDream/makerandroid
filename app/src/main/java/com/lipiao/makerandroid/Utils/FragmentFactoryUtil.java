@@ -2,8 +2,8 @@ package com.lipiao.makerandroid.Utils;
 
 import android.support.v4.app.Fragment;
 
+import com.lipiao.makerandroid.View.Fragment.LeadFragment;
 import com.lipiao.makerandroid.View.Fragment.ProjectCategoryFragment;
-import com.lipiao.makerandroid.View.Fragment.SystemFragment;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +37,10 @@ public class FragmentFactoryUtil {
         if (fragment == null) {
             switch (index) {
                 case TAB_TREE:
-                    fragment = SystemFragment.newInstance("tree");//知识体系
+                    fragment = LeadFragment.newInstance("tree");//知识体系
                     break;
                 case TAB_NAVIGATION:
-                    fragment = SystemFragment.newInstance("navigation");//拓维导航
+                    fragment = LeadFragment.newInstance("navigation");//拓维导航
                     break;
                 default:
                     fragment = ProjectCategoryFragment.newInstance(index);//根据项目分类CID来创建fragment
