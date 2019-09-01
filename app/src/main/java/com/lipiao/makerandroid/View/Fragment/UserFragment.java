@@ -68,13 +68,16 @@ public class UserFragment extends LazyLoadFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rvAbout.setLayoutManager(layoutManager);
 //初始化mList
-
+        //https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831
+        RvAboutBean huaweiHero=new RvAboutBean(R.mipmap.huawei,"湖科大华为HERO联盟","https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831");
         RvAboutBean myBlog = new RvAboutBean(R.mipmap.csdn, "CSDN博客", "https://blog.csdn.net/qq_42391904");
         RvAboutBean Maker = new RvAboutBean(R.mipmap.makerlogo, "Maker-IoT官网", "https://www.baidu.com/");
         RvAboutBean mayun = new RvAboutBean(R.mipmap.mayun, "码云首页", "https://gitee.com/lipiaoMKX");
         RvAboutBean hexo = new RvAboutBean(R.mipmap.me, "个人博客网站", "https://lipiaomkx.gitee.io/");
-        rvAboutBeanList.add(myBlog);
+
         rvAboutBeanList.add(Maker);
+        rvAboutBeanList.add(huaweiHero);
+        rvAboutBeanList.add(myBlog);
         rvAboutBeanList.add(mayun);
         rvAboutBeanList.add(hexo);
         //实例化MyAdapter并传入rvAboutBeanList对象

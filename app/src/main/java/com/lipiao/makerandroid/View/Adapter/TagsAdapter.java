@@ -52,7 +52,7 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
         //通过其get()方法可以获得其中的对象
         TagsSimpleBean systemSimpleBean = systemSimpleBeanList.get(i);
         contactViewHolder.tvTitle.setText(systemSimpleBean.getTitle());
-        Log.d(TAG, "title: "+systemSimpleBean.getTitle());
+        //Log.d(TAG, "title: "+systemSimpleBean.getTitle());
 
 
         //获取布局填充器,一会将tv.xml文件填充到标签内.
@@ -70,15 +70,12 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
         });
 
         //          为点击标签设置点击事件.
-        contactViewHolder.tflTags.setOnTagClickListener(new TagFlowLayout.OnTagClickListener() {
-            @Override
-            public boolean onTagClick(View view, int position, com.zhy.view.flowlayout.FlowLayout parent) {
-                Toast.makeText(context, systemSimpleBean.getTags()[position], Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, WebActivity.class);
-                intent.putExtra("webURL",systemSimpleBean.getWebURLs()[position]);
-                context.startActivity(intent);
-                return true;
-            }
+        contactViewHolder.tflTags.setOnTagClickListener((view, position, parent) -> {
+            Toast.makeText(context, systemSimpleBean.getTags()[position], Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, WebActivity.class);
+            intent.putExtra("webURL",systemSimpleBean.getWebURLs()[position]);
+            context.startActivity(intent);
+            return true;
         });
 
     }

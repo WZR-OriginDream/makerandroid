@@ -219,11 +219,14 @@ public class LeadFragment extends Fragment {
 
                         List<SystemBean.DataBean.ChildrenBean> childrenBeanList = systemDataBean.getChildren();
                         String[] mVals = new String[childrenBeanList.size()];
+                        String[] webURLs = new String[childrenBeanList.size()];//web地址
                         for (int index = 0; index < childrenBeanList.size(); index++) {
                             mVals[index] = childrenBeanList.get(index).getName();
+                            webURLs[index]="https://www.wanandroid.com/article/list/0?cid="
+                                    +childrenBeanList.get(index).getId();
                             //Log.d(TAG, "child: " + childrenBeanList.get(index).getName());
                         }
-                        TagsSimpleBean systemSimpleBean = new TagsSimpleBean(systemDataBean.getName(), mVals);
+                        TagsSimpleBean systemSimpleBean = new TagsSimpleBean(systemDataBean.getName(), mVals,webURLs);
                         systemSimpleBeanList.add(systemSimpleBean);
                     }
                 } catch (IOException | JSONException e) {

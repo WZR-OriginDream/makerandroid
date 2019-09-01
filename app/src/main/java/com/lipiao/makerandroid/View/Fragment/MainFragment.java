@@ -97,7 +97,7 @@ public class MainFragment extends Fragment {
 
     private void initData() {
         alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
-                .setMessage("获取项目数据中...")
+                .setMessage("获取首页数据中...")
                 .setTitle("Maker——IoT").create();
         alertDialog.show();
         //LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
