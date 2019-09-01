@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ArticleBean;
 import com.lipiao.makerandroid.Bean.BannerBean;
+import com.lipiao.makerandroid.Bean.BannerSimpleBean;
 import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
 import com.lipiao.makerandroid.Bean.TopArticleBean;
 import com.lipiao.makerandroid.R;
@@ -26,6 +27,7 @@ import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,8 +57,9 @@ public class MainFragment extends Fragment {
     @BindView(R.id.banner)
     Banner banner;
 
-    ArrayList<String> images = new ArrayList<String>();//图片资源集合
-    ArrayList<String> titles = new ArrayList<String>();//标题
+    ArrayList<String> images = new ArrayList<>();//图片资源集合
+    ArrayList<String> titles = new ArrayList<>();//标题
+    ArrayList<String> webURLs = new ArrayList<>();//web链接
 
     private List<BannerBean.DataBean> bannerDataBeanList;
     private List<TopArticleBean.DataBean> topDataBeanList;
@@ -93,14 +96,11 @@ public class MainFragment extends Fragment {
     }
 
     private void initData() {
-
-
         alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setMessage("获取项目数据中...")
                 .setTitle("Maker——IoT").create();
         alertDialog.show();
-
-        LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
+        //LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
 
         //banner所需数据images titles
         //接口参数 无
@@ -119,10 +119,23 @@ public class MainFragment extends Fragment {
                     bannerBean = gson.fromJson(jsonObject.toString(), BannerBean.class);
 
                     bannerDataBeanList = bannerBean.getData();
-                    //初始化images titles
+                    //初始化bannerSimpleBeanList
                     for (int i = 0; i < bannerDataBeanList.size(); i++) {
                         images.add(bannerDataBeanList.get(i).getImagePath());
                         titles.add(bannerDataBeanList.get(i).getTitle());
+                        //统一成https
+                        // webURLs.add(bannerDataBeanList.get(i).getUrl());
+                        if (bannerDataBeanList.get(i).getUrl().contains("https")){
+                            webURLs.add(bannerDataBeanList.get(i).getUrl());
+                        }else {
+                            String strhttp = bannerDataBeanList.get(i).getUrl();
+                            //http修改为https webAgent需使用https 使用StringBuffer完成
+                            //http://www.wanandroid.com/blog/show/2658 //第五个位置添加s
+                            StringBuffer strhttps = new StringBuffer();
+                            strhttps.append(strhttp).insert(4, "s");
+                            webURLs.add(strhttps+"");
+                        }
+                        //LogUtil.d(TAG,bannerDataBeanList.get(i).getUrl());
                     }
                     //获取完数据后UI操作
                     //主线程将alertDialog提示隐藏
@@ -235,8 +248,15 @@ public class MainFragment extends Fragment {
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         //设置标题集合（当banner样式有显示title时）
         banner.setBannerTitles(titles);
+        //lambda表达式简化
+        banner.setOnBannerListener(position -> {
+            Intent intent = new Intent(getActivity().getApplicationContext(), WebActivity.class);
+            intent.putExtra("webURL",webURLs.get(position));
+            //LogUtil.d(TAG,"banner "+webURLs.get(position)+" "+position);
+            startActivity(intent);
+        });
         //设置轮播时间
-        banner.setDelayTime(3000);
+        banner.setDelayTime(2500);
         banner.start();
     }
 

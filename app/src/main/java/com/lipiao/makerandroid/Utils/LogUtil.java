@@ -24,21 +24,21 @@ public class LogUtil {
 
     public static void d(String TAG, String MSG) {
         if (level <= DEBUG)
-            Log.v(TAG, MSG);
+            Log.d(TAG, MSG);
     }
 
     public static void i(String TAG, String MSG) {
         if (level <= INFO)
-            Log.v(TAG, MSG);
+            Log.i(TAG, MSG);
     }
 
     public static void w(String TAG, String MSG) {
         if (level <= WARN)
-            Log.v(TAG, MSG);
+            Log.w(TAG, MSG);
     }
 
     public static void e(String TAG, String MSG) {
         if (level <= ERROR)
-            Log.v(TAG, MSG);
+            Log.e(TAG, MSG);
     }
 }
