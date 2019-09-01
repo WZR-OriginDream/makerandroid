@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="50dp"
+            android:layout_marginLeft="30dp"
             android:layout_toEndOf="@id/tv_project_article_author"
             android:text="文章发布时间"
             android:textSize="13sp" />
