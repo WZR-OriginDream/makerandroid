@@ -4,43 +4,62 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ArticleBean;
+import com.lipiao.makerandroid.Bean.BannerBean;
+import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
+import com.lipiao.makerandroid.Utils.HttpUtil;
+import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+//原始的四个碎片自带缓存 无需懒加载 也不会重复加载数据
+public class MainFragment extends Fragment {
 
-public class MainFragment extends LazyLoadFragment {
-
+    String TAG = "MainFragment";
     View rootView;
 
     //碎片中使用butterknife略有不同
     private Unbinder unbinder;
 
-    // @BindView(R.id.banner)
+    @BindView(R.id.banner)
     Banner banner;
 
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
     ArrayList<String> titles = new ArrayList<String>();//标题
 
+
+    //项目碎片bean类集合 项目类型
+    private List<BannerBean.DataBean> bannerDataBeanList;
+
     //top article
     static TopArticleAdapter topArticleAdapter;
     static List<ArticleBean> mList = new ArrayList<>();
-    //@BindView(R.id.rv_top_article)
+    @BindView(R.id.rv_top_article)
     RecyclerView mRecyclerView;
 
     public MainFragment() {
@@ -51,30 +70,71 @@ public class MainFragment extends LazyLoadFragment {
         return new MainFragment();
     }
 
-
-    //表示层 暂时不加
     @Override
-    protected void injectPresenter() {
-
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
+        unbinder = ButterKnife.bind(this, rootView);
+        initData();
+        initView();
+        return rootView;
     }
 
-    //视图文件
-    @Override
-    protected int attachLayoutId() {
-        return R.layout.fragment_main;
+    private void initData() {
+        LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
+        //banner所需数据images titles
+
+        //接口参数 page cid
+        Call<ResponseBody> call = HttpUtil.getWanAndroidService().getBannerData();
+        //网络请求
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String strBack = response.body().string();
+                    //处理数据
+                    JSONObject jsonObject = null;
+                    BannerBean bannerBean;
+                    jsonObject = new JSONObject(strBack);
+                    Gson gson = new Gson();
+                    bannerBean = gson.fromJson(jsonObject.toString(), BannerBean.class);
+
+                    bannerDataBeanList = bannerBean.getData();
+                    //初始化images titles
+                    for (int i=0;i<bannerDataBeanList.size();i++){
+                        images.add(bannerDataBeanList.get(i).getImagePath());
+                        titles.add(bannerDataBeanList.get(i).getTitle());
+                    }
+
+                } catch (IOException | JSONException e) {
+                    Log.d(TAG, "初始化项目数据成功");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(TAG, "初始化项目数据失败");
+            }
+        });
+
+
+        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
+        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
+        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
+        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
+        titles.add("标题1");
+        titles.add("标题2");
+        titles.add("标题3");
+        titles.add("标题4");
+        //文章所需数据 mList
+        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
+        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
+        mList.add(articleBean1);
+        mList.add(articleBean2);
     }
 
-    //初始化控件
-    @Override
-    protected void initView(View root) {
-        banner = root.findViewById(R.id.banner);
-        mRecyclerView=root.findViewById(R.id.rv_top_article);
-    }
-
-    //懒加载直接使用数据 直接使用images titles mList 抛出空指针异常
-    @Override
-    protected void initData() throws NullPointerException {
-        //初始化banner
+    private void initView() {
         banner.setImages(images).setImageLoader(new GlideImageLoader());
         //设置banner样式 显示圆形指示器和标题（水平显示
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
@@ -84,92 +144,30 @@ public class MainFragment extends LazyLoadFragment {
         banner.setDelayTime(3000);
         banner.start();
 
-        //初始化topRecyclerView
+        //top rv
         mRecyclerView.setHasFixedSize(true);
         //平常的水平一个item布局的流
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        //实例化MyAdapter并传入mList对象
-        topArticleAdapter = new TopArticleAdapter(mList);
-        //为RecyclerView对象mRecyclerView设置adapter
-        mRecyclerView.setAdapter(topArticleAdapter);
 
-    }
-
-    //获取数据 懒加载 初始化images titles mList
-    @Override
-    public void fetchData() {
-
-        //初始化banner所需 images titles
-        //https://www.wanandroid.com/banner/json
-
-        //首次加载需再次调用initData()
-        initData();
-    }
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//        //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
-//        unbinder = ButterKnife.bind(this, rootView);
-//        initView();
-//        return rootView;
-//    }
-//
-//    private void initView() {
-//        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
-//        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
-//        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
-//        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
-//        titles.add("标题1");
-//        titles.add("标题2");
-//        titles.add("标题3");
-//        titles.add("标题4");
-//        banner.setImages(images).setImageLoader(new GlideImageLoader());
-//        //设置banner样式 显示圆形指示器和标题（水平显示
-//        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-//        //设置标题集合（当banner样式有显示title时）
-//        banner.setBannerTitles(titles);
-//        //设置轮播时间
-//        banner.setDelayTime(3000);
-//        banner.start();
-//
-//
-//        //top rv
-//        mRecyclerView.setHasFixedSize(true);
-//        //平常的水平一个item布局的流
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-//        mRecyclerView.setLayoutManager(layoutManager);
-//
-////初始化mList
+//初始化mList
 //        initArticleBeanList();
-////实例化MyAdapter并传入mList对象
-//        topArticleAdapter = new TopArticleAdapter(mList);
-////为RecyclerView对象mRecyclerView设置adapter
-//        mRecyclerView.setAdapter(topArticleAdapter);
-//    }
-//
-//    private void initArticleBeanList() {
-//        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
-//        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
-//        mList.add(articleBean1);
-//        mList.add(articleBean2);
-//
-//    }
-//
-//
-//    /**
-//     * onDestroyView中进行解绑操作
-//     */
-//    @Override
-//    public void onDestroyView() {
-//        super.onDestroyView();
-//        unbinder.unbind();
-//    }
-//
+//实例化MyAdapter并传入mList对象
+        topArticleAdapter = new TopArticleAdapter(mList);
+//为RecyclerView对象mRecyclerView设置adapter
+        mRecyclerView.setAdapter(topArticleAdapter);
+    }
+
+    /**
+     * onDestroyView中进行解绑操作
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
     //优化图片轮播库体验
     @Override
     public void onStart() {
