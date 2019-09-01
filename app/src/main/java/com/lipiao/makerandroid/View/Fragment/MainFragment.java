@@ -2,6 +2,7 @@ package com.lipiao.makerandroid.View.Fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +57,7 @@ public class MainFragment extends Fragment {
 
     //项目碎片bean类集合 项目类型
     private List<BannerBean.DataBean> bannerDataBeanList;
+    AlertDialog alertDialog;//模拟加载数据
 
     //top article
     static TopArticleAdapter topArticleAdapter;
@@ -77,11 +80,20 @@ public class MainFragment extends Fragment {
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         initData();
-        initView();
+
         return rootView;
     }
 
     private void initData() {
+        //文章所需数据 mList
+        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
+        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
+        mList.add(articleBean1);
+        mList.add(articleBean2);
+        alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
+                .setMessage("获取项目数据中...")
+                .setTitle("Maker——IoT").create();
+        alertDialog.show();
         LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
         //banner所需数据images titles
 
@@ -106,7 +118,10 @@ public class MainFragment extends Fragment {
                         images.add(bannerDataBeanList.get(i).getImagePath());
                         titles.add(bannerDataBeanList.get(i).getTitle());
                     }
-
+                    //获取完数据后UI操作
+                    initView();
+                    //主线程将alertDialog提示隐藏
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> alertDialog.hide());
                 } catch (IOException | JSONException e) {
                     Log.d(TAG, "初始化项目数据成功");
                 }
@@ -118,20 +133,6 @@ public class MainFragment extends Fragment {
             }
         });
 
-
-        images.add("https://wanandroid.com/blogimgs/0b712568-6203-4a03-b475-ff55e68d89e8.jpeg");
-        images.add("https://www.wanandroid.com/blogimgs/50c115c2-cf6c-4802-aa7b-a4334de444cd.png");
-        images.add("https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png");
-        images.add("https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png");
-        titles.add("标题1");
-        titles.add("标题2");
-        titles.add("标题3");
-        titles.add("标题4");
-        //文章所需数据 mList
-        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
-        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
-        mList.add(articleBean1);
-        mList.add(articleBean2);
     }
 
     private void initView() {
