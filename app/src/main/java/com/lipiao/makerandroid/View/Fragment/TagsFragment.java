@@ -102,7 +102,6 @@ public class TagsFragment extends Fragment {
         }
     }
 
-
     //抛出异常，initProjectFragment需重用此方法（加载数据）
     private void initView() throws NullPointerException {
         //titles，fragments，viewpager初始完后与适配器绑定
@@ -117,14 +116,12 @@ public class TagsFragment extends Fragment {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);//设置Tab滚动方式为：可滚动
     }
 
-
     //初始化项目碎片界面数据 titles，fragments
     private void initProjectFragment() {
         alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setMessage("获取项目数据中...")
                 .setTitle("Maker——IoT").create();
         alertDialog.show();
-        // 懒加载才可以
         //接口参数 page cid
         Call<ResponseBody> call = HttpUtil.getWanAndroidService().getProjectCategory();
         //网络请求
@@ -225,4 +222,3 @@ public class TagsFragment extends Fragment {
     }
 
 }
-

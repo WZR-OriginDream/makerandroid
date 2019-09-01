@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.RvAboutBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.AboutAdapter;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
@@ -26,7 +27,7 @@ import java.util.List;
  */
 public class UserFragment extends LazyLoadFragment {
 
-
+    String TAG="UserFragment";
     RecyclerView rvAbout;//关于
     RecyclerView rvCollect;//收藏
     AboutAdapter aboutAdapter;
@@ -54,14 +55,13 @@ public class UserFragment extends LazyLoadFragment {
 
     @Override
     protected void initView(View root) {
-
         rvAbout = root.findViewById(R.id.rv_user_fragment_about);
         rvCollect = root.findViewById(R.id.rv_user_fragment_collect);
-
     }
 
     @Override
     protected void initData() throws NullPointerException {
+        LogUtil.d(TAG,"initData");
 
         //top rv
         rvAbout.setHasFixedSize(true);
@@ -97,14 +97,6 @@ public class UserFragment extends LazyLoadFragment {
 
     @Override
     public void fetchData() {
-//        RvAboutBean myBlog=new RvAboutBean(R.mipmap.csdn,"csdn博客","https://blog.csdn.net/qq_42391904");
-//        RvAboutBean Maker=new RvAboutBean(R.mipmap.makerlogo,"Maker-IoT官网","https://www.baidu.com/");
-//        RvAboutBean mayun=new RvAboutBean(R.mipmap.mayun,"码云首页","https://gitee.com/lipiaoMKX");
-//        RvAboutBean hexo=new RvAboutBean(R.mipmap.me,"个人博客网站","http://lipiaomkx.gitee.io/");
-//        rvAboutBeanList.add(myBlog);
-//        rvAboutBeanList.add(Maker);
-//        rvAboutBeanList.add(mayun);
-//        rvAboutBeanList.add(hexo);
 
     }
 

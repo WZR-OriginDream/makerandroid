@@ -126,7 +126,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         Log.d(TAG, intProjectCategoryCID + "fetchData: f1的网络请求");
         //利用refreshLayout手动刷新UI界面
         refreshLayout.autoRefreshAnimationOnly();
-        refreshLayout.finishRefresh(1600/*,false*/);//传入false表示刷新失败//手动设置动画时长为一秒
+        refreshLayout.finishRefresh(1100/*,false*/);//传入false表示刷新失败//手动设置动画时长为1.1秒
 
         //添加网络请求(暂时只写第一页的数据)
         int page = 1;

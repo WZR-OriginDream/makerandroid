@@ -99,7 +99,7 @@ public class LeadFragment extends Fragment {
 
         //利用refreshLayout手动刷新UI界面
         refreshLayout.autoRefreshAnimationOnly();
-        refreshLayout.finishRefresh(1600/*,false*/);//传入false表示刷新失败//手动设置动画时长为一秒
+        refreshLayout.finishRefresh(1100/*,false*/);//传入false表示刷新失败//手动设置动画时长为一秒
     }
 
     private void initData() {
@@ -196,13 +196,13 @@ public class LeadFragment extends Fragment {
                     //通过其get()方法可以获得其中的对象
                     for (int i = 0; i < systemDataBeanList.size(); i++) {
                         SystemBean.DataBean systemDataBean = systemDataBeanList.get(i);
-                        Log.d(TAG, "@@@@@title: " + systemDataBean.getName());
+                        //Log.d(TAG, "@@@@@title: " + systemDataBean.getName());
 
                         List<SystemBean.DataBean.ChildrenBean> childrenBeanList = systemDataBean.getChildren();
                         String[] mVals = new String[childrenBeanList.size()];
                         for (int index = 0; index < childrenBeanList.size(); index++) {
                             mVals[index] = childrenBeanList.get(index).getName();
-                            Log.d(TAG, "child: " + childrenBeanList.get(index).getName());
+                            //Log.d(TAG, "child: " + childrenBeanList.get(index).getName());
                         }
                         TagsSimpleBean systemSimpleBean = new TagsSimpleBean(systemDataBean.getName(), mVals);
                         systemSimpleBeanList.add(systemSimpleBean);
