@@ -8,9 +8,12 @@ import android.view.View;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.RvAboutBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.AboutAdapter;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +33,8 @@ public class UserFragment extends LazyLoadFragment {
     RecyclerView rvCollect;//收藏
     AboutAdapter aboutAdapter;
     List<RvAboutBean> rvAboutBeanList = new ArrayList<>();
+    Banner banner;
+    ArrayList<String> images = new ArrayList<>();//图片资源集合
 
     public UserFragment() {
         // Required empty public constructor
@@ -53,6 +58,7 @@ public class UserFragment extends LazyLoadFragment {
 
     @Override
     protected void initView(View root) {
+        banner=root.findViewById(R.id.user_fragment_banner);
         rvAbout = root.findViewById(R.id.rv_user_fragment_about);
         rvCollect = root.findViewById(R.id.rv_user_fragment_collect);
     }
@@ -60,6 +66,19 @@ public class UserFragment extends LazyLoadFragment {
     @Override
     protected void initData() throws NullPointerException {
         LogUtil.d(TAG,"initData");
+//images
+        images.add("https://m.qpic.cn/psb?/V11CZbvM3uqJkN/IyHQgHfi5z4gd4Y3YE5KHYSAqNg5flnXUyQnhXG8Avw!/b/dLYAAAAAAAAA&bo=gAegBYAHoAURBzA!&rf=viewer_4");
+        images.add("https://m.qpic.cn/psb?/V11CZbvM3uqJkN/TuYokHTU9arCWsbljxyI7ncMvG2WZ3prhC56WhmNkhI!/b/dEgBAAAAAAAA&bo=wAOAAsADgAIRFyA!&rf=viewer_4");
+        images.add("https://m.qpic.cn/psb?/V11CZbvM3uqJkN/o*Muhty0A0D*7kh0ckdk1wurKk1*jUvXcFbiRyM880M!/b/dE0BAAAAAAAA&bo=wAOAAsADgAIRFyA!&rf=viewer_4");
+        images.add("https://m.qpic.cn/psb?/V11CZbvM3uqJkN/tx4y8qUlR8geQQWfOXQSW7hhanEZd*CfN5fs9mVihjk!/b/dDYBAAAAAAAA&bo=wAOAAsADgAIRFyA!&rf=viewer_4");
+
+        banner.setImages(images).setImageLoader(new GlideImageLoader());
+        //设置banner样式 不显示指示器和标题
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
+        //设置轮播时间
+        banner.setDelayTime(2500);
+        banner.start();
+
 
         //top rv
         rvAbout.setHasFixedSize(true);
@@ -69,6 +88,7 @@ public class UserFragment extends LazyLoadFragment {
         rvAbout.setLayoutManager(layoutManager);
 //初始化mList
         //https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831
+        RvAboutBean iotAssociation=new RvAboutBean(R.mipmap.iot,"湖科大物联网协会","https://user.qzone.qq.com/1832771920?ADUIN=2357390156&ADSESSION=1567347298&ADTAG=CLIENT.QQ.5647_FriendInfo_PersonalInfo.0&ADPUBNO=26931&source=namecardstar");
         RvAboutBean huaweiHero=new RvAboutBean(R.mipmap.huawei,"湖科大华为HERO联盟","https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831");
         RvAboutBean myBlog = new RvAboutBean(R.mipmap.csdn, "CSDN博客", "https://blog.csdn.net/qq_42391904");
         RvAboutBean Maker = new RvAboutBean(R.mipmap.makerlogo, "Maker-IoT官网", "https://www.baidu.com/");
@@ -77,6 +97,7 @@ public class UserFragment extends LazyLoadFragment {
 
         rvAboutBeanList.add(Maker);
         rvAboutBeanList.add(huaweiHero);
+        rvAboutBeanList.add(iotAssociation);
         rvAboutBeanList.add(myBlog);
         rvAboutBeanList.add(mayun);
         rvAboutBeanList.add(hexo);
