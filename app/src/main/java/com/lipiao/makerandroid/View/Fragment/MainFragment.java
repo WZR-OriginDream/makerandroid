@@ -15,7 +15,9 @@ import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ArticleBean;
 import com.lipiao.makerandroid.Bean.BannerBean;
 import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
+import com.lipiao.makerandroid.Bean.TopArticleBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.Utils.LogUtil;
@@ -54,16 +56,20 @@ public class MainFragment extends Fragment {
     ArrayList<String> images = new ArrayList<String>();//图片资源集合
     ArrayList<String> titles = new ArrayList<String>();//标题
 
-
-    //项目碎片bean类集合 项目类型
     private List<BannerBean.DataBean> bannerDataBeanList;
+    private List<TopArticleBean.DataBean> topDataBeanList;
     AlertDialog alertDialog;//模拟加载数据
 
     //top article
     static TopArticleAdapter topArticleAdapter;
     static List<ArticleBean> mList = new ArrayList<>();
+
     @BindView(R.id.rv_top_article)
     RecyclerView mRecyclerView;
+
+    static final int BANNER=1;
+    static final int TOPARTICLE=2;
+
 
     public MainFragment() {
         // Required empty public constructor
@@ -85,22 +91,26 @@ public class MainFragment extends Fragment {
     }
 
     private void initData() {
+
         //文章所需数据 mList
-        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
-        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
-        mList.add(articleBean1);
-        mList.add(articleBean2);
+//        ArticleBean articleBean1 = new ArticleBean("星蔚", "Android基础-四大组件之Service（基础）", "2019年07月11日", "四大组件");
+//        ArticleBean articleBean2 = new ArticleBean("星蔚", "Android基础-四大组件之activity（基础）", "2019年07月11日", "四大组件");
+//        mList.add(articleBean1);
+//        mList.add(articleBean2);
+
+
         alertDialog = new AlertDialog.Builder(Objects.requireNonNull(getActivity()))
                 .setMessage("获取项目数据中...")
                 .setTitle("Maker——IoT").create();
         alertDialog.show();
-        LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
-        //banner所需数据images titles
 
-        //接口参数 page cid
-        Call<ResponseBody> call = HttpUtil.getWanAndroidService().getBannerData();
+        LogUtil.d(TAG, "initData 验证是否重复加载碎片所需数据");
+
+        //banner所需数据images titles
+        //接口参数 无
+        Call<ResponseBody> callBanner = HttpUtil.getWanAndroidService().getBannerData();
         //网络请求
-        call.enqueue(new Callback<ResponseBody>() {
+        callBanner.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 try {
@@ -119,9 +129,14 @@ public class MainFragment extends Fragment {
                         titles.add(bannerDataBeanList.get(i).getTitle());
                     }
                     //获取完数据后UI操作
-                    initView();
                     //主线程将alertDialog提示隐藏
-                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> alertDialog.hide());
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initView(BANNER);
+                            alertDialog.hide();
+                        }
+                    });
                 } catch (IOException | JSONException e) {
                     Log.d(TAG, "初始化项目数据成功");
                 }
@@ -133,18 +148,64 @@ public class MainFragment extends Fragment {
             }
         });
 
+        //topArticle所需数据mList
+        //接口参数 无
+        Call<ResponseBody> callTopArticle = HttpUtil.getWanAndroidService().getTopArticle();
+        callTopArticle.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                String strBack = null;
+                try {
+                    strBack = response.body().string();
+                    //处理数据
+                    JSONObject jsonObject = null;
+                    jsonObject = new JSONObject(strBack);
+                    Gson gson = new Gson();
+                    TopArticleBean topArticleBean;
+                    topArticleBean = gson.fromJson(jsonObject.toString(), TopArticleBean.class);
+                    topDataBeanList=topArticleBean.getData();
+                    //初始化mList
+                    for (int i=0;i<topDataBeanList.size();i++){
+                        //文章所需数据 mList
+                        ArticleBean articleBean = new ArticleBean(
+                                ""+topDataBeanList.get(i).getAuthor(),
+                                ""+topDataBeanList.get(i).getTitle(),
+                                ""+ DateUtil.timeStampDate(topDataBeanList.get(i).getPublishTime()+""),
+                                ""+topDataBeanList.get(i).getChapterName());
+                        mList.add(articleBean);
+                    }
+                    //获取完数据后UI操作
+                    //主线程将alertDialog提示隐藏
+                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            initView(TOPARTICLE);
+                            alertDialog.hide();
+                        }
+                    });
+
+                } catch (IOException | JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
     }
 
-    private void initView() {
-        banner.setImages(images).setImageLoader(new GlideImageLoader());
-        //设置banner样式 显示圆形指示器和标题（水平显示
-        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
-        //设置标题集合（当banner样式有显示title时）
-        banner.setBannerTitles(titles);
-        //设置轮播时间
-        banner.setDelayTime(3000);
-        banner.start();
+    private void initView(int i) {
+        switch (i){
+            case  BANNER:initBannerView();break;
+            case TOPARTICLE:initTopArticleView();break;
+        }
+    }
 
+    private void initTopArticleView() {
         //top rv
         mRecyclerView.setHasFixedSize(true);
         //平常的水平一个item布局的流
@@ -158,6 +219,17 @@ public class MainFragment extends Fragment {
         topArticleAdapter = new TopArticleAdapter(mList);
 //为RecyclerView对象mRecyclerView设置adapter
         mRecyclerView.setAdapter(topArticleAdapter);
+    }
+
+    private void initBannerView() {
+        banner.setImages(images).setImageLoader(new GlideImageLoader());
+        //设置banner样式 显示圆形指示器和标题（水平显示
+        banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
+        //设置标题集合（当banner样式有显示title时）
+        banner.setBannerTitles(titles);
+        //设置轮播时间
+        banner.setDelayTime(3000);
+        banner.start();
     }
 
     /**

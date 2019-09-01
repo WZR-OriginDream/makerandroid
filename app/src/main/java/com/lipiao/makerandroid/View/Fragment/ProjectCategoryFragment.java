@@ -14,6 +14,7 @@ import com.lipiao.makerandroid.Bean.ProjectArticleBean;
 import com.lipiao.makerandroid.Bean.ProjectContentBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Service.WanAndroidService;
+import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.ProjectArticleAdapter;
@@ -162,7 +163,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                         ProjectArticleBean projectArticleBean = new ProjectArticleBean(
                                 "" + projectContentBean.getData().getDatas().get(i).getAuthor(),
                                 "" + projectContentBean.getData().getDatas().get(i).getTitle(),
-                                "" + projectContentBean.getData().getDatas().get(i).getPublishTime(),
+                                "" + DateUtil.timeStampDate(projectContentBean.getData().getDatas().get(i).getPublishTime()+""),
                                 "" + projectContentBean.getData().getDatas().get(i).getDesc(),
                                 "" + strhttps,
                                 //"" + projectContentBean.getData().getDatas().get(i).getLink(),
