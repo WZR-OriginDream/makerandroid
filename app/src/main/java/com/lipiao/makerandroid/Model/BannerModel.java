@@ -5,6 +5,8 @@ import com.lipiao.makerandroid.Bean.BannerBean;
 import java.util.List;
 
 /**
+ * MVP模式重构项目 （暂时不写了，能力有限）
+ * 模型层
  * 用于加载数据
  */
 public interface BannerModel {
