@@ -5,7 +5,7 @@ import com.lipiao.makerandroid.Bean.BannerBean;
 import java.util.List;
 
 /**
- * MVP模式重构项目 （暂时不写了，能力有限）
+ * MVP模式重构项目 （暂时不写了，还不会）
  * View层
  * 定义所有的UI逻辑
  * activity访问接口获取数据

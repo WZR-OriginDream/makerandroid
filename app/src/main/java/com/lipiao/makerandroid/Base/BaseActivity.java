@@ -6,7 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 
 
 /**
- * Activity基类
+ * MVP模式重构项目 （暂时不写了，还不会）
+ * 用于MVP模式的Activity基类
  * 泛型的使用
  * V,T
  * 抽象

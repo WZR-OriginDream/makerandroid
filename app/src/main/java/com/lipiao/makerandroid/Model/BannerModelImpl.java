@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MVP模式重构项目 （暂时不写了，能力有限）
+ * MVP模式重构项目 （暂时不写了，还不会）
  * 模型层
  * bannermodel的实现
  */

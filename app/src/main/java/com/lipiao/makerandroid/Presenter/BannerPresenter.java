@@ -9,7 +9,7 @@ import com.lipiao.makerandroid.View.BannerView;
 import java.util.List;
 
 /**
- * MVP模式重构项目 （暂时不写了，能力有限）
+ * MVP模式重构项目 （暂时不写了，还不会）
  * 表示层
  * 需要model层与view层引用
  */
