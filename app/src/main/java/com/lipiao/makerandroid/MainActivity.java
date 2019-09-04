@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         HttpUtil.getInstance();
         DateUtil.getInstance();
 
-
         //先判空后添加
         if (mainFragment == null) {
             mainFragment = MainFragment.newInstance();
