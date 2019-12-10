@@ -23,7 +23,8 @@ import java.util.List;
  */
 public class ProjectArticleAdapter extends RecyclerView.Adapter<ProjectArticleAdapter.ContactViewHolder> {
 
-    //MyAdapter的成员变量contactInfoList, 这里被我们用作数据的来源
+    //MyAdapter的成员变量contactInfoList, 这里被我们用
+    // 作数据的来源
     private List<ProjectArticleBean> projectArticleBeanList;
     private Context context;
 

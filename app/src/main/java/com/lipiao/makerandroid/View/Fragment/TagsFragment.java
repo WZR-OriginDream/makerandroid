@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.FragmentFactoryUtil;

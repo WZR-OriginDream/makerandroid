@@ -155,11 +155,14 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                     //获取本次结果的文章数量
                     int articleCount = projectContentBean.getData().getDatas().size();
                     for (int i = 0; i < articleCount; i++) {
-                        String strhttp = projectContentBean.getData().getDatas().get(i).getLink();
-                        //http修改为https webAgent需使用https 使用StringBuffer完成
-                        //http://www.wanandroid.com/blog/show/2658 //第五个位置添加s
-                        StringBuffer strhttps = new StringBuffer();
-                        strhttps.append(strhttp).insert(4, "s");
+                        String strhttps = projectContentBean.getData().getDatas().get(i).getLink();
+//                        String strhttp = projectContentBean.getData().getDatas().get(i).getLink();
+//                        Log.d(TAG, "onResponse: "+strhttp);
+//                        //http修改为https webAgent需使用https 使用StringBuffer完成
+//                        //http://www.wanandroid.com/blog/show/2658 //第五个位置添加s
+//                        StringBuffer strhttps = new StringBuffer();
+//                        strhttps.append(strhttp).insert(4, "s");
+
                         ProjectArticleBean projectArticleBean = new ProjectArticleBean(
                                 "" + projectContentBean.getData().getDatas().get(i).getAuthor(),
                                 "" + projectContentBean.getData().getDatas().get(i).getTitle(),
@@ -169,8 +172,12 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                                 //"" + projectContentBean.getData().getDatas().get(i).getLink(),
                                 "" + projectContentBean.getData().getDatas().get(i).getEnvelopePic()
                         );
+
+                        //调试输出修改为https的url http不能被agentWeb web加载库所记载
+                        //Log.d(TAG, "onResponse: "+strhttps);
                         //使用工具类
                         // LogUtil.d(TAG, projectArticleBean.outString());
+
                         mList.add(projectArticleBean);
                     }
 
