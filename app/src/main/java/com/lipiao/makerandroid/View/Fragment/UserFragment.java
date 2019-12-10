@@ -88,10 +88,10 @@ public class UserFragment extends LazyLoadFragment {
         rvAbout.setLayoutManager(layoutManager);
 //初始化mList
         //https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831
-        RvAboutBean iotAssociation=new RvAboutBean(R.mipmap.iot,"湖科大物联网协会","https://user.qzone.qq.com/1832771920?ADUIN=2357390156&ADSESSION=1567347298&ADTAG=CLIENT.QQ.5647_FriendInfo_PersonalInfo.0&ADPUBNO=26931&source=namecardstar");
+        RvAboutBean iotAssociation=new RvAboutBean(R.mipmap.iot,"湖科大物联网协会","https://blog.csdn.net/qq_42391904");
         RvAboutBean huaweiHero=new RvAboutBean(R.mipmap.huawei,"湖科大华为HERO联盟","https://developer.huaweicloud.com/hero/forum.php?mod=group&fid=831");
         RvAboutBean myBlog = new RvAboutBean(R.mipmap.csdn, "CSDN博客", "https://blog.csdn.net/qq_42391904");
-        RvAboutBean Maker = new RvAboutBean(R.mipmap.makerlogo, "Maker-IoT官网", "https://www.baidu.com/");
+        RvAboutBean Maker = new RvAboutBean(R.mipmap.makerlogo, "Maker-IoT官网", "https://blog.csdn.net/qq_42391904");
         RvAboutBean mayun = new RvAboutBean(R.mipmap.mayun, "码云首页", "https://gitee.com/lipiaoMKX");
         RvAboutBean hexo = new RvAboutBean(R.mipmap.me, "个人博客网站", "https://lipiaomkx.gitee.io/");
 
