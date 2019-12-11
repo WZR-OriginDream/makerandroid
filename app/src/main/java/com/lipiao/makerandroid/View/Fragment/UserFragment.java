@@ -44,12 +44,6 @@ public class UserFragment extends LazyLoadFragment {
         return new UserFragment();
     }
 
-    //选择表示层 暂时不用
-    @Override
-    protected void injectPresenter() {
-
-    }
-
     //选择父布局文件
     @Override
     protected int attachLayoutId() {

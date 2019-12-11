@@ -3,9 +3,8 @@ package com.lipiao.makerandroid.Utils;
 import android.util.Log;
 
 /**
+ * 参考 第一行代码
  * 日志打印工具类，可用于完结项目后清除所有log
- * 源于 第一行代码
- *
  */
 public class LogUtil {
     public static final int VERBOSE = 1;

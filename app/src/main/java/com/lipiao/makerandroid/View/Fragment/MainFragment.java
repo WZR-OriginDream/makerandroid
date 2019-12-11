@@ -12,22 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.lipiao.makerandroid.Base.LazyLoadFragment;
 import com.lipiao.makerandroid.Bean.ArticleBean;
 import com.lipiao.makerandroid.Bean.BannerBean;
-import com.lipiao.makerandroid.Bean.BannerSimpleBean;
-import com.lipiao.makerandroid.Bean.ProjectCategoryBean;
 import com.lipiao.makerandroid.Bean.TopArticleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
 import com.lipiao.makerandroid.Utils.HttpUtil;
-import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.TopArticleAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;

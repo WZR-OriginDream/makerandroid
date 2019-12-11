@@ -59,11 +59,6 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         return fragment;
     }
 
-    //选择表示层
-    @Override
-    protected void injectPresenter() {
-//        Log.d(TAG, "injectPresenter: ");
-    }
 
     //初始化试图文件xml
     @Override

@@ -1,6 +1,5 @@
 package com.lipiao.makerandroid;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -24,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.tabView)
     TabView tabView;
     List<TabViewChild> tabViewChildList = new ArrayList<>();
-    private long lastClickBackTime = System.currentTimeMillis() - 3000;
+    private long lastClickBackTime = System.currentTimeMillis() - 3000;//三秒间隔 间隔内两次返回提示用户是否退出
     private MainFragment mainFragment;//首页
     private TagsFragment tagsFragment;//导向
     private TagsFragment projectFragment;//导向
