@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/layout_user_fragment_topInformation"
-        layout="@layout/user_top_infor"></include>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_user_fragment_about"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/layout_user_fragment_topInformation"
-        android:layout_margin="10dp">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <include
+            android:id="@+id/layout_user_fragment_topInformation"
+            layout="@layout/user_top_infor"></include>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_user_fragment_collect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rv_user_fragment_about"
-        android:layout_margin="10dp">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_user_fragment_about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_user_fragment_topInformation"
+            android:layout_margin="10dp">
 
-    </android.support.v7.widget.RecyclerView>
-</RelativeLayout>
+        </android.support.v7.widget.RecyclerView>
+
+        <com.lipiao.makerandroid.View.NoScrollListView
+            android:id="@+id/lv_collect_article"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+            android:layout_below="@+id/rv_user_fragment_about"
+            android:layout_margin="10dp">
+
+        </com.lipiao.makerandroid.View.NoScrollListView>
+    </RelativeLayout>
+</ScrollView>

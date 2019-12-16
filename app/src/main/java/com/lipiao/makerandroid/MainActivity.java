@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.HttpUtil;
+import com.lipiao.makerandroid.Utils.SqliteUtils;
 import com.lipiao.makerandroid.View.Fragment.TagsFragment;
 import com.lipiao.makerandroid.View.Fragment.MainFragment;
 import com.lipiao.makerandroid.View.Fragment.UserFragment;
@@ -35,9 +36,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         //绑定 初始化 ButterKnife
         ButterKnife.bind(this);
-        //初始化 全局网络请求工具类 时间戳格式化工具类 均为单例
+        //初始化 全局网络请求工具类 时间戳格式化工具类  SQLite数据库工具类 均为单例
         HttpUtil.getInstance();
         DateUtil.getInstance();
+        SqliteUtils.getInstance(getBaseContext());
 
         //先判空后添加
         if (mainFragment == null) {

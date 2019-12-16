@@ -55,6 +55,8 @@ public interface WanAndroidService {
     /**
      * 3.1 导航数据 标题
      * 原接口:https://www.wanandroid.com/navi/json
+     * 方法：GET
+     *      * 参数：无
      * @return
      */
     @GET("navi/json")

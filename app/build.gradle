@@ -32,7 +32,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    //UI//底部导航
+    //UI//底部导航https://github.com/yaochangliang159/Android-TabView
     implementation 'com.ycl.tabview.library:tabviewlibrary:1.0'
 
     //material design库

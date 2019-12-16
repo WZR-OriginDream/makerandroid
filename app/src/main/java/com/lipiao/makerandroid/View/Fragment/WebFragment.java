@@ -29,6 +29,7 @@ import com.just.agentweb.DefaultWebClient;
 import com.just.agentweb.WebChromeClient;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.LogUtil;
+import com.lipiao.makerandroid.Utils.SqliteUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -111,9 +112,6 @@ public class WebFragment extends Fragment {
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         strWebURL = getArguments().getString("webURL");
-        //demoForRetrofit();
-        //agentWeb();
-
         return rootView;
     }
 
@@ -121,19 +119,17 @@ public class WebFragment extends Fragment {
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-
             switch (v.getId()) {
-                case R.id.iv_back:
+                case R.id.iv_back://返回
                     // true表示AgentWeb处理了该事件
                     if (!mAgentWeb.back()) {
                         WebFragment.this.getActivity().finish();
                     }
                     break;
-                case R.id.iv_finish:
+                case R.id.iv_finish://关闭此网页
                     WebFragment.this.getActivity().finish();
                     break;
-                case R.id.iv_more:
+                case R.id.iv_more://弹出菜单
                     showPoPup(v);
                     break;
                 default:
@@ -144,11 +140,7 @@ public class WebFragment extends Fragment {
 
     };
 
-    /**
-     * 显示更多菜单
-     *
-     * @param view 菜单依附在该View下面
-     */
+    //显示更多菜单
     private void showPoPup(View view) {
         if (mPopupMenu == null) {
             mPopupMenu = new PopupMenu(this.getActivity(), view);
@@ -158,36 +150,32 @@ public class WebFragment extends Fragment {
         mPopupMenu.show();
     }
 
-    /**
-     * 菜单事件
-     */
+    //菜单对应的点击事件
     private PopupMenu.OnMenuItemClickListener mOnMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
 
             switch (item.getItemId()) {
 
-                case R.id.refresh:
+                case R.id.collect_article://收藏文章
                     if (mAgentWeb != null) {
-                        mAgentWeb.getUrlLoader().reload(); // 刷新
+                        String collectUrl=mAgentWeb.getWebCreator().getWebView().getUrl();//网址
+                        String collectTitles=mAgentWeb.getWebCreator().getWebView().getTitle();//网页标题
+                        //插入
+                        Log.d(TAG, "onMenuItemClick: "+collectUrl+" "+collectTitles);
+                        String backStr=SqliteUtils.insert(collectUrl,collectTitles);
+                        Toast.makeText(getContext(), backStr, Toast.LENGTH_SHORT).show();
                     }
                     return true;
-
-                case R.id.copy:
+                case R.id.copy://复制文章链接
                     if (mAgentWeb != null) {
                         toCopy(WebFragment.this.getContext(), mAgentWeb.getWebCreator().getWebView().getUrl());
                     }
                     return true;
-                case R.id.default_browser:
+                case R.id.default_browser://使用系统浏览器打开
                     if (mAgentWeb != null) {
                         openBrowser(mAgentWeb.getWebCreator().getWebView().getUrl());
                     }
-                    return true;
-                case R.id.default_clean:
-                    toCleanWebCache();
-                    return true;
-                case R.id.error_website:
-                    loadErrorWebSite();
                     return true;
                 default:
                     return false;
@@ -196,49 +184,14 @@ public class WebFragment extends Fragment {
         }
     };
 
-    /**
-     * 测试错误页的显示
-     */
-    private void loadErrorWebSite() {
-        if (mAgentWeb != null) {
-            mAgentWeb.getUrlLoader().loadUrl("http://www.unkownwebsiteblog.me");
-        }
-    }
 
-    /**
-     * 清除 WebView 缓存
-     */
-    private void toCleanWebCache() {
-
-        if (this.mAgentWeb != null) {
-
-            //清理所有跟WebView相关的缓存 ，数据库， 历史记录 等。
-            this.mAgentWeb.clearWebCache();
-            Toast.makeText(getActivity(), "已清理缓存", Toast.LENGTH_SHORT).show();
-            //清空所有 AgentWeb 硬盘缓存，包括 WebView 的缓存 , AgentWeb 下载的图片 ，视频 ，apk 等文件。
-//            AgentWebConfig.clearDiskCache(this.getContext());
-        }
-
-    }
-
-    /**
-     * 复制字符串
-     *
-     * @param context
-     * @param text
-     */
+    //复制字符串 用系统浏览器打开前 先复制链接
     private void toCopy(Context context, String text) {
-
         ClipboardManager mClipboardManager = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         mClipboardManager.setPrimaryClip(ClipData.newPlainText(null, text));
-
     }
 
-    /**
-     * 打开浏览器
-     *
-     * @param targetUrl 外部浏览器打开的地址
-     */
+    //打开浏览器 使用隐式意图 设置其动作Action为android.intent.action.VIEW打开浏览器
     private void openBrowser(String targetUrl) {
         if (TextUtils.isEmpty(targetUrl) || targetUrl.startsWith("file://")) {
             Toast.makeText(this.getContext(), targetUrl + " 该链接无法使用浏览器打开。", Toast.LENGTH_SHORT).show();
@@ -251,6 +204,7 @@ public class WebFragment extends Fragment {
         startActivity(intent);
     }
 
+    //agentWeb固定写法
     protected com.just.agentweb.WebChromeClient mWebChromeClient = new WebChromeClient() {
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
@@ -272,9 +226,7 @@ public class WebFragment extends Fragment {
     };
 
 
-    /**
-     * onDestroyView中进行解绑操作
-     */
+    //onDestroyView中进行unbind解绑操作
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -293,6 +245,5 @@ public class WebFragment extends Fragment {
         mAgentWeb.getWebLifeCycle().onPause(); //暂停应用内所有WebView ， 调用mWebView.resumeTimers();/mAgentWeb.getWebLifeCycle().onResume(); 恢复。
         super.onPause();
     }
-
 
 }

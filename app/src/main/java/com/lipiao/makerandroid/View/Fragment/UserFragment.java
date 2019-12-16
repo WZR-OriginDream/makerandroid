@@ -63,16 +63,16 @@ public class UserFragment extends Fragment {
         return new UserFragment();
     }
 
-    //碎片可见时调用
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        rootView = inflater.inflate(R.layout.fragment_user, container, false);
-//        initView();
-//        initData();
-//        fetchData();
-//        return rootView;
-//    }
+    //创建碎片视图
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_user, container, false);
+        initView();
+        initData();
+        fetchData();
+        return rootView;
+    }
 
     //重新获取焦点时 重新加载数据（因为可能用户有新的收藏文章 需要重新从sqLite数据库中查询并显示）
     @Override
@@ -101,7 +101,7 @@ public class UserFragment extends Fragment {
         lvCollect = rootView.findViewById(R.id.lv_collect_article);
     }
 
-    //获取数据 收藏的文章
+    //获取数据
     protected void initData() throws NullPointerException {
         LogUtil.d(TAG, "initData");
 
@@ -164,6 +164,7 @@ public class UserFragment extends Fragment {
     public void fetchData() {
         //处理前判空
         if (collectArticleBeanList.size() != 0) {
+            Log.d(TAG, "fetchData: 收藏文章listview加载");
             //初始化一个大小和收藏文章集合大小一致的 字符串数组
             arrStr = new ArrayList<>();
             for (CollectArticleBean collectArticleBean : collectArticleBeanList) {
@@ -201,8 +202,7 @@ public class UserFragment extends Fragment {
                 alertDialog.show();
                 return true;//表示此事件已经消费，不会触发单击事件
             });
-        }
-
+        }//判空if
 
     }
 
