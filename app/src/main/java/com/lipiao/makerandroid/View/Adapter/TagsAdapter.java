@@ -4,14 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lipiao.makerandroid.Bean.TagsSimpleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.TagsSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -27,11 +26,13 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
 
     //TagsAdapter的成员变量systemBeanList.DataBean, 这里被我们用作数据的来源
     private List<TagsSimpleBean> systemSimpleBeanList;
+    private String userNumber;
     private Context context;
 
     //构造函数
-    public TagsAdapter(List<TagsSimpleBean> systemSimpleBeanList) {
+    public TagsAdapter(List<TagsSimpleBean> systemSimpleBeanList,String userNumber) {
         this.systemSimpleBeanList = systemSimpleBeanList;
+        this.userNumber=userNumber;
     }
 
 
@@ -73,7 +74,8 @@ public class TagsAdapter extends RecyclerView.Adapter<TagsAdapter.ContactViewHol
         contactViewHolder.tflTags.setOnTagClickListener((view, position, parent) -> {
             Toast.makeText(context, systemSimpleBean.getTags()[position], Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, WebActivity.class);
-            intent.putExtra("webURL",systemSimpleBean.getWebURLs()[position]);
+            intent.putExtra("webURL",systemSimpleBean.getWebURLs()[position]);//userNumber
+            intent.putExtra("userNumber",userNumber);
             context.startActivity(intent);
             return true;
         });

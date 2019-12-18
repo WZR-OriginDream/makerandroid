@@ -10,10 +10,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lipiao.makerandroid.Base.LazyLoadFragment;
-import com.lipiao.makerandroid.Bean.ProjectArticleBean;
-import com.lipiao.makerandroid.Bean.ProjectContentBean;
+import com.lipiao.makerandroid.Bean.ViewBean.ProjectArticleBean;
+import com.lipiao.makerandroid.Bean.RespondBean.ProjectContentBean;
 import com.lipiao.makerandroid.R;
-import com.lipiao.makerandroid.Service.WanAndroidService;
 import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
@@ -40,6 +39,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
     String TAG = "ProjectCategoryFragment";
 
     int intProjectCategoryCID;//项目种类编号，访问接口需要
+    String userNumber;
 
     RecyclerView mRecyclerView;
 
@@ -51,10 +51,11 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         // Required empty public constructor
     }
 
-    public static ProjectCategoryFragment newInstance(int intProjectCategoryCID) {
+    public static ProjectCategoryFragment newInstance(int intProjectCategoryCID,String userNumber) {
         ProjectCategoryFragment fragment = new ProjectCategoryFragment();
         Bundle bundle = new Bundle();
         bundle.putInt("categoryCid", intProjectCategoryCID);
+        bundle.putString("userNumber", userNumber);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -73,6 +74,7 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
         Log.d(TAG, "initView: ");
         //获取项目种类cid
         intProjectCategoryCID = getArguments().getInt("categoryCid");
+        userNumber= getArguments().getString("userNumber");
 
         refreshLayout = root.findViewById(R.id.srl_sf);
         refreshLayout.setReboundDuration(200);//回弹动画
@@ -101,6 +103,8 @@ public class ProjectCategoryFragment extends LazyLoadFragment {
                 //Toast.makeText(getContext(), "点击事件：查看" + mList.get(position).getWebURL(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity().getApplicationContext(), WebActivity.class);
                 intent.putExtra("webURL", mList.get(position).getWebURL());
+                intent.putExtra("userNumber", userNumber);
+
                 startActivity(intent);
             }
 

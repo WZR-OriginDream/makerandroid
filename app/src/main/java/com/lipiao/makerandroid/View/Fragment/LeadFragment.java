@@ -1,6 +1,5 @@
 package com.lipiao.makerandroid.View.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,12 +11,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.lipiao.makerandroid.Bean.NavigationDataBean;
-import com.lipiao.makerandroid.Bean.SystemBean;
-import com.lipiao.makerandroid.Bean.TagsSimpleBean;
+import com.lipiao.makerandroid.Bean.RespondBean.NavigationDataBean;
+import com.lipiao.makerandroid.Bean.RespondBean.SystemBean;
+import com.lipiao.makerandroid.Bean.ViewBean.TagsSimpleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.HttpUtil;
-import com.lipiao.makerandroid.View.Activity.WebActivity;
 import com.lipiao.makerandroid.View.Adapter.TagsAdapter;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
@@ -41,6 +39,7 @@ import retrofit2.Response;
  * 知识体系与拓维导航复用同一个模板碎片
  */
 public class LeadFragment extends Fragment {
+    String userNumber;
 
     String TAG = "LeadFragment";
     String strKind;
@@ -68,10 +67,11 @@ public class LeadFragment extends Fragment {
     }
 
     //分类，知识体系和拓维导航两种碎片leadFragment中包含两个碎片
-    public static LeadFragment newInstance(String arg) {
+    public static LeadFragment newInstance(String arg ,String userNumber) {
         LeadFragment fragment = new LeadFragment();
         Bundle bundle = new Bundle();
         bundle.putString("kind", arg);
+        bundle.putString("userNumber", userNumber);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -84,6 +84,7 @@ public class LeadFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         //获取kind类型值
         strKind = getArguments().getString("kind");
+        userNumber = getArguments().getString("userNumber");
         initView();
         initData();
         return rootView;
@@ -126,7 +127,7 @@ public class LeadFragment extends Fragment {
 
 
         //实例化MyAdapter并传入mList对象
-        tagsAdapter = new TagsAdapter(systemSimpleBeanList);
+        tagsAdapter = new TagsAdapter(systemSimpleBeanList,userNumber);
 
         Log.d(TAG, "initData: " + systemSimpleBeanList.size());
 //为RecyclerView对象mRecyclerView设置adapter

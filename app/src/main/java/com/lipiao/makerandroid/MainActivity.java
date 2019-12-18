@@ -1,7 +1,9 @@
 package com.lipiao.makerandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.lipiao.makerandroid.Utils.DateUtil;
@@ -20,6 +22,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
+    static String TAG= "MainActivity";
+
+    static String userNumber;//账号
+    static String password;//密码
 
     @BindView(R.id.tabView)
     TabView tabView;
@@ -41,21 +47,28 @@ public class MainActivity extends AppCompatActivity {
         DateUtil.getInstance();
         SqliteUtils.getInstance(getBaseContext());
 
+        //接受LoginActivity传来的数据
+        Intent intent=getIntent();
+        userNumber =intent.getStringExtra("userNumber");
+        password=intent.getStringExtra("password");
+        Log.d(TAG, "onCreate: userNumber "+userNumber+" password "+password);
+
+
         //先判空后添加
         if (mainFragment == null) {
-            mainFragment = MainFragment.newInstance();
+            mainFragment = MainFragment.newInstance(userNumber);
             tabViewChildList.add(new TabViewChild(R.mipmap.main, R.mipmap.main_no, "首页", mainFragment));
         }
         if (tagsFragment == null) {
-            tagsFragment = TagsFragment.newInstance("leadFragment");
+            tagsFragment = TagsFragment.newInstance("leadFragment", userNumber);
             tabViewChildList.add(new TabViewChild(R.mipmap.lead, R.mipmap.lead_no, "导向", tagsFragment));
         }
         if (projectFragment == null) {
-            projectFragment = TagsFragment.newInstance("projectFragment");
+            projectFragment = TagsFragment.newInstance("projectFragment", userNumber);
             tabViewChildList.add(new TabViewChild(R.mipmap.project, R.mipmap.project_no, "项目", projectFragment));
         }
         if (userFragment == null) {
-            userFragment = UserFragment.newInstance();
+            userFragment = UserFragment.newInstance(userNumber,password);
             tabViewChildList.add(new TabViewChild(R.mipmap.user, R.mipmap.user_no, "我的", userFragment));
         }
 

@@ -27,13 +27,21 @@ import com.just.agentweb.AgentWeb;
 import com.just.agentweb.AgentWebConfig;
 import com.just.agentweb.DefaultWebClient;
 import com.just.agentweb.WebChromeClient;
+import com.lipiao.makerandroid.Bean.RespondBean.MessageBean;
+import com.lipiao.makerandroid.Bean.RespondBean.UserCollectArticleBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.Utils.SqliteUtils;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -41,6 +49,8 @@ import butterknife.Unbinder;
  * 基于AgentWeb+Fragment
  */
 public class WebFragment extends Fragment {
+
+    String userNumber;//WebActivity传来的userNumber
     View rootView;
     String TAG = "WebFragment";
     String strWebURL;//文章url
@@ -67,10 +77,11 @@ public class WebFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static WebFragment newInstance(String webURL) {
+    public static WebFragment newInstance(String webURL,String userNumber) {
         WebFragment fragment = new WebFragment();
         Bundle bundle = new Bundle();
         bundle.putString("webURL", webURL);
+        bundle.putString("userNumber", userNumber);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -112,6 +123,8 @@ public class WebFragment extends Fragment {
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
         strWebURL = getArguments().getString("webURL");
+        userNumber=getArguments().getString("userNumber");
+        Log.d(TAG, "onCreateView: userNumber "+userNumber);
         return rootView;
     }
 
@@ -154,16 +167,26 @@ public class WebFragment extends Fragment {
     private PopupMenu.OnMenuItemClickListener mOnMenuItemClickListener = new PopupMenu.OnMenuItemClickListener() {
         @Override
         public boolean onMenuItemClick(MenuItem item) {
-
             switch (item.getItemId()) {
-
                 case R.id.collect_article://收藏文章
                     if (mAgentWeb != null) {
-                        String collectUrl=mAgentWeb.getWebCreator().getWebView().getUrl();//网址
-                        String collectTitles=mAgentWeb.getWebCreator().getWebView().getTitle();//网页标题
+                        String collectUrl = mAgentWeb.getWebCreator().getWebView().getUrl();//网址
+                        String collectTitles = mAgentWeb.getWebCreator().getWebView().getTitle();//网页标题
                         //插入
-                        Log.d(TAG, "onMenuItemClick: "+collectUrl+" "+collectTitles);
-                        String backStr=SqliteUtils.insert(collectUrl,collectTitles);
+                        Log.d(TAG, "onMenuItemClick: " + collectUrl + " " + collectTitles);
+                        String backStr = SqliteUtils.insert(collectUrl, collectTitles);
+                        Call<MessageBean> callBanner = HttpUtil.getUserService().addArticle(userNumber, collectUrl, collectTitles);
+                        callBanner.enqueue(new Callback<MessageBean>() {
+                            @Override
+                            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+                                Log.d(TAG, "onResponse: " + response.body().getMessage());
+                            }
+
+                            @Override
+                            public void onFailure(Call<MessageBean> call, Throwable t) {
+
+                            }
+                        });
                         Toast.makeText(getContext(), backStr, Toast.LENGTH_SHORT).show();
                     }
                     return true;

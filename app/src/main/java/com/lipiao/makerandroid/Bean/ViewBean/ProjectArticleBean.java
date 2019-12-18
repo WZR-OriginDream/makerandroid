@@ -1,4 +1,4 @@
-package com.lipiao.makerandroid.Bean;
+package com.lipiao.makerandroid.Bean.ViewBean;
 
 /**
  * 项目文章bean类简化版

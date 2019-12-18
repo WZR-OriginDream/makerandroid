@@ -1,6 +1,5 @@
 package com.lipiao.makerandroid.View.Fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,16 +10,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.lipiao.makerandroid.Bean.CollectArticleBean;
-import com.lipiao.makerandroid.Bean.RvAboutBean;
+import com.lipiao.makerandroid.Bean.RespondBean.MessageBean;
+import com.lipiao.makerandroid.Bean.RespondBean.UserCollectArticleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.CollectArticleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.RvAboutBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
+import com.lipiao.makerandroid.Utils.HttpUtil;
 import com.lipiao.makerandroid.Utils.LogUtil;
 import com.lipiao.makerandroid.Utils.SqliteUtils;
 import com.lipiao.makerandroid.View.Activity.WebActivity;
@@ -33,6 +34,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * 用户界面碎片
  * 包含几个简要信息
@@ -40,6 +45,9 @@ import java.util.Objects;
  * Maker-IoT官网地址
  */
 public class UserFragment extends Fragment {
+
+    static String userNumber;//账号
+    static String password;//密码
 
     String TAG = "UserFragment";
     View rootView;
@@ -51,6 +59,7 @@ public class UserFragment extends Fragment {
     ArrayList<String> images = new ArrayList<>();//图片资源集合
 
     static List<CollectArticleBean> collectArticleBeanList = new ArrayList<>();//收藏文章的集合
+    static List<UserCollectArticleBean.ArticleListBean> articleListBeanArrayList = new ArrayList<>();//收藏文章的集合 服务器
     static List<String> arrStr;//收藏文章的标题 字符串数组
     AlertDialog alertDialog;
     static ArrayAdapter<String> adapter;
@@ -59,8 +68,13 @@ public class UserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UserFragment newInstance() {
-        return new UserFragment();
+    public static UserFragment newInstance(String username, String password) {
+        UserFragment fragment = new UserFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("userNumber", username);
+        bundle.putString("password", password);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     //创建碎片视图
@@ -69,8 +83,10 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_user, container, false);
         initView();
-        initData();
-        fetchData();
+        assert getArguments() != null;//判空处理
+        userNumber = getArguments().getString("userNumber");//获取账号
+        password = getArguments().getString("password");//获取账号
+        Log.d(TAG, "onCreateView: userNumber " + userNumber + " password " + password);
         return rootView;
     }
 
@@ -79,7 +95,6 @@ public class UserFragment extends Fragment {
     public void onResume() {
         super.onResume();
         initData();
-        fetchData();
     }
 
     //碎片是否可见 可见下重新加载数据
@@ -104,6 +119,24 @@ public class UserFragment extends Fragment {
     //获取数据
     protected void initData() throws NullPointerException {
         LogUtil.d(TAG, "initData");
+        //接口参数 无
+        Call<UserCollectArticleBean> callBanner = HttpUtil.getUserService().findAllArticle(userNumber);
+        callBanner.enqueue(new Callback<UserCollectArticleBean>() {
+            @Override
+            public void onResponse(Call<UserCollectArticleBean> call, Response<UserCollectArticleBean> response) {
+                Log.d(TAG, "onResponse: " + response.body().getMessage());
+                articleListBeanArrayList = new ArrayList<>();//空初始化收藏的文章集合
+                articleListBeanArrayList = response.body().getArticleList();
+
+                fetchData();
+            }
+
+            @Override
+            public void onFailure(Call<UserCollectArticleBean> call, Throwable t) {
+
+            }
+        });
+
 
         //初始化收藏的文章
         collectArticleBeanList = new ArrayList<>();//空初始化收藏的文章集合
@@ -153,6 +186,7 @@ public class UserFragment extends Fragment {
             //根据URL创建web活动
             Intent intent = new Intent(getActivity(), WebActivity.class);
             intent.putExtra("webURL", rvAboutBeanList.get(position).getAboutUrlStr());
+            intent.putExtra("userNumber", userNumber);
             startActivity(intent);
         });
         //为RecyclerView对象mRecyclerView设置adapter
@@ -162,48 +196,93 @@ public class UserFragment extends Fragment {
 
     //将数据放到视图控件中
     public void fetchData() {
-        //处理前判空
-        if (collectArticleBeanList.size() != 0) {
-            Log.d(TAG, "fetchData: 收藏文章listview加载");
+
+        //articleListBeanArrayList  源自服务器
+        //collectArticleBeanList 本地
+//        if (articleListBeanArrayList.size() >= 0) {
+            Log.d(TAG, "fetchData: 服务器中的数据放到listview articleListBeanArrayList.size()" + articleListBeanArrayList.size());
             //初始化一个大小和收藏文章集合大小一致的 字符串数组
             arrStr = new ArrayList<>();
-            for (CollectArticleBean collectArticleBean : collectArticleBeanList) {
-                arrStr.add(collectArticleBean.getCollectTitles());//i 先用后加1
+            for (UserCollectArticleBean.ArticleListBean articleListBean : articleListBeanArrayList) {
+                arrStr.add(articleListBean.getCollectTitles());//i 先用后加1
             }
-            adapter = new ArrayAdapter<String>(Objects.requireNonNull(getActivity()),
-                    android.R.layout.simple_list_item_1, arrStr);//新建并配置ArrayAapeter
-            lvCollect.setAdapter(adapter);
-            setListViewHeightBasedOnChildren(lvCollect);//解决ScrollView嵌套ListView只显示一条的问题
-            //点击事件
-            lvCollect.setOnItemClickListener((adapterView, view, i1, l) -> {
-                //根据URL创建web活动
-                Intent intent = new Intent(getActivity(), WebActivity.class);
-                intent.putExtra("webURL", collectArticleBeanList.get(i1).getCollectUrl());
-                startActivity(intent);
-            });
-            //长按事件
-            lvCollect.setOnItemLongClickListener((adapterView, view, i14, l) -> {
-                alertDialog = new AlertDialog.Builder(Objects.requireNonNull(UserFragment.this.getActivity()))
-                        .setMessage("是否取消收藏该文章 ?")
-                        .setPositiveButton("确定", (dialogInterface, i13) -> {
+            loadRvView(0);
+
+//        } else {
+//            Log.d(TAG, "fetchData: sqlite中的数据放到listview articleListBeanArrayList.size()=" + articleListBeanArrayList.size());
+//            //初始化一个大小和收藏文章集合大小一致的 字符串数组
+//            arrStr = new ArrayList<>();
+//            for (CollectArticleBean collectArticleBean : collectArticleBeanList) {
+//                arrStr.add(collectArticleBean.getCollectTitles());//i 先用后加1
+//            }
+//            loadRvView(1);
+
+//        }//else
+
+
+    }
+
+
+    // 0代表服务器数据源  1代表sqlite数据源
+    public void loadRvView(int i) {
+        adapter = new ArrayAdapter<String>(Objects.requireNonNull(getActivity()),
+                android.R.layout.simple_list_item_1, arrStr);//新建并配置ArrayAapeter
+        lvCollect.setAdapter(adapter);
+        setListViewHeightBasedOnChildren(lvCollect);//解决ScrollView嵌套ListView只显示一条的问题
+        //点击事件
+        lvCollect.setOnItemClickListener((adapterView, view, i1, l) -> {
+            //根据URL创建web活动
+            Intent intent = new Intent(getActivity(), WebActivity.class);
+            intent.putExtra("webURL", collectArticleBeanList.get(i1).getCollectUrl());
+            startActivity(intent);
+        });
+        //长按事件
+        lvCollect.setOnItemLongClickListener((adapterView, view, i14, l) -> {
+            alertDialog = new AlertDialog.Builder(Objects.requireNonNull(UserFragment.this.getActivity()))
+                    .setMessage("是否取消收藏该文章 ?")
+                    .setPositiveButton("确定", (dialogInterface, i13) -> {
+
+                        //articleListBeanArrayList  源自服务器
+                        //collectArticleBeanList 本地
+                        if (i == 0) {//服务器数据源
+                            //删除对应服务器数据源
+                            Call<MessageBean> call = HttpUtil.getUserService().deleteArticle(userNumber, articleListBeanArrayList.get(i14).getCollectUrl());
+                            call.enqueue(new Callback<MessageBean>() {
+                                @Override
+                                public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+                                    Log.d(TAG, "onResponse: " + response.body().getMessage());
+                                }
+
+                                @Override
+                                public void onFailure(Call<MessageBean> call, Throwable t) {
+
+                                }
+                            });
+                            //删除对应SQlite中的数据
+                            String backStr = SqliteUtils.delete(articleListBeanArrayList.get(i14).getCollectUrl());
+                            Toast.makeText(UserFragment.this.getContext(), backStr, Toast.LENGTH_SHORT).show();
+                            //删除数据源后 更新recycleView界面
+                            Log.d(TAG, "fetchData: " + i14);
+                        } else {
                             //删除数据 提示插入是否成功 隐藏对话框
                             String backStr = SqliteUtils.delete(collectArticleBeanList.get(i14).getCollectUrl());
                             Toast.makeText(UserFragment.this.getContext(), backStr, Toast.LENGTH_SHORT).show();
                             //删除数据源后 更新recycleView界面
                             Log.d(TAG, "fetchData: " + i14);
-                            arrStr.remove(i14);//删除数据源,移除集合中当前下标的数据
-                            adapter.notifyDataSetChanged();//刷新被删除的地方
-                        })
-                        .setNegativeButton("取消", (dialogInterface, i12) -> {
-                            //只隐藏对话框即可
-                            alertDialog.hide();
-                        })
-                        .create();
-                alertDialog.show();
-                return true;//表示此事件已经消费，不会触发单击事件
-            });
-        }//判空if
+                        }
+                        arrStr.remove(i14);//删除数据源,移除集合中当前下标的数据
+                        adapter.notifyDataSetChanged();//刷新被删除的地方
 
+
+                    })
+                    .setNegativeButton("取消", (dialogInterface, i12) -> {
+                        //只隐藏对话框即可
+                        alertDialog.hide();
+                    })
+                    .create();
+            alertDialog.show();
+            return true;//表示此事件已经消费，不会触发单击事件
+        });
     }
 
     /**

@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lipiao.makerandroid.Bean.RvAboutBean;
+import com.lipiao.makerandroid.Bean.ViewBean.RvAboutBean;
 import com.lipiao.makerandroid.R;
 
 import java.util.List;

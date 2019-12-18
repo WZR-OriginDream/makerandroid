@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.lipiao.makerandroid.Bean.ArticleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.ArticleBean;
 import com.lipiao.makerandroid.R;
 
 import java.util.List;

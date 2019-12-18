@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.gson.Gson;
-import com.lipiao.makerandroid.Bean.ArticleBean;
-import com.lipiao.makerandroid.Bean.BannerBean;
-import com.lipiao.makerandroid.Bean.TopArticleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.ArticleBean;
+import com.lipiao.makerandroid.Bean.RespondBean.BannerBean;
+import com.lipiao.makerandroid.Bean.RespondBean.TopArticleBean;
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.Utils.DateUtil;
 import com.lipiao.makerandroid.Utils.GlideImageLoader;
@@ -42,6 +42,8 @@ import retrofit2.Response;
 
 //原始的四个碎片自带缓存 无需懒加载 也不会重复加载数据
 public class MainFragment extends Fragment {
+
+    static String userNumber;//账号
 
     String TAG = "MainFragment";
     View rootView;
@@ -75,8 +77,12 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static MainFragment newInstance(String username) {
+        MainFragment fragment = new MainFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("userNumber", username);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -85,6 +91,9 @@ public class MainFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //返回一个Unbinder值（进行解绑），注意这里的this不能使用getActivity()
         unbinder = ButterKnife.bind(this, rootView);
+        assert getArguments() != null;//判空处理
+        userNumber = getArguments().getString("userNumber");//获取账号
+        Log.d(TAG, "onCreateView: userNumber "+ userNumber);
         initData();
 
         return rootView;
@@ -182,20 +191,15 @@ public class MainFragment extends Fragment {
                     }
                     //获取完数据后UI操作
                     //主线程将alertDialog提示隐藏
-                    Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            initView(TOPARTICLE);
-                            alertDialog.hide();
-                        }
+                    Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                        initView(TOPARTICLE);
+                        alertDialog.hide();
                     });
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
@@ -231,6 +235,7 @@ public class MainFragment extends Fragment {
         topArticleAdapter.setOnItemClickListener((view, position) -> {
             Intent intent = new Intent(getActivity().getApplicationContext(), WebActivity.class);
             intent.putExtra("webURL", mList.get(position).getWebURL());
+            intent.putExtra("userNumber", userNumber);
             startActivity(intent);
         });
 //为RecyclerView对象mRecyclerView设置adapter
@@ -247,6 +252,7 @@ public class MainFragment extends Fragment {
         banner.setOnBannerListener(position -> {
             Intent intent = new Intent(getActivity().getApplicationContext(), WebActivity.class);
             intent.putExtra("webURL",webURLs.get(position));
+            intent.putExtra("userNumber",userNumber);
             //LogUtil.d(TAG,"banner "+webURLs.get(position)+" "+position);
             startActivity(intent);
         });

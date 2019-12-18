@@ -1,4 +1,4 @@
-package com.lipiao.makerandroid.Bean;
+package com.lipiao.makerandroid.Bean.ViewBean;
 
 /**
  * 用户碎片

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">玩Android</string>
+    <string name="app_name">Android博客阅读</string>
 
     <!--统一管理各个请求的baseURL-->
     <!--玩Android 开放API https://www.wanandroid.com/blog/show/2 -->

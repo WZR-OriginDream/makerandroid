@@ -31,19 +31,19 @@ public class FragmentFactoryUtil {
    // private static Map<String, Fragment> projectFragmentMap = new HashMap<>();
 
     //根据下标创建碎片 适用于导向碎片中创建碎片
-    public static Fragment initFragment(int index) {
+    public static Fragment initFragment(int index,String userNumber) {
         Fragment fragment = leadFragmentMap.get(index);
         //如果之前没有创建，就创建新的
         if (fragment == null) {
             switch (index) {
                 case TAB_TREE:
-                    fragment = LeadFragment.newInstance("tree");//知识体系
+                    fragment = LeadFragment.newInstance("tree",userNumber);//知识体系
                     break;
                 case TAB_NAVIGATION:
-                    fragment = LeadFragment.newInstance("navigation");//拓维导航
+                    fragment = LeadFragment.newInstance("navigation",userNumber);//拓维导航
                     break;
                 default:
-                    fragment = ProjectCategoryFragment.newInstance(index);//根据项目分类CID来创建fragment
+                    fragment = ProjectCategoryFragment.newInstance(index,userNumber);//根据项目分类CID来创建fragment
 
             }
             //把创建的fragment存起来

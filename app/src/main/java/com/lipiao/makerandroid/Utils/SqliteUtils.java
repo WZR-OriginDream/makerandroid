@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.lipiao.makerandroid.Bean.CollectArticleBean;
+import com.lipiao.makerandroid.Bean.ViewBean.CollectArticleBean;
 import com.lipiao.makerandroid.sqlite.MyHelper;
 
 import java.util.ArrayList;

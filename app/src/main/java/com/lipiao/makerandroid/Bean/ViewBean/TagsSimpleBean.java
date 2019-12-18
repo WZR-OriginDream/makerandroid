@@ -1,4 +1,4 @@
-package com.lipiao.makerandroid.Bean;
+package com.lipiao.makerandroid.Bean.ViewBean;
 
 //体系标签与拓维导航 tagBean
 // 简化Bean类 体系大标题+下属的小标签集合

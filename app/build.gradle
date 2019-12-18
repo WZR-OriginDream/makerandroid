@@ -64,10 +64,11 @@ dependencies {
     //网络请求 Retrofit库(基于okHttp封装的网络请求库)
     implementation 'com.squareup.okhttp3:okhttp:4.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2' // 用Gson解析json的转换器
 
     //web加载库
     implementation 'com.just.agentweb:agentweb:4.1.2'
     implementation 'com.just.agentweb:filechooser:4.1.2'// (可选)
-    implementation  'com.download.library:Downloader:4.1.2'// (可选)
+    implementation 'com.download.library:Downloader:4.1.2'// (可选)
 
 }

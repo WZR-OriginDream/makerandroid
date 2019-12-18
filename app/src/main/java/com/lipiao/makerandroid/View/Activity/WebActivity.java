@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.lipiao.makerandroid.R;
 import com.lipiao.makerandroid.View.Fragment.WebFragment;
@@ -15,6 +16,8 @@ import com.lipiao.makerandroid.View.Fragment.WebFragment;
 public class WebActivity extends AppCompatActivity {
     //文章链接
     String webURL;
+    //用户名
+    String userNumber;
     String TAG = "WebActivity";
     WebFragment webFragment;
 
@@ -24,8 +27,10 @@ public class WebActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web);
         Intent intent = getIntent();
         webURL = intent.getStringExtra("webURL");
+        userNumber = intent.getStringExtra("userNumber");
+        Log.d(TAG, "onCreate: userNumber "+userNumber);
         if (webFragment == null) {
-            replaceFragment(webFragment = WebFragment.newInstance(webURL));
+            replaceFragment(webFragment = WebFragment.newInstance(webURL,userNumber));
         }
 
     }
