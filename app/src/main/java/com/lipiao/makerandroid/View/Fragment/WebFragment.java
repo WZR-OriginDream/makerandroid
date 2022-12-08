@@ -175,18 +175,18 @@ public class WebFragment extends Fragment {
                         //插入
                         Log.d(TAG, "onMenuItemClick: " + collectUrl + " " + collectTitles);
                         String backStr = SqliteUtils.insert(collectUrl, collectTitles);
-                        Call<MessageBean> callBanner = HttpUtil.getUserService().addArticle(userNumber, collectUrl, collectTitles);
-                        callBanner.enqueue(new Callback<MessageBean>() {
-                            @Override
-                            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
-                                Log.d(TAG, "onResponse: " + response.body().getMessage());
-                            }
-
-                            @Override
-                            public void onFailure(Call<MessageBean> call, Throwable t) {
-
-                            }
-                        });
+//                        Call<MessageBean> callBanner = HttpUtil.getUserService().addArticle(userNumber, collectUrl, collectTitles);
+//                        callBanner.enqueue(new Callback<MessageBean>() {
+//                            @Override
+//                            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+//                                Log.d(TAG, "onResponse: " + response.body().getMessage());
+//                            }
+//
+//                            @Override
+//                            public void onFailure(Call<MessageBean> call, Throwable t) {
+//
+//                            }
+//                        });
                         Toast.makeText(getContext(), backStr, Toast.LENGTH_SHORT).show();
                     }
                     return true;

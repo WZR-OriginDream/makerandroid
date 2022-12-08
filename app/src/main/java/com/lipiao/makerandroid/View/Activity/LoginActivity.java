@@ -62,35 +62,49 @@ public class LoginActivity extends AppCompatActivity {
     public void login(View view) {
         userNumber = etUsername.getText().toString().trim();
         password = etPassword.getText().toString().trim();
+        userInfo = SaveAccount.getUserInfo(this);
+        Log.d(TAG,userInfo.get("userNumber")+"  "+userInfo.get("password"));
+        if(userNumber.equals(userInfo.get("userNumber"))&&password.equals(userInfo.get("password"))){
+            Toast.makeText(LoginActivity.this,"登录成功",Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.putExtra("userNumber", userNumber);
+            intent.putExtra("password", password);
+            startActivity(intent);
+            finish();
+        }else {
+            Toast.makeText(context, "输入错误，请重新输入！", Toast.LENGTH_LONG).show();
+            etUsername.setText("");
+            etPassword.setText("");
+        }
+
         //Log.d("LoginActivity", "login: " + userNumber + password);
-        Call<MessageBean> call = HttpUtil.getUserService().login(userNumber, password);
-        call.enqueue(new Callback<MessageBean>() {
-            @Override
-            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
-//                Log.d(TAG, "onResponse: " + response.body().getMessage());
-                String strBack = response.body().getMessage();
-                if (strBack.equals("loginSuccess")) {
-                    Toast.makeText(context, "登录成功!", Toast.LENGTH_LONG).show();
-                    SaveAccount.saveAccountInfo(context, userNumber, password);//保存账号密码
-                    //将数据转到MainActivity
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra("userNumber", userNumber);
-                    intent.putExtra("password", password);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(context, "登录失败!" + strBack, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageBean> call, Throwable t) {
-                Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
-                Log.d(TAG, "onResponse: error");
-                Log.d(TAG, t.getMessage());
-            }
-        });
-
+//        Call<MessageBean> call = HttpUtil.getUserService().login(userNumber, password);
+//        call.enqueue(new Callback<MessageBean>() {
+//            @Override
+//            public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+////                Log.d(TAG, "onResponse: " + response.body().getMessage());
+//                String strBack = response.body().getMessage();
+//                if (strBack.equals("loginSuccess")) {
+//                    Toast.makeText(context, "登录成功!", Toast.LENGTH_LONG).show();
+//                    SaveAccount.saveAccountInfo(context, userNumber, password);//保存账号密码
+//                    //将数据转到MainActivity
+//                    Intent intent = new Intent(context, MainActivity.class);
+//                    intent.putExtra("userNumber", userNumber);
+//                    intent.putExtra("password", password);
+//                    startActivity(intent);
+//                    finish();
+//                } else {
+//                    Toast.makeText(context, "登录失败!" + strBack, Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<MessageBean> call, Throwable t) {
+//                Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
+//                Log.d(TAG, "onResponse: error");
+//                Log.d(TAG, t.getMessage());
+//            }
+//        });
 
     }
 

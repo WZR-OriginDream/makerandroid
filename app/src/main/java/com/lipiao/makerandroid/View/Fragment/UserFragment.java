@@ -200,22 +200,22 @@ public class UserFragment extends Fragment {
         //articleListBeanArrayList  源自服务器
         //collectArticleBeanList 本地
 //        if (articleListBeanArrayList.size() >= 0) {
-            Log.d(TAG, "fetchData: 服务器中的数据放到listview articleListBeanArrayList.size()" + articleListBeanArrayList.size());
-            //初始化一个大小和收藏文章集合大小一致的 字符串数组
-            arrStr = new ArrayList<>();
-            for (UserCollectArticleBean.ArticleListBean articleListBean : articleListBeanArrayList) {
-                arrStr.add(articleListBean.getCollectTitles());//i 先用后加1
-            }
-            loadRvView(0);
-
-//        } else {
-//            Log.d(TAG, "fetchData: sqlite中的数据放到listview articleListBeanArrayList.size()=" + articleListBeanArrayList.size());
+//            Log.d(TAG, "fetchData: 服务器中的数据放到listview articleListBeanArrayList.size()" + articleListBeanArrayList.size());
 //            //初始化一个大小和收藏文章集合大小一致的 字符串数组
 //            arrStr = new ArrayList<>();
-//            for (CollectArticleBean collectArticleBean : collectArticleBeanList) {
-//                arrStr.add(collectArticleBean.getCollectTitles());//i 先用后加1
+//            for (UserCollectArticleBean.ArticleListBean articleListBean : articleListBeanArrayList) {
+//                arrStr.add(articleListBean.getCollectTitles());//i 先用后加1
 //            }
-//            loadRvView(1);
+//            loadRvView(0);
+
+//        } else {
+            Log.d(TAG, "fetchData: sqlite中的数据放到listview articleListBeanArrayList.size()=" + articleListBeanArrayList.size());
+            //初始化一个大小和收藏文章集合大小一致的 字符串数组
+            arrStr = new ArrayList<>();
+            for (CollectArticleBean collectArticleBean : collectArticleBeanList) {
+                arrStr.add(collectArticleBean.getCollectTitles());//i 先用后加1
+            }
+            loadRvView(1);
 
 //        }//else
 
@@ -246,18 +246,18 @@ public class UserFragment extends Fragment {
                         //collectArticleBeanList 本地
                         if (i == 0) {//服务器数据源
                             //删除对应服务器数据源
-                            Call<MessageBean> call = HttpUtil.getUserService().deleteArticle(userNumber, articleListBeanArrayList.get(i14).getCollectUrl());
-                            call.enqueue(new Callback<MessageBean>() {
-                                @Override
-                                public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
-                                    Log.d(TAG, "onResponse: " + response.body().getMessage());
-                                }
-
-                                @Override
-                                public void onFailure(Call<MessageBean> call, Throwable t) {
-
-                                }
-                            });
+//                            Call<MessageBean> call = HttpUtil.getUserService().deleteArticle(userNumber, articleListBeanArrayList.get(i14).getCollectUrl());
+//                            call.enqueue(new Callback<MessageBean>() {
+//                                @Override
+//                                public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+//                                    Log.d(TAG, "onResponse: " + response.body().getMessage());
+//                                }
+//
+//                                @Override
+//                                public void onFailure(Call<MessageBean> call, Throwable t) {
+//
+//                                }
+//                            });
                             //删除对应SQlite中的数据
                             String backStr = SqliteUtils.delete(articleListBeanArrayList.get(i14).getCollectUrl());
                             Toast.makeText(UserFragment.this.getContext(), backStr, Toast.LENGTH_SHORT).show();

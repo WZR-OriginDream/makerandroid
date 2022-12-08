@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.lipiao.makerandroid.Bean.RespondBean.MessageBean;
 import com.lipiao.makerandroid.R;
+import com.lipiao.makerandroid.SharedPreferences.SaveAccount;
 import com.lipiao.makerandroid.Utils.HttpUtil;
 
 import retrofit2.Call;
@@ -41,28 +42,32 @@ public class RegisterActivity extends AppCompatActivity {
         if (etPassword.getText().toString().equals(etPassword2.getText().toString())) {
             String username = etUsername.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
+
+            SaveAccount.saveAccountInfo(context,username,password);
+            Toast.makeText(context, "注册成功!", Toast.LENGTH_LONG).show();
+
             //Log.d("LoginActivity", "login: " + userNumber + password);
-            Call<MessageBean> call = HttpUtil.getUserService().register(username, password);
-
-            call.enqueue(new Callback<MessageBean>() {
-                @Override
-                public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
-//                Log.d(TAG, "onResponse: " + response.body().getMessage());
-                    String strBack=response.body().getMessage();
-                    if (strBack.equals("registerSuccess")){
-                        Toast.makeText(context, "注册成功!", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(context, "注册失败!"+strBack, Toast.LENGTH_LONG).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MessageBean> call, Throwable t) {
-                    Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "onResponse: error");
-                    Log.d(TAG,t.getMessage());
-                }
-            });
+//            Call<MessageBean> call = HttpUtil.getUserService().register(username, password);
+//
+//            call.enqueue(new Callback<MessageBean>() {
+//                @Override
+//                public void onResponse(Call<MessageBean> call, Response<MessageBean> response) {
+////                Log.d(TAG, "onResponse: " + response.body().getMessage());
+//                    String strBack=response.body().getMessage();
+//                    if (strBack.equals("registerSuccess")){
+//                        Toast.makeText(context, "注册成功!", Toast.LENGTH_LONG).show();
+//                    }else {
+//                        Toast.makeText(context, "注册失败!"+strBack, Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<MessageBean> call, Throwable t) {
+//                    Toast.makeText(context, t.getMessage(), Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "onResponse: error");
+//                    Log.d(TAG,t.getMessage());
+//                }
+//            });
         }else {
             Toast.makeText(context, "两次密码不一致，请重新输入！", Toast.LENGTH_LONG).show();
             etPassword.setText("");
